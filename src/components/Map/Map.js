@@ -1,44 +1,71 @@
-'use client';
+"use client";
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
+import pno_stat from "../../app/pno_tilasto.json";
+import proj4 from "proj4";
+import "proj4leaflet";
 
 import L from "leaflet";
 
-
 const Map = () => {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
-  const center = { lng: 13.338414, lat: 52.507932 };
-  const [zoom] = useState(12);
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    const center = { lng: 13.338414, lat: 52.507932 };
+    const [zoom] = useState(12);
 
-  useEffect(() => {
-    if (map.current) return; // stops map from intializing more than once
+    useEffect(() => {
+        if (map.current) return; // stops map from intializing more than once
 
-    // Toimiva esimerrki:
-    /* map.current = L.map(mapContainer.current).setView([51.505, -0.09], 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map.current); */
+        // Toimiva esimerrki:
+        /* map.current = L.map(mapContainer.current).setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(map.current); */
 
-    map.current = L.map(mapContainer.current).setView([51.505, -0.09], 5);
-    var wmsLayer = L.tileLayer.wms('http://ows.mundialis.de/services/service?', {
-      layers: 'TOPO-OSM-WMS'
-    }).addTo(map.current);
+        map.current = L.map(mapContainer.current).setView([65, 20], 3);
 
-    return () => {
-      map.current = null;
-    };
-  }, []);
+        // var wmsLayer = L.tileLayer
+        //     .wms("http://ows.mundialis.de/services/service?", {
+        //         layers: "TOPO-OSM-WMS",
+        //     })
+        //     .addTo(map.current);
 
-    
+        const myStyle = {
+            color: "#ff7800",
+            weight: 2,
+            opacity: 0.65,
+        };
 
-  return (
-    <div ref={mapContainer}
-    style={{height: '180px', width: '50vw'}}>
-    </div>
-  )
-}
+        proj4.defs(
+            "EPSG:3067",
+            "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+        );
+
+        const pnoLayer = L.Proj.geoJson(pno_stat, {
+            style: myStyle,
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(
+                    `
+                  <h2>${feature.properties.postinumeroalue}</h2>
+                  <p>${feature.properties.nimi}</p>
+                  `
+                );
+            },
+        }).addTo(map.current);
+
+        return () => {
+            map.current = null;
+        };
+    }, []);
+
+    return (
+        <div
+            ref={mapContainer}
+            style={{ height: "180px", width: "50vw" }}
+        ></div>
+    );
+};
 
 export default Map;
