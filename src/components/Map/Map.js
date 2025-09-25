@@ -32,10 +32,24 @@ const Map = () => {
         //     })
         //     .addTo(map.current);
 
-        const myStyle = {
-            color: "#ff7800",
-            weight: 2,
-            opacity: 0.65,
+        const getRandomColor = () => {
+            const colors = ["#123456", "#987654", "#262626", "#aa0000"];
+
+            const randomInt = Math.floor(Math.random() * colors.length);
+
+            return colors[randomInt];
+        };
+
+        const featureStyle = (feature) => {
+            // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
+            return {
+                fillColor: getRandomColor(),
+                weight: 1.5,
+                opacity: 1,
+                color: "white",
+                dashArray: "3",
+                fillOpacity: 1,
+            };
         };
 
         proj4.defs(
@@ -44,7 +58,7 @@ const Map = () => {
         );
 
         const pnoLayer = L.Proj.geoJson(pno_stat, {
-            style: myStyle,
+            style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(
                     `
