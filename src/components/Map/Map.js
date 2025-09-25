@@ -27,7 +27,10 @@ const Map = () => {
 
         }).addTo(map.current); */
 
-        //map.current = L.map(mapContainer.current).setView([65, 20], 5);
+        map.current = L.map(mapContainer.current, { minZoom: 5 }).setView(
+            [65, 20],
+            5
+        );
 
         // var wmsLayer = L.tileLayer
         //     .wms("http://ows.mundialis.de/services/service?", {
@@ -72,7 +75,9 @@ const Map = () => {
             },
         }).addTo(map.current);
 
-        map.current.fitBounds(pnoLayer.getBounds()); // Centers the map
+        const layerBounds = pnoLayer.getBounds();
+        map.current.fitBounds(layerBounds); // Centers the map
+        map.current.setMaxBounds(layerBounds); // Block user pan the map out of view. // TODO: make bounds wider here, because now this is maybe too much restricting
 
         return () => {
             map.current = null;
@@ -82,7 +87,7 @@ const Map = () => {
     return (
         <div
             ref={mapContainer}
-            style={{ height: "100vh", width: "50vw" }}
+            style={{ height: "100dvh", width: "50vw" }}
         ></div>
     );
 };
