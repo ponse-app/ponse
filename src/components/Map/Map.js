@@ -72,7 +72,9 @@ const Map = () => {
             },
         }).addTo(map.current);
 
-        map.current.fitBounds(pnoLayer.getBounds()); // Centers the map
+        const layerBounds = pnoLayer.getBounds();
+        map.current.fitBounds(layerBounds); // Centers the map
+        map.current.setMaxBounds(layerBounds); // Block user pan the map out of view. // TODO: make bounds wider here, because now this is maybe too much restricting
 
         return () => {
             map.current = null;
