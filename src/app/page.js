@@ -1,15 +1,11 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import Map from "../components/Map/Map";
+//import Map from "../components/Map/Map";
 
 export default function Home() {
-    /* const Map = useMemo(() => dynamic(
-    () => import('../components/Map'),
-    { 
-      loading: () => <p>A map is loading</p>,
-      ssr: false
-    }
-  ), []) */
+    const Map = dynamic(() => import("../components/Map/Map"), {
+        ssr: !!false,
+    });
 
     return (
         <div className="font-sans grid items-center justify-items-center min-h-screen">
