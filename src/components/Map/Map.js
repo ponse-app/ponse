@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import pno_stat from "../../app/pno_tilasto.json";
+import pno_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
@@ -24,7 +24,7 @@ const Map = () => {
           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(map.current); */
 
-        map.current = L.map(mapContainer.current).setView([65, 20], 3);
+        map.current = L.map(mapContainer.current).setView([65, 20], 5);
 
         // var wmsLayer = L.tileLayer
         //     .wms("http://ows.mundialis.de/services/service?", {
@@ -63,7 +63,7 @@ const Map = () => {
     return (
         <div
             ref={mapContainer}
-            style={{ height: "180px", width: "50vw" }}
+            style={{ height: "100vh", width: "50vw" }}
         ></div>
     );
 };
