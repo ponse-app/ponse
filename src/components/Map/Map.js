@@ -8,6 +8,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
+
 const Map = () => {
     const mapContainer = useRef(null);
     const map = useRef(null);
@@ -17,14 +18,16 @@ const Map = () => {
     useEffect(() => {
         if (map.current) return; // stops map from intializing more than once
 
-        // Toimiva esimerrki:
-        /* map.current = L.map(mapContainer.current).setView([51.505, -0.09], 13);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          }).addTo(map.current); */
 
-        map.current = L.map(mapContainer.current).setView([65, 20], 5);
+        // Toimiva esimerrki:
+        map.current = L.map(mapContainer.current).setView([51.505, -0.09], 13);
+        /* L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+
+        }).addTo(map.current); */
+
+        //map.current = L.map(mapContainer.current).setView([65, 20], 5);
 
         // var wmsLayer = L.tileLayer
         //     .wms("http://ows.mundialis.de/services/service?", {
