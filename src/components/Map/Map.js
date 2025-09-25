@@ -79,7 +79,7 @@ const Map = () => {
     return (
         <div
             ref={mapContainer}
-            style={{ height: "100vh", width: "50vw" }}
+            style={{ height: "100dvh", width: "50vw" }}
         ></div>
     );
 };
