@@ -24,7 +24,10 @@ const Map = () => {
           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           }).addTo(map.current); */
 
-        map.current = L.map(mapContainer.current).setView([65, 20], 5);
+        map.current = L.map(mapContainer.current, { minZoom: 5 }).setView(
+            [65, 20],
+            5
+        );
 
         // var wmsLayer = L.tileLayer
         //     .wms("http://ows.mundialis.de/services/service?", {
