@@ -55,6 +55,8 @@ const Map = () => {
             },
         }).addTo(map.current);
 
+        map.current.fitBounds(pnoLayer.getBounds()); // Centers the map
+
         return () => {
             map.current = null;
         };
