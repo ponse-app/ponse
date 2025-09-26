@@ -17,24 +17,7 @@ const Map = () => {
     useEffect(() => {
         if (map.current) return; // stops map from intializing more than once
 
-        // Toimiva esimerrki:
-        //map.current = L.map(mapContainer.current).setView([51.505, -0.09], 13);
-        /* L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-
-        }).addTo(map.current); */
-
-        map.current = L.map(mapContainer.current, { minZoom: 5 }).setView(
-            [65, 20],
-            5
-        );
-
-        // var wmsLayer = L.tileLayer
-        //     .wms("http://ows.mundialis.de/services/service?", {
-        //         layers: "TOPO-OSM-WMS",
-        //     })
-        //     .addTo(map.current);
+        map.current = L.map(mapContainer.current, { minZoom: 5 });
 
         const getRandomColor = () => {
             const colors = ["#123456", "#987654", "#262626", "#aa0000"];
