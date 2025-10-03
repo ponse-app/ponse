@@ -68,7 +68,7 @@ const Map = () => {
     return (
         <div
             ref={mapContainer}
-            style={{ height: "100dvh", width: "50vw" }}
+            className="absolute h-full w-1/2 right-0"
         ></div>
     );
 };
