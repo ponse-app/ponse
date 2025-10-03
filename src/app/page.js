@@ -7,8 +7,11 @@ export default function Home() {
     });
 
     return (
-        <div className="font-sans grid items-center justify-items-center min-h-screen">
-            <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+        <div className="flex">
+            <div className="flex w-2/7 h-screen">
+                <p>Some content here</p>
+            </div>
+            <main className="flex w-5/7 h-screen">
                 <Map />
             </main>
         </div>
