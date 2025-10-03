@@ -65,12 +65,7 @@ const Map = () => {
         };
     }, []);
 
-    return (
-        <div
-            ref={mapContainer}
-            style={{ height: "100dvh", width: "50vw" }}
-        ></div>
-    );
+    return <div ref={mapContainer} className={"w-full"}></div>;
 };
 
 export default Map;
