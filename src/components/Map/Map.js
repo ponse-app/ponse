@@ -65,7 +65,12 @@ const Map = () => {
         };
     }, []);
 
-    return <div ref={mapContainer} className={"w-full"}></div>;
+    return (
+        <div
+            ref={mapContainer}
+            className="absolute h-full w-1/2 right-0"
+        ></div>
+    );
 };
 
 export default Map;
