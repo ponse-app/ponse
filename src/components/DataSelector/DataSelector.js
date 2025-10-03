@@ -11,7 +11,7 @@ const Map = () => {
         <div
             className="absolute w-full h-full flex flex-col items-center">
             <form action={""} method="post">
-                <div className="bg-gray-500 w-fit p-1">
+                <div className="bg-gray-500 w-fit p-1 mt-5">
                 <fieldset>
                     <legend>Valitse parametrit:</legend>
                         <ParameterSelector inputName={"parameter1"} />
