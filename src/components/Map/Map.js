@@ -26,6 +26,26 @@ const Map = ({ parameter }) => {
         return null;
     };
 
+    const getColor = (value) => {
+        let greatest = 0;
+        let smallest = Number.MAX_VALUE;
+        for (let i = 0; i < kunta_stat.features.length; i++) {
+            const municipalityProperties = kunta_stat.features[i].properties;
+            if (Number(municipalityProperties[parameter]) > greatest)
+                greatest = Number(municipalityProperties[parameter]);
+
+            if (Number(municipalityProperties[parameter]) < smallest)
+                smallest = Number(municipalityProperties[parameter]);
+        }
+
+        const normalizedValue =
+            (Number(value) - smallest) / (greatest - smallest);
+
+        const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
+
+        return color;
+    };
+
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
@@ -47,7 +67,7 @@ const Map = ({ parameter }) => {
         const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
             return {
-                fillColor: getRandomColor(),
+                fillColor: getColor(feature.properties[parameter]),
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
