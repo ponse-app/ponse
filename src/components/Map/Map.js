@@ -12,9 +12,10 @@ import L from "leaflet";
 const Map = () => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const center = { lng: 13.338414, lat: 52.507932 };
+    const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
     const [zoom] = useState(12);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
+    const [bounds, setBounds] = useState(null);
 
     useEffect(() => {
 
@@ -22,17 +23,14 @@ const Map = () => {
             map.current = L.map(mapContainer.current, { minZoom: 5 });
         }  // stops map from intializing more than once
 
-        
-
-
     }, [])
-    
-    
-    
+
+
+
     useEffect(() => {
 
         if (map.current == null) return;
-        
+
         const getRandomColor = () => {
             const colors = ["#123456", "#987654", "#262626", "#aa0000"];
 
@@ -69,12 +67,15 @@ const Map = () => {
                 ); */
                 layer.addEventListener("click", (e) => {
                     setMapLayer(pno_stat);
+                    map.current.fitBounds(e.target.getBounds());
                 })
             },
         }).addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
-        map.current.fitBounds(layerBounds); // Centers the map
+        if (mapLayer == kunta_stat) {
+            map.current.fitBounds(layerBounds); // Centers the map 
+        }
         map.current.setMaxBounds(layerBounds); // Block user pan the map out of view. // TODO: make bounds wider here, because now this is maybe too much restricting
 
     }, [mapLayer]);
