@@ -2,7 +2,8 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import pno_stat from "../../app/kunta_vaki2024.json";
+import kunta_stat from "../../app/kunta_vaki2024.json";
+import pno_stat from "../../app/pno_tilasto.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
@@ -13,12 +14,25 @@ const Map = () => {
     const map = useRef(null);
     const center = { lng: 13.338414, lat: 52.507932 };
     const [zoom] = useState(12);
+    const [mapLayer, setMapLayer] = useState(kunta_stat);
 
     useEffect(() => {
-        if (map.current) return; // stops map from intializing more than once
 
-        map.current = L.map(mapContainer.current, { minZoom: 5 });
+        if (map.current == null) {
+            map.current = L.map(mapContainer.current, { minZoom: 5 });
+        }  // stops map from intializing more than once
 
+        
+
+
+    }, [])
+    
+    
+    
+    useEffect(() => {
+
+        if (map.current == null) return;
+        
         const getRandomColor = () => {
             const colors = ["#123456", "#987654", "#262626", "#aa0000"];
 
@@ -44,15 +58,18 @@ const Map = () => {
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
 
-        const pnoLayer = L.Proj.geoJson(pno_stat, {
+        const pnoLayer = L.Proj.geoJson(mapLayer, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
-                layer.bindPopup(
+                /* layer.bindPopup(
                     `
                   <h2>${feature.properties.postinumeroalue}</h2>
                   <p>${feature.properties.nimi}</p>
                   `
-                );
+                ); */
+                layer.addEventListener("click", (e) => {
+                    setMapLayer(pno_stat);
+                })
             },
         }).addTo(map.current);
 
@@ -60,10 +77,7 @@ const Map = () => {
         map.current.fitBounds(layerBounds); // Centers the map
         map.current.setMaxBounds(layerBounds); // Block user pan the map out of view. // TODO: make bounds wider here, because now this is maybe too much restricting
 
-        return () => {
-            map.current = null;
-        };
-    }, []);
+    }, [mapLayer]);
 
     return (
         <div
