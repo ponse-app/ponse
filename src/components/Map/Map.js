@@ -2,17 +2,34 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import pno_stat from "../../app/kunta_vaki2024.json";
+import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = () => {
+const Map = ({ parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const center = { lng: 13.338414, lat: 52.507932 };
     const [zoom] = useState(12);
+
+    const getValue = (municipality, property) => {
+        // console.log(kunta_stat);
+
+        for (let i = 0; i < kunta_stat.features.length; i++) {
+            const municipalityProperties = kunta_stat.features[i].properties;
+            if (municipalityProperties.nimi === municipality)
+                return municipalityProperties[property];
+        }
+
+        return null;
+    };
+
+    proj4.defs(
+        "EPSG:3067",
+        "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+    );
 
     useEffect(() => {
         if (map.current) return; // stops map from intializing more than once
@@ -39,12 +56,7 @@ const Map = () => {
             };
         };
 
-        proj4.defs(
-            "EPSG:3067",
-            "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
-        );
-
-        const pnoLayer = L.Proj.geoJson(pno_stat, {
+        const pnoLayer = L.Proj.geoJson(kunta_stat, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(
@@ -53,23 +65,25 @@ const Map = () => {
                   <p>${feature.properties.nimi}</p>
                   `
                 );
+                layer
+                    .bindTooltip(
+                        String(getValue(feature.properties.nimi, parameter)),
+                        {
+                            permanent: true,
+                            direction: "center",
+                        }
+                    )
+                    .openTooltip();
             },
         }).addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
         map.current.fitBounds(layerBounds); // Centers the map
         map.current.setMaxBounds(layerBounds); // Block user pan the map out of view. // TODO: make bounds wider here, because now this is maybe too much restricting
-
-        return () => {
-            map.current = null;
-        };
     }, []);
 
     return (
-        <div
-            ref={mapContainer}
-            className="absolute h-full w-1/2 right-0"
-        ></div>
+        <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
     );
 };
 
