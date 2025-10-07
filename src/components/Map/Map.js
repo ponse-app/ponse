@@ -2,17 +2,51 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import pno_stat from "../../app/kunta_vaki2024.json";
+import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = () => {
+const Map = ({ parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const center = { lng: 13.338414, lat: 52.507932 };
     const [zoom] = useState(12);
+
+    const getPropertyValue = (municipality, property) => {
+        for (let i = 0; i < kunta_stat.features.length; i++) {
+            const municipalityProperties = kunta_stat.features[i].properties;
+            if (municipalityProperties.nimi === municipality)
+                return municipalityProperties[property];
+        }
+
+        return null;
+    };
+
+    const getDatasetMinMax = () => {
+        const propertyValues = kunta_stat.features.map((kunta) => {
+            return kunta.properties[parameter];
+        });
+
+        return [Math.min(...propertyValues), Math.max(...propertyValues)];
+    };
+
+    const [datasetMin, datasetMax] = getDatasetMinMax();
+
+    const getColor = (value) => {
+        const normalizedValue =
+            (Number(value) - datasetMin) / (datasetMax - datasetMin);
+
+        const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
+
+        return color;
+    };
+
+    proj4.defs(
+        "EPSG:3067",
+        "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+    );
 
     useEffect(() => {
         if (map.current) return; // stops map from intializing more than once
@@ -30,7 +64,7 @@ const Map = () => {
         const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
             return {
-                fillColor: getRandomColor(),
+                fillColor: getColor(feature.properties[parameter]),
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
@@ -39,12 +73,7 @@ const Map = () => {
             };
         };
 
-        proj4.defs(
-            "EPSG:3067",
-            "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
-        );
-
-        const pnoLayer = L.Proj.geoJson(pno_stat, {
+        const pnoLayer = L.Proj.geoJson(kunta_stat, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(
@@ -53,16 +82,23 @@ const Map = () => {
                   <p>${feature.properties.nimi}</p>
                   `
                 );
+                layer
+                    .bindTooltip(
+                        String(
+                            getPropertyValue(feature.properties.nimi, parameter)
+                        ),
+                        {
+                            permanent: true,
+                            direction: "center",
+                        }
+                    )
+                    .openTooltip();
             },
         }).addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
         map.current.fitBounds(layerBounds); // Centers the map
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
-
-        return () => {
-            map.current = null;
-        };
     }, []);
 
     return (
