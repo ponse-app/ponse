@@ -25,19 +25,11 @@ const Map = ({ parameter }) => {
     };
 
     const getDatasetMinMax = () => {
-        console.log("getMinMax()");
-        let greatest = 0;
-        let smallest = Number.MAX_VALUE;
-        for (let i = 0; i < kunta_stat.features.length; i++) {
-            const municipalityProperties = kunta_stat.features[i].properties;
-            if (Number(municipalityProperties[parameter]) > greatest)
-                greatest = Number(municipalityProperties[parameter]);
+        const propertyValues = kunta_stat.features.map((kunta) => {
+            return kunta.properties[parameter];
+        });
 
-            if (Number(municipalityProperties[parameter]) < smallest)
-                smallest = Number(municipalityProperties[parameter]);
-        }
-
-        return [smallest, greatest];
+        return [Math.min(...propertyValues), Math.max(...propertyValues)];
     };
 
     const [datasetMin, datasetMax] = getDatasetMinMax();
