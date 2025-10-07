@@ -14,9 +14,7 @@ const Map = ({ parameter }) => {
     const center = { lng: 13.338414, lat: 52.507932 };
     const [zoom] = useState(12);
 
-    const getValue = (municipality, property) => {
-        // console.log(kunta_stat);
-
+    const getPropertyValue = (municipality, property) => {
         for (let i = 0; i < kunta_stat.features.length; i++) {
             const municipalityProperties = kunta_stat.features[i].properties;
             if (municipalityProperties.nimi === municipality)
@@ -87,7 +85,9 @@ const Map = ({ parameter }) => {
                 );
                 layer
                     .bindTooltip(
-                        String(getValue(feature.properties.nimi, parameter)),
+                        String(
+                            getPropertyValue(feature.properties.nimi, parameter)
+                        ),
                         {
                             permanent: true,
                             direction: "center",
