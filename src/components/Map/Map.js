@@ -43,8 +43,6 @@ const Map = ({ parameter }) => {
     const [datasetMin, datasetMax] = getDatasetMinMax();
 
     const getColor = (value) => {
-        console.log(datasetMin, datasetMax);
-
         const normalizedValue =
             (Number(value) - datasetMin) / (datasetMax - datasetMin);
 
