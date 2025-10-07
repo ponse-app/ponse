@@ -25,8 +25,8 @@ const Map = ({ parameter }) => {
     };
 
     const getDatasetMinMax = () => {
-        const propertyValues = kunta_stat.features.map((kunta) => {
-            return kunta.properties[parameter];
+        const propertyValues = kunta_stat.features.map((municipality) => {
+            return municipality.properties[parameter];
         });
 
         return [Math.min(...propertyValues), Math.max(...propertyValues)];
