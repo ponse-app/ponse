@@ -14,12 +14,12 @@ const Map = ({ parameter }) => {
     const center = { lng: 13.338414, lat: 52.507932 };
     const [zoom] = useState(12);
 
-    const getPropertyValue = (municipality, property) => {
-        for (let i = 0; i < kunta_stat.features.length; i++) {
-            const municipalityProperties = kunta_stat.features[i].properties;
-            if (municipalityProperties.nimi === municipality)
-                return municipalityProperties[property];
-        }
+    const getPropertyValue = (municipalityName, property) => {
+        const municipality = kunta_stat.features.find(
+            (municipality) => municipality.properties.nimi === municipalityName
+        );
+
+        if (municipality) return municipality.properties[property];
 
         return null;
     };
