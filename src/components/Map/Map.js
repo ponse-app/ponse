@@ -24,7 +24,8 @@ const Map = ({ parameter }) => {
         return null;
     };
 
-    const getColor = (value) => {
+    const getDatasetMinMax = () => {
+        console.log("getMinMax()");
         let greatest = 0;
         let smallest = Number.MAX_VALUE;
         for (let i = 0; i < kunta_stat.features.length; i++) {
@@ -36,8 +37,16 @@ const Map = ({ parameter }) => {
                 smallest = Number(municipalityProperties[parameter]);
         }
 
+        return [smallest, greatest];
+    };
+
+    const [datasetMin, datasetMax] = getDatasetMinMax();
+
+    const getColor = (value) => {
+        console.log(datasetMin, datasetMax);
+
         const normalizedValue =
-            (Number(value) - smallest) / (greatest - smallest);
+            (Number(value) - datasetMin) / (datasetMax - datasetMin);
 
         const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
 
