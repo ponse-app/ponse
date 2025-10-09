@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = () => {
+const Map = ({ parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
@@ -17,18 +17,47 @@ const Map = () => {
     const [mapLayer, setMapLayer] = useState(kunta_stat);
     const [bounds, setBounds] = useState(null);
 
-    useEffect(() => {
+    const getPropertyValue = (municipalityName, property) => {
+        const municipality = kunta_stat.features.find(
+            (municipality) => municipality.properties.nimi === municipalityName
+        );
 
+        if (municipality) return municipality.properties[property];
+
+        return null;
+    };
+
+    const getDatasetMinMax = () => {
+        const propertyValues = kunta_stat.features.map((kunta) => {
+            return kunta.properties[parameter];
+        });
+
+        return [Math.min(...propertyValues), Math.max(...propertyValues)];
+    };
+
+    const [datasetMin, datasetMax] = getDatasetMinMax();
+
+    const getColor = (value) => {
+        const normalizedValue =
+            (Number(value) - datasetMin) / (datasetMax - datasetMin);
+
+        const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
+
+        return color;
+    };
+
+    proj4.defs(
+        "EPSG:3067",
+        "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+    );
+
+    useEffect(() => {
         if (map.current == null) {
             map.current = L.map(mapContainer.current, { minZoom: 5 });
-        }  // stops map from intializing more than once
-
-    }, [])
-
-
+        } // stops map from intializing more than once
+    }, []);
 
     useEffect(() => {
-
         if (map.current == null) return;
 
         const getRandomColor = () => {
@@ -42,7 +71,7 @@ const Map = () => {
         const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
             return {
-                fillColor: getRandomColor(),
+                fillColor: getColor(feature.properties[parameter]),
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
@@ -68,16 +97,26 @@ const Map = () => {
                 layer.addEventListener("click", (e) => {
                     setMapLayer(pno_stat);
                     map.current.fitBounds(e.target.getBounds());
-                })
+                });
+                /*                 layer
+                    .bindTooltip(
+                        String(
+                            getPropertyValue(feature.properties.nimi, parameter)
+                        ),
+                        {
+                            permanent: true,
+                            direction: "center",
+                        }
+                    )
+                    .openTooltip(); */
             },
         }).addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
         if (mapLayer == kunta_stat) {
-            map.current.fitBounds(layerBounds); // Centers the map 
+            map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
-
     }, [mapLayer]);
 
     return (
