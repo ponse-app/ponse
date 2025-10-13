@@ -9,9 +9,10 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = ({ parameter }) => {
+const Map = ({ parameter, onUpdatePreviewBounds }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
+    const PreviewMap = useRef(null);
     const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
     const [zoom] = useState(12);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
@@ -97,6 +98,7 @@ const Map = ({ parameter }) => {
                 layer.addEventListener("click", (e) => {
                     setMapLayer(pno_stat);
                     map.current.fitBounds(e.target.getBounds());
+                    onUpdatePreviewBounds(e.target.getBounds());
                 });
                 /*                 layer
                     .bindTooltip(

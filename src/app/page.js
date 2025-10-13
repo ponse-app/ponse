@@ -9,8 +9,17 @@ export default function Home() {
     const Map = dynamic(() => import("../components/Map/Map"), {
         ssr: !!false,
     });
+    const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
+        ssr: !!false,
+    });
 
     const [parameter, setParameter] = useState("miehet");
+
+    const [preview1, setPreview1] = useState(null);
+
+    const updatePreviewBounds = (bounds) => {
+        setPreview1(bounds);
+    };
 
     /* return (
         <div className="font-sans grid items-center justify-items-center min-h-screen">
@@ -27,8 +36,12 @@ export default function Home() {
                     <DataSelector
                         setParameter={(value) => setParameter(value)}
                     />
+                    <PreviewMap
+                        preview1 = {preview1}
+                    />
                 </div>
-                <Map parameter={parameter} />
+                <Map parameter={parameter} 
+                    onUpdatePreviewBounds={updatePreviewBounds}/>
             </main>
         </div>
     );
