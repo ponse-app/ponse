@@ -11,7 +11,7 @@ const Map = ({ inputName, setParameter }) => {
             >
                 <option value="miehet">Miesten määrä</option>
                 <option value="naiset">Naisten määrä</option>
-                <option value="3">Data3</option>
+                <option value="ika_65_p">ika_65_p</option>
             </select>
         </div>
     );

@@ -27,23 +27,28 @@ const Map = ({ parameter }) => {
         return null;
     };
 
-    const getDatasetMinMax = () => {
-        const propertyValues = kunta_stat.features.map((kunta) => {
-            return kunta.properties[parameter];
-        });
+    const sortBy = () => {
+        const sorted = mapLayer.features.sort(
+            (a, b) => b.properties[parameter] - a.properties[parameter]
+        );
 
-        return [Math.min(...propertyValues), Math.max(...propertyValues)];
+        console.log(sorted);
+        return sorted;
     };
 
-    const [datasetMin, datasetMax] = getDatasetMinMax();
+    const sorted = sortBy();
 
     const getColor = (value) => {
-        const normalizedValue =
-            (Number(value) - datasetMin) / (datasetMax - datasetMin);
+        const amountOfGaps = 44;
+        const interval = Math.ceil(sorted.length / amountOfGaps);
 
-        const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
+        let whichGap = 0;
+        for (let i = 0; i < sorted.length; i += interval) {
+            if (sorted[i].properties[parameter] < value) break;
+            whichGap++;
+        }
 
-        return color;
+        return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
     };
 
     proj4.defs(
@@ -88,16 +93,18 @@ const Map = ({ parameter }) => {
         const pnoLayer = L.Proj.geoJson(mapLayer, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
-                /* layer.bindPopup(
+                layer.bindPopup(
                     `
                   <h2>${feature.properties.postinumeroalue}</h2>
                   <p>${feature.properties.nimi}</p>
                   `
-                ); */
-                layer.addEventListener("click", (e) => {
+                );
+
+                /*                 layer.addEventListener("click", (e) => {
                     setMapLayer(pno_stat);
                     map.current.fitBounds(e.target.getBounds());
-                });
+                }); */
+
                 /*                 layer
                     .bindTooltip(
                         String(
