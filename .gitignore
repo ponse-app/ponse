@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+src/app/pno_tilasto.json
+src/app/kunta_vaki2024.json
