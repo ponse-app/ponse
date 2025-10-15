@@ -1,22 +1,20 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
-import kunta_stat from "../../app/kunta_vaki2024.json";
 import pno_stat from "../../app/pno_tilasto.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
 import L from "leaflet";
 
-const PreviewMap = ({ preview1 }) => {
+const PreviewMap = ({ previewRef }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
-    const [zoom] = useState(12);
-    const [mapLayer, setMapLayer] = useState(kunta_stat);
-    const [bounds, setBounds] = useState(null);
-    console.log(preview1);
+
+    const [visible, setVisible] = useState(false);
+    const [version, setVersion] = useState(0);
+
 
     proj4.defs(
         "EPSG:3067",
@@ -25,17 +23,28 @@ const PreviewMap = ({ preview1 }) => {
 
     useEffect(() => {
         if (map.current == null) {
-            map.current = L.map(mapContainer.current, { minZoom: 5 });
+            map.current = L.map(mapContainer.current, {
+                minZoom: 5,
+                zoomControl: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                zoom: false,
+                dragging: false,
+            });
         } // stops map from intializing more than once
     }, []);
 
+    const featureStyle = useRef(null);
+    const pnoLayer = useRef(null);
+    const layerBounds = useRef(null);
     useEffect(() => {
         if (map.current == null) return;
 
-        const featureStyle = (feature) => {
+        featureStyle.current = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
             return {
                 /* fillColor: getColor(feature.properties[parameter]), */
+                fillColor: "#000000",
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
@@ -48,22 +57,34 @@ const PreviewMap = ({ preview1 }) => {
             "EPSG:3067",
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
-
-        const pnoLayer = L.Proj.geoJson(mapLayer, {
-            style: featureStyle,
+        pnoLayer.current = L.Proj.geoJson(pno_stat, {
+            style: featureStyle.current,
             onEachFeature: function (feature, layer) {
             },
         }).addTo(map.current);
 
-        const layerBounds = pnoLayer.getBounds();
-        if (preview1 != null) {
-            map.current.fitBounds(preview1);
-        }
-        map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
-    }, [mapLayer, preview1]);
-    if (preview1 == null) {
-       return (
-        <div ref={mapContainer} className="invisible"></div>
+        layerBounds.current = pnoLayer.current.getBounds();
+
+    }, []);
+    
+    if (previewRef.current?.bounds) {
+        map.current?.fitBounds(previewRef.current.bounds, { animate: false });
+    }
+    map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
+
+    useImperativeHandle(previewRef, () => ({
+        giveBounds: (bounds) => previewRef.current.bounds = bounds,
+        getBounds: () => {
+            return previewRef.current.bounds;
+        },
+        show: () => setVisible(true),
+        update: () => setVersion(version + 1),
+    }), [version, previewRef]);
+
+    
+    if (!visible) {
+        return (
+            <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0 invisible"></div>
         );
     };
     return (

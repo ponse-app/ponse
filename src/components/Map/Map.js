@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, memo } from "react";
 import "leaflet/dist/leaflet.css";
 import kunta_stat from "../../app/kunta_vaki2024.json";
-import pno_stat from "../../app/pno_tilasto.json";
+//import pno_stat from "../../app/pno_tilasto.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
@@ -12,11 +12,7 @@ import L from "leaflet";
 const Map = ({ parameter, onUpdatePreviewBounds }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const PreviewMap = useRef(null);
-    const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
-    const [zoom] = useState(12);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
-    const [bounds, setBounds] = useState(null);
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -96,7 +92,7 @@ const Map = ({ parameter, onUpdatePreviewBounds }) => {
                   `
                 ); */
                 layer.addEventListener("click", (e) => {
-                    setMapLayer(pno_stat);
+                    //setMapLayer(pno_stat);
                     map.current.fitBounds(e.target.getBounds());
                     onUpdatePreviewBounds(e.target.getBounds());
                 });
@@ -126,4 +122,4 @@ const Map = ({ parameter, onUpdatePreviewBounds }) => {
     );
 };
 
-export default Map;
+export default memo(Map);
