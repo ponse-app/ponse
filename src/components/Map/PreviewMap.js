@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 import pno_stat from "../../app/pno_tilasto.json";
+import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
@@ -24,12 +25,11 @@ const PreviewMap = ({ previewRef }) => {
     useEffect(() => {
         if (map.current == null) {
             map.current = L.map(mapContainer.current, {
-                minZoom: 5,
-                zoomControl: false,
+                /* zoomControl: false,
                 scrollWheelZoom: false,
                 doubleClickZoom: false,
-                zoom: false,
-                dragging: false,
+                zoom: false, */
+                //dragging: false,
             });
         } // stops map from intializing more than once
     }, []);
@@ -37,6 +37,8 @@ const PreviewMap = ({ previewRef }) => {
     const featureStyle = useRef(null);
     const pnoLayer = useRef(null);
     const layerBounds = useRef(null);
+    const [selectedPno, SetSelectedPno] = useState(null);
+    const hoveredPno = useRef(null);
     useEffect(() => {
         if (map.current == null) return;
 
@@ -57,16 +59,53 @@ const PreviewMap = ({ previewRef }) => {
             "EPSG:3067",
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
+
+
         pnoLayer.current = L.Proj.geoJson(pno_stat, {
             style: featureStyle.current,
             onEachFeature: function (feature, layer) {
+                layer.addEventListener("mouseover", (e) => {
+                    console.log("New postnumber", layer);
+                    if (hoveredPno.current != layer) {
+
+                        if (hoveredPno.current != null) {
+                            hoveredPno.current.setStyle(featureStyle.current());
+                        }
+                        hoveredPno.current = layer;
+                        layer.setStyle({
+                            fillColor: "#222222",
+                            weight: 2,
+                            opacity: 1,
+                            color: "yellow",
+                            dashArray: "3",
+                            fillOpacity: 1,
+                        });
+                    }
+                });
             },
         }).addTo(map.current);
+        const kuntaLayer = L.Proj.geoJson(kunta_stat, {
+            style: {
+                fillColor: "#000000",
+                weight: 2,
+                opacity: 0.5,
+                color: "blue",
+                dashArray: "3",
+                fillOpacity: 0,
+            },
+            interactive: false,
+        }).addTo(map.current);
+
+        var overlays = {
+            "kunnat": kuntaLayer
+        }
+        L.control.layers({}, overlays).addTo(map.current);
+
 
         layerBounds.current = pnoLayer.current.getBounds();
 
     }, []);
-    
+
     if (previewRef.current?.bounds) {
         map.current?.fitBounds(previewRef.current.bounds, { animate: false });
     }
@@ -81,7 +120,7 @@ const PreviewMap = ({ previewRef }) => {
         update: () => setVersion(version + 1),
     }), [version, previewRef]);
 
-    
+
     if (!visible) {
         return (
             <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0 invisible"></div>
