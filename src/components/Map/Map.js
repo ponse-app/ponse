@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, memo } from "react";
+import React, { useRef, useEffect, useState, memo, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 import kunta_stat from "../../app/kunta_vaki2024.json";
 //import pno_stat from "../../app/pno_tilasto.json";
@@ -9,10 +9,13 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = ({ parameter, onUpdatePreviewBounds }) => {
+const Map = ({ onUpdatePreviewBounds, ref }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
+
+    const [parameter, setParameter] = useState("miehet");
+    const [version, setVersion] = useState(0);
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -37,7 +40,6 @@ const Map = ({ parameter, onUpdatePreviewBounds }) => {
     const getColor = (value) => {
         const normalizedValue =
             (Number(value) - datasetMin) / (datasetMax - datasetMin);
-
         const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
 
         return color;
@@ -115,7 +117,31 @@ const Map = ({ parameter, onUpdatePreviewBounds }) => {
             map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
+
+        return () => {
+            if (map.current == null) return;
+            map.current?.eachLayer((layer) => {
+                layer.off();
+                map.current.removeLayer(layer);
+            });
+        }
     }, [mapLayer]);
+
+    useImperativeHandle(ref, () => ({
+        setParameter: (parameter) => setParameter(parameter),
+        update: () => setVersion(version + 1),
+        countLayers: () => {
+            map.current?.eachLayer((layer) => {
+                console.log("test");
+            });
+        },
+        clearLayers: () => {
+            map.current?.eachLayer((layer) => {
+                layer.off();
+                map.current.removeLayer(layer);
+            });
+        }
+    }), [version]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>

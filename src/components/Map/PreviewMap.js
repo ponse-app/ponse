@@ -104,6 +104,14 @@ const PreviewMap = ({ previewRef }) => {
 
         layerBounds.current = pnoLayer.current.getBounds();
 
+        return () => {
+            if (map.current == null) return;
+            map.current?.eachLayer((layer) => {
+                layer.off();
+                map.current.removeLayer(layer);
+            });
+        }
+
     }, []);
 
     if (previewRef.current?.bounds) {
@@ -123,11 +131,15 @@ const PreviewMap = ({ previewRef }) => {
 
     if (!visible) {
         return (
-            <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0 invisible"></div>
+            <div className="absolute w-full h-full">
+                <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0 invisible"></div>
+            </div>
         );
     };
     return (
-        <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0"></div>
+        <div className="absolute w-full h-full">
+            <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0"></div>
+        </div>
     );
 };
 

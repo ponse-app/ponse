@@ -13,7 +13,16 @@ export default function Home() {
         ssr: !!false,
     });
 
-    const [parameter, setParameter] = useState("miehet");
+    const largeMapRef = useRef(null);
+
+    const updateSelectedParameter = (parameter) => {
+        largeMapRef.current?.setParameter(parameter);
+        //largeMapRef.current?.countLayers();
+        //largeMapRef.current?.clearLayers();
+        largeMapRef.current?.update();
+    }
+
+    //const [parameter, setParameter] = useState("miehet");
 
     //const [preview1, setPreview1] = useState(null);
     const previewMap1 = useRef(null);
@@ -31,14 +40,15 @@ export default function Home() {
             <main className="relative h-[100%] w-[100%]">
                 <div className="absolute h-full w-[50%]">
                     <DataSelector
-                        setParameter={(value) => setParameter(value)}
+                        setParameter={updateSelectedParameter}
                     />
                     <PreviewMap
                         previewRef = {previewMap1}
                     />
                 </div>
-                <Map parameter={parameter} 
-                    onUpdatePreviewBounds={updatePreviewBounds}/>
+                <Map
+                ref={largeMapRef}
+                onUpdatePreviewBounds={updatePreviewBounds}/>
             </main>
         </div>
     );
