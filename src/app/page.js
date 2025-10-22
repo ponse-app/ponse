@@ -5,10 +5,11 @@ import dynamic from "next/dynamic";
 import DataSelector from "../components/DataSelector/DataSelector";
 import { useEffect, useState } from "react";
 
+const Map = dynamic(() => import("../components/Map/Map"), {
+    ssr: !!false,
+});
+
 export default function Home() {
-    const Map = dynamic(() => import("../components/Map/Map"), {
-        ssr: !!false,
-    });
 
     const [parameter, setParameter] = useState("miehet");
 

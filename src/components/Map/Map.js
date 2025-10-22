@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import "leaflet/dist/leaflet.css";
 import kunta_stat from "../../app/kunta_vaki2024.json";
 import pno_stat from "../../app/pno_tilasto.json";
@@ -15,6 +15,7 @@ const Map = ({ parameter }) => {
     const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
     const [zoom] = useState(12);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
+    const geoJsonLayer = useRef(null);
     const [bounds, setBounds] = useState(null);
 
     const getPropertyValue = (municipalityName, property) => {
@@ -32,24 +33,26 @@ const Map = ({ parameter }) => {
             (a, b) => b.properties[parameter] - a.properties[parameter]
         );
 
-        console.log(sorted);
         return sorted;
     };
 
     const sorted = sortBy();
 
-    const getColor = (value) => {
-        const amountOfGaps = 44;
-        const interval = Math.ceil(sorted.length / amountOfGaps);
+    const getColor = useCallback(
+        (value) => {
+            const amountOfGaps = 44;
+            const interval = Math.ceil(sorted.length / amountOfGaps);
 
-        let whichGap = 0;
-        for (let i = 0; i < sorted.length; i += interval) {
-            if (sorted[i].properties[parameter] < value) break;
-            whichGap++;
-        }
+            let whichGap = 0;
+            for (let i = 0; i < sorted.length; i += interval) {
+                if (sorted[i].properties[parameter] < value) break;
+                whichGap++;
+            }
 
-        return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
-    };
+            return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
+        },
+        [sorted, parameter]
+    );
 
     proj4.defs(
         "EPSG:3067",
@@ -90,6 +93,9 @@ const Map = ({ parameter }) => {
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
 
+        // map.current.removeLayer(geoJsonLayer);
+        geoJsonLayer.current?.remove();
+
         const pnoLayer = L.Proj.geoJson(mapLayer, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
@@ -97,6 +103,7 @@ const Map = ({ parameter }) => {
                     `
                   <h2>${feature.properties.postinumeroalue}</h2>
                   <p>${feature.properties.nimi}</p>
+                  <p>${feature.properties[parameter]}</p>
                   `
                 );
 
@@ -120,11 +127,13 @@ const Map = ({ parameter }) => {
         }).addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
-        if (mapLayer == kunta_stat) {
+        if (mapLayer == kunta_stat && !geoJsonLayer.current) {
             map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
-    }, [mapLayer]);
+        
+        geoJsonLayer.current = pnoLayer;
+    }, [mapLayer, parameter, getColor]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
