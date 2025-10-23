@@ -17,7 +17,6 @@ const Map = ({ parameter }) => {
     const [mapLayer, setMapLayer] = useState(kunta_stat);
     const geoJsonLayer = useRef(null);
     const [bounds, setBounds] = useState(null);
-    const legend = useRef(L.control({ position: "bottomright" }));
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -109,8 +108,7 @@ const Map = ({ parameter }) => {
             "EPSG:3067",
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
-
-        // map.current.removeLayer(geoJsonLayer);
+        
         geoJsonLayer.current?.remove();
 
         const pnoLayer = L.Proj.geoJson(mapLayer, {
@@ -145,9 +143,9 @@ const Map = ({ parameter }) => {
 
 
 
-        legend.current.remove()
+        const legend = L.control({ position: "bottomright" });
 
-        legend.current.onAdd = () => {
+        legend.onAdd = () => {
             const div = L.DomUtil.create("div", "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black");
             div.style.fontSize = 2;
 
@@ -160,7 +158,7 @@ const Map = ({ parameter }) => {
             return div;
         };
 
-        legend.current.addTo(map.current);
+        legend.addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
         if (mapLayer == kunta_stat && !geoJsonLayer.current) {
@@ -169,6 +167,11 @@ const Map = ({ parameter }) => {
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
 
         geoJsonLayer.current = pnoLayer;
+        
+        return () => {
+            legend.remove()
+
+        }
     }, [mapLayer, parameter, getColor, sorted]);
 
     return (
