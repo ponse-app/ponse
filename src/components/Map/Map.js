@@ -44,12 +44,12 @@ const Map = ({ parameter }) => {
         const interval = Math.ceil(toBeGrouped.length / amountOfGaps);
         let grouped = [];
 
-        for (let i = 0, j = 0; i < toBeGrouped.length; i++) {
-            if (grouped.length <= j) {
+        for (let i = 0, groupNumber = 0; i < toBeGrouped.length; i++) {
+            if (grouped.length <= groupNumber) {
                 grouped.push([]);
             }
-            grouped[j].push(toBeGrouped[i]);
-            if (grouped[j].length === interval) j++;
+            grouped[groupNumber].push(toBeGrouped[i]);
+            if (grouped[groupNumber].length === interval) groupNumber++;
         }
 
         return grouped;
