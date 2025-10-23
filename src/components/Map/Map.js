@@ -38,9 +38,9 @@ const Map = ({ parameter }) => {
 
     const sorted = sortBy();
 
-    const group = (toBeGrouped) => {
-        const amountOfGaps = 44;
-        const interval = Math.ceil(toBeGrouped.length / amountOfGaps);
+    const group = useCallback((toBeGrouped) => {
+        const maxAmountOfGaps = 30;
+        const interval = Math.ceil(toBeGrouped.length / maxAmountOfGaps);
         let grouped = [];
 
         for (let i = 0, groupNumber = 0; i < toBeGrouped.length; i++) {
@@ -54,22 +54,25 @@ const Map = ({ parameter }) => {
         }
 
         return grouped;
-    };
+    }, [parameter]);
 
     const getColor = useCallback(
         (value) => {
-            const amountOfGaps = 44;
-            const interval = Math.ceil(sorted.length / amountOfGaps);
+            const grouped = group(sorted);
+            const amountOfGaps = grouped.length;
 
             let whichGap = 0;
-            for (let i = 0; i < sorted.length; i += interval) {
-                if (sorted[i].properties[parameter] < value) break;
-                whichGap++;
+            for (let i = 0; i < amountOfGaps; i++) {
+                const currentGap = grouped[i];
+                if (currentGap[currentGap.length - 1].properties[parameter] <= value && value <= currentGap[0].properties[parameter]) {
+                    whichGap = i;
+                    break;
+                }
             }
 
             return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
         },
-        [sorted, parameter]
+        [group, sorted, parameter]
     );
 
     proj4.defs(
@@ -110,7 +113,7 @@ const Map = ({ parameter }) => {
             "EPSG:3067",
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
-        
+
         geoJsonLayer.current?.remove();
 
         const pnoLayer = L.Proj.geoJson(mapLayer, {
@@ -174,7 +177,7 @@ const Map = ({ parameter }) => {
             legend.remove()
 
         }
-    }, [mapLayer, parameter, getColor, sorted]);
+    }, [mapLayer, parameter, getColor, sorted, group]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
