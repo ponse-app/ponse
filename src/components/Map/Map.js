@@ -48,7 +48,9 @@ const Map = ({ parameter }) => {
                 grouped.push([]);
             }
             grouped[groupNumber].push(toBeGrouped[i]);
-            if (grouped[groupNumber].length === interval) groupNumber++;
+
+            if (toBeGrouped[i].properties[parameter] === toBeGrouped[i+1]?.properties[parameter]) continue;
+            if (grouped[groupNumber].length >= interval) groupNumber++;
         }
 
         return grouped;
