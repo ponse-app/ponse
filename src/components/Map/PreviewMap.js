@@ -99,13 +99,14 @@ const PreviewMap = ({ previewRef }) => {
         var overlays = {
             "kunnat": kuntaLayer
         }
-        L.control.layers({}, overlays).addTo(map.current);
+        const layerControl = L.control.layers({}, overlays).addTo(map.current);
 
 
         layerBounds.current = pnoLayer.current.getBounds();
 
         return () => {
             if (map.current == null) return;
+            layerControl.remove();
             map.current?.eachLayer((layer) => {
                 layer.off();
                 map.current.removeLayer(layer);
