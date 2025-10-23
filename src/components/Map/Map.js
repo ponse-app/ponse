@@ -17,6 +17,7 @@ const Map = ({ parameter }) => {
     const [mapLayer, setMapLayer] = useState(kunta_stat);
     const geoJsonLayer = useRef(null);
     const [bounds, setBounds] = useState(null);
+    const legend = useRef(L.control({ position: "bottomright" }));
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -37,6 +38,22 @@ const Map = ({ parameter }) => {
     };
 
     const sorted = sortBy();
+
+    const group = (toBeGrouped) => {
+        const amountOfGaps = 44;
+        const interval = Math.ceil(toBeGrouped.length / amountOfGaps);
+        let grouped = [];
+
+        for (let i = 0, j = 0; i < toBeGrouped.length; i++) {
+            if (grouped.length <= j) {
+                grouped.push([]);
+            }
+            grouped[j].push(toBeGrouped[i]);
+            if (grouped[j].length === interval) j++;
+        }
+
+        return grouped;
+    };
 
     const getColor = useCallback(
         (value) => {
@@ -126,14 +143,33 @@ const Map = ({ parameter }) => {
             },
         }).addTo(map.current);
 
+
+
+        legend.current.remove()
+
+        legend.current.onAdd = () => {
+            const div = L.DomUtil.create("div", "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black");
+            div.style.fontSize = 2;
+
+            const grouped = group(sorted);
+
+            div.innerHTML = grouped.map((a) =>
+                `<p class="flex gap-2"><i style="width: 20px; height: 20px; float: left; background-color: ${getColor(a[0].properties[parameter])};"></i>${a[a.length - 1].properties[parameter]}&ndash;${a[0].properties[parameter]}</p>`
+            ).join('');
+
+            return div;
+        };
+
+        legend.current.addTo(map.current);
+
         const layerBounds = pnoLayer.getBounds();
         if (mapLayer == kunta_stat && !geoJsonLayer.current) {
             map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
-        
+
         geoJsonLayer.current = pnoLayer;
-    }, [mapLayer, parameter, getColor]);
+    }, [mapLayer, parameter, getColor, sorted]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
