@@ -9,13 +9,10 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = ({ onUpdatePreviewBounds, ref }) => {
+const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
-
-    const [parameter, setParameter] = useState("miehet");
-    const [version, setVersion] = useState(0);
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -87,28 +84,11 @@ const Map = ({ onUpdatePreviewBounds, ref }) => {
         const pnoLayer = L.Proj.geoJson(mapLayer, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
-                /* layer.bindPopup(
-                    `
-                  <h2>${feature.properties.postinumeroalue}</h2>
-                  <p>${feature.properties.nimi}</p>
-                  `
-                ); */
                 layer.addEventListener("click", (e) => {
                     //setMapLayer(pno_stat);
                     map.current.fitBounds(e.target.getBounds());
                     onUpdatePreviewBounds(e.target.getBounds());
                 });
-                /*                 layer
-                    .bindTooltip(
-                        String(
-                            getPropertyValue(feature.properties.nimi, parameter)
-                        ),
-                        {
-                            permanent: true,
-                            direction: "center",
-                        }
-                    )
-                    .openTooltip(); */
             },
         }).addTo(map.current);
 
@@ -126,22 +106,6 @@ const Map = ({ onUpdatePreviewBounds, ref }) => {
             });
         }
     }, [mapLayer]);
-
-    useImperativeHandle(ref, () => ({
-        setParameter: (parameter) => setParameter(parameter),
-        update: () => setVersion(version + 1),
-        countLayers: () => {
-            map.current?.eachLayer((layer) => {
-                console.log("test");
-            });
-        },
-        clearLayers: () => {
-            map.current?.eachLayer((layer) => {
-                layer.off();
-                map.current.removeLayer(layer);
-            });
-        }
-    }), [version]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>

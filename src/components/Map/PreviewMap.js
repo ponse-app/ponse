@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const PreviewMap = ({ previewRef }) => {
+const PreviewMap = ({ preview }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
@@ -115,22 +115,22 @@ const PreviewMap = ({ previewRef }) => {
 
     }, []);
 
-    if (previewRef.current?.bounds) {
-        map.current?.fitBounds(previewRef.current.bounds, { animate: false });
+    if (preview) {
+        map.current?.fitBounds(preview, { animate: false });
     }
     map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
 
-    useImperativeHandle(previewRef, () => ({
+    /* useImperativeHandle(previewRef, () => ({
         giveBounds: (bounds) => previewRef.current.bounds = bounds,
         getBounds: () => {
             return previewRef.current.bounds;
         },
         show: () => setVisible(true),
         update: () => setVersion(version + 1),
-    }), [version, previewRef]);
+    }), [version, previewRef]); */
 
 
-    if (!visible) {
+    if (!preview) {
         return (
             <div className="absolute w-full h-full">
                 <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0 invisible"></div>
