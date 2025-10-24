@@ -123,9 +123,8 @@ const PreviewMap = ({ preview }) => {
     
     return (
         <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] left-0 bottom-0"
-        style={
-            {...styles}
-        }></div>
+        style={styles}>
+        </div>
     );
 };
 
