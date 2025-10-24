@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, memo, useImperativeHandle } from "react";
+import React, { useRef, useEffect, useState, useCallback, memo } from "react";
 import "leaflet/dist/leaflet.css";
 import kunta_stat from "../../app/kunta_vaki2024.json";
 //import pno_stat from "../../app/pno_tilasto.json";
@@ -13,6 +13,8 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
+    const geoJsonLayer = useRef(null);
+    const [bounds, setBounds] = useState(null);
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -24,23 +26,52 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
         return null;
     };
 
-    const getDatasetMinMax = () => {
-        const propertyValues = kunta_stat.features.map((kunta) => {
-            return kunta.properties[parameter];
-        });
+    const sortBy = () => {
+        const sorted = mapLayer.features.sort(
+            (a, b) => b.properties[parameter] - a.properties[parameter]
+        );
 
-        return [Math.min(...propertyValues), Math.max(...propertyValues)];
+        return sorted;
     };
 
-    const [datasetMin, datasetMax] = getDatasetMinMax();
+    const sorted = sortBy();
 
-    const getColor = (value) => {
-        const normalizedValue =
-            (Number(value) - datasetMin) / (datasetMax - datasetMin);
-        const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
+    const group = useCallback((toBeGrouped) => {
+        const maxAmountOfGaps = 30;
+        const interval = Math.ceil(toBeGrouped.length / maxAmountOfGaps);
+        let grouped = [];
 
-        return color;
-    };
+        for (let i = 0, groupNumber = 0; i < toBeGrouped.length; i++) {
+            if (grouped.length <= groupNumber) {
+                grouped.push([]);
+            }
+            grouped[groupNumber].push(toBeGrouped[i]);
+
+            if (toBeGrouped[i].properties[parameter] === toBeGrouped[i+1]?.properties[parameter]) continue;
+            if (grouped[groupNumber].length >= interval) groupNumber++;
+        }
+
+        return grouped;
+    }, [parameter]);
+
+    const getColor = useCallback(
+        (value) => {
+            const grouped = group(sorted);
+            const amountOfGaps = grouped.length;
+
+            let whichGap = 0;
+            for (let i = 0; i < amountOfGaps; i++) {
+                const currentGap = grouped[i];
+                if (currentGap[currentGap.length - 1].properties[parameter] <= value && value <= currentGap[0].properties[parameter]) {
+                    whichGap = i;
+                    break;
+                }
+            }
+
+            return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
+        },
+        [group, sorted, parameter]
+    );
 
     proj4.defs(
         "EPSG:3067",
@@ -81,6 +112,8 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
 
+        geoJsonLayer.current?.remove();
+
         const pnoLayer = L.Proj.geoJson(mapLayer, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
@@ -92,20 +125,42 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
             },
         }).addTo(map.current);
 
+
+
+        const legend = L.control({ position: "bottomright" });
+
+        legend.onAdd = () => {
+            const div = L.DomUtil.create("div", "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black");
+            div.style.fontSize = 2;
+
+            const grouped = group(sorted);
+
+            div.innerHTML = grouped.map((a) =>
+                `<p class="flex gap-2"><i style="width: 20px; height: 20px; float: left; background-color: ${getColor(a[0].properties[parameter])};"></i>${a[a.length - 1].properties[parameter]}&ndash;${a[0].properties[parameter]}</p>`
+            ).join('');
+
+            return div;
+        };
+
+        legend.addTo(map.current);
+
         const layerBounds = pnoLayer.getBounds();
-        if (mapLayer == kunta_stat) {
+        if (mapLayer == kunta_stat && !geoJsonLayer.current) {
             map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
+        geoJsonLayer.current = pnoLayer;
 
         return () => {
+            legend.remove()
+
             if (map.current == null) return;
             map.current?.eachLayer((layer) => {
                 layer.off();
                 map.current.removeLayer(layer);
             });
         }
-    }, [mapLayer]);
+    }, [mapLayer, parameter, getColor, sorted, group, onUpdatePreviewBounds]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
