@@ -130,16 +130,24 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
         const legend = L.control({ position: "bottomright" });
 
         legend.onAdd = () => {
-            const div = L.DomUtil.create("div", "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black");
-            div.style.fontSize = 2;
-
             const grouped = group(sorted);
+            const eLegendContainer = L.DomUtil.create("div", "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black");
 
-            div.innerHTML = grouped.map((a) =>
-                `<p class="flex gap-2"><i style="width: 20px; height: 20px; float: left; background-color: ${getColor(a[0].properties[parameter])};"></i>${a[a.length - 1].properties[parameter]}&ndash;${a[0].properties[parameter]}</p>`
-            ).join('');
+            grouped.forEach((a) => {
+                const startValue = a[a.length - 1].properties[parameter];
+                const endValue = a[0].properties[parameter];
+                
+                const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
+                eLegendLine.textContent = `${startValue}–${endValue}`;
 
-            return div;
+                const eColorBox = L.DomUtil.create("i", "w-[17] h-[17] float-left");
+                eColorBox.style.backgroundColor = getColor(startValue);
+                
+                eLegendLine.prepend(eColorBox);
+                eLegendContainer.append(eLegendLine);
+            });
+
+            return eLegendContainer;
         };
 
         legend.addTo(map.current);
