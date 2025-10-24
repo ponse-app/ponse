@@ -13,9 +13,6 @@ const PreviewMap = ({ preview }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
-    const [visible, setVisible] = useState(false);
-    const [version, setVersion] = useState(0);
-
 
     proj4.defs(
         "EPSG:3067",
@@ -25,11 +22,11 @@ const PreviewMap = ({ preview }) => {
     useEffect(() => {
         if (map.current == null) {
             map.current = L.map(mapContainer.current, {
-                /* zoomControl: false,
+                zoomControl: false,
                 scrollWheelZoom: false,
                 doubleClickZoom: false,
-                zoom: false, */
-                //dragging: false,
+                zoom: false,
+                dragging: false,
             });
         } // stops map from intializing more than once
     }, []);
@@ -120,27 +117,15 @@ const PreviewMap = ({ preview }) => {
     }
     map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
 
-    /* useImperativeHandle(previewRef, () => ({
-        giveBounds: (bounds) => previewRef.current.bounds = bounds,
-        getBounds: () => {
-            return previewRef.current.bounds;
-        },
-        show: () => setVisible(true),
-        update: () => setVersion(version + 1),
-    }), [version, previewRef]); */
-
-
-    if (!preview) {
-        return (
-            <div className="absolute w-full h-full">
-                <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0 invisible"></div>
-            </div>
-        );
-    };
+    const styles = {
+        visibility: preview ? 'visible' : 'hidden',
+    }
+    
     return (
-        <div className="absolute w-full h-full">
-            <div ref={mapContainer} className="absolute h-1/4 w-1/2 left-0 bottom-0"></div>
-        </div>
+        <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] left-0 bottom-0"
+        style={
+            {styles}
+        }></div>
     );
 };
 
