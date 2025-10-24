@@ -14,17 +14,6 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
     const map = useRef(null);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
     const geoJsonLayer = useRef(null);
-    const [bounds, setBounds] = useState(null);
-
-    const getPropertyValue = (municipalityName, property) => {
-        const municipality = kunta_stat.features.find(
-            (municipality) => municipality.properties.nimi === municipalityName
-        );
-
-        if (municipality) return municipality.properties[property];
-
-        return null;
-    };
 
     const sortBy = () => {
         const sorted = mapLayer.features.sort(
@@ -86,14 +75,6 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
 
     useEffect(() => {
         if (map.current == null) return;
-
-        const getRandomColor = () => {
-            const colors = ["#123456", "#987654", "#262626", "#aa0000"];
-
-            const randomInt = Math.floor(Math.random() * colors.length);
-
-            return colors[randomInt];
-        };
 
         const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
