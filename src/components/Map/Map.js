@@ -140,7 +140,7 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
                 const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
                 eLegendLine.textContent = `${startValue}–${endValue}`;
 
-                const eColorBox = L.DomUtil.create("i", "w-[17] h-[17] float-left");
+                const eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
                 eColorBox.style.backgroundColor = getColor(startValue);
                 
                 eLegendLine.prepend(eColorBox);
