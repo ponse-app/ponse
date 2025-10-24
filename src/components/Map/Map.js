@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, memo, useImperativeHandle } from "react";
 import "leaflet/dist/leaflet.css";
 import kunta_stat from "../../app/kunta_vaki2024.json";
-import pno_stat from "../../app/pno_tilasto.json";
+//import pno_stat from "../../app/pno_tilasto.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = ({ parameter }) => {
+const Map = ({ onUpdatePreviewBounds, ref }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [center, setCenter] = useState({ lng: 13.338414, lat: 52.507932 });
-    const [zoom] = useState(12);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
-    const [bounds, setBounds] = useState(null);
+
+    const [parameter, setParameter] = useState("miehet");
+    const [version, setVersion] = useState(0);
 
     const getPropertyValue = (municipalityName, property) => {
         const municipality = kunta_stat.features.find(
@@ -40,7 +40,6 @@ const Map = ({ parameter }) => {
     const getColor = (value) => {
         const normalizedValue =
             (Number(value) - datasetMin) / (datasetMax - datasetMin);
-
         const color = `hsl(217 100 ${(normalizedValue * 100) / 2})`;
 
         return color;
@@ -95,8 +94,9 @@ const Map = ({ parameter }) => {
                   `
                 ); */
                 layer.addEventListener("click", (e) => {
-                    setMapLayer(pno_stat);
+                    //setMapLayer(pno_stat);
                     map.current.fitBounds(e.target.getBounds());
+                    onUpdatePreviewBounds(e.target.getBounds());
                 });
                 /*                 layer
                     .bindTooltip(
@@ -117,11 +117,35 @@ const Map = ({ parameter }) => {
             map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
+
+        return () => {
+            if (map.current == null) return;
+            map.current?.eachLayer((layer) => {
+                layer.off();
+                map.current.removeLayer(layer);
+            });
+        }
     }, [mapLayer]);
+
+    useImperativeHandle(ref, () => ({
+        setParameter: (parameter) => setParameter(parameter),
+        update: () => setVersion(version + 1),
+        countLayers: () => {
+            map.current?.eachLayer((layer) => {
+                console.log("test");
+            });
+        },
+        clearLayers: () => {
+            map.current?.eachLayer((layer) => {
+                layer.off();
+                map.current.removeLayer(layer);
+            });
+        }
+    }), [version]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
     );
 };
 
-export default Map;
+export default memo(Map);

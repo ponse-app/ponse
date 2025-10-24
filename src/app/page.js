@@ -3,32 +3,52 @@
 import dynamic from "next/dynamic";
 //import Map from "../components/Map/Map";
 import DataSelector from "../components/DataSelector/DataSelector";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
     const Map = dynamic(() => import("../components/Map/Map"), {
         ssr: !!false,
     });
+    const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
+        ssr: !!false,
+    });
 
-    const [parameter, setParameter] = useState("miehet");
+    const largeMapRef = useRef(null);
 
-    /* return (
-        <div className="font-sans grid items-center justify-items-center min-h-screen">
-            <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-                <Map />
-            </main>
-        </div>
-    ); */
+    const updateSelectedParameter = (parameter) => {
+        largeMapRef.current?.setParameter(parameter);
+        //largeMapRef.current?.countLayers();
+        //largeMapRef.current?.clearLayers();
+        largeMapRef.current?.update();
+    }
+
+    //const [parameter, setParameter] = useState("miehet");
+
+    //const [preview1, setPreview1] = useState(null);
+    const previewMap1 = useRef(null);
+
+    const updatePreviewBounds = (bounds) => {
+        //setPreview1(bounds);
+        //previewMap1.current
+        const newBounds = previewMap1.current?.giveBounds(bounds);
+        previewMap1.current?.show();
+        previewMap1.current?.update();
+    };
 
     return (
         <div className="font-sans min-h-screen h-dvh w-dvw">
             <main className="relative h-[100%] w-[100%]">
                 <div className="absolute h-full w-[50%]">
                     <DataSelector
-                        setParameter={(value) => setParameter(value)}
+                        setParameter={updateSelectedParameter}
+                    />
+                    <PreviewMap
+                        previewRef = {previewMap1}
                     />
                 </div>
-                <Map parameter={parameter} />
+                <Map
+                ref={largeMapRef}
+                onUpdatePreviewBounds={updatePreviewBounds}/>
             </main>
         </div>
     );
