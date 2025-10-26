@@ -70,7 +70,19 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
                 }
             }
 
-            return `hsl(0 100 ${(whichGap * 100) / (amountOfGaps - 1)})`;
+            const gapPercentage = (whichGap) / (amountOfGaps - 1) * 100;
+
+            let lightness, hue;
+            
+            if (gapPercentage <= 50) {
+                lightness = 50 + gapPercentage;
+                hue = 120;
+            } else {
+                lightness = 50 + (100 - gapPercentage);
+                hue = 0;
+            }
+
+            return `hsl(${hue} 100 ${lightness})`
         },
         [grouped, parameter]
     );
