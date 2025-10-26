@@ -70,7 +70,7 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
                 }
             }
 
-            return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
+            return `hsl(0 100 ${(whichGap * 100) / (amountOfGaps - 1)})`;
         },
         [grouped, parameter]
     );
