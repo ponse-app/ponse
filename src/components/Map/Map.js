@@ -26,17 +26,29 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
     const sorted = sortBy();
 
     const group = useCallback((toBeGrouped) => {
-        const maxAmountOfGaps = 30;
-        const interval = Math.ceil(toBeGrouped.length / maxAmountOfGaps);
-        let grouped = [];
+        // Groups data to the following structure: [[200, 100, ..., 50], [ 40, ..., 30], ..., [29, ..., 10]]
+        // Aims to group items equidistantly (every group have the same amount of items)
+        // but designed to keep same values in the same group
+
+        const maxAmountOfGroups = 30; // Maximum amount of groups
+        const interval = Math.ceil(toBeGrouped.length / maxAmountOfGroups); // Roughfly how many items in a group
+
+        let grouped = []; // Array for the final group
 
         for (let i = 0, groupNumber = 0; i < toBeGrouped.length; i++) {
+            // If there's not a group already and a one is needed, create a new one
             if (grouped.length <= groupNumber) {
                 grouped.push([]);
             }
+
+            // Push current value to current group
             grouped[groupNumber].push(toBeGrouped[i]);
 
+            // Check if current value is the same as next one.
+            // If it's then delay group change to keep same values in the same group
             if (toBeGrouped[i].properties[parameter] === toBeGrouped[i+1]?.properties[parameter]) continue;
+
+            // If current group have enough items, change group
             if (grouped[groupNumber].length >= interval) groupNumber++;
         }
 
