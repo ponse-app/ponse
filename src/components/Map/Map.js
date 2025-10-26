@@ -55,9 +55,10 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
         return grouped;
     }, [parameter]);
 
+    const grouped = group(sorted)
+
     const getColor = useCallback(
         (value) => {
-            const grouped = group(sorted);
             const amountOfGaps = grouped.length;
 
             let whichGap = 0;
@@ -71,7 +72,7 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
 
             return `hsl(0 100 ${(whichGap * 100) / amountOfGaps})`;
         },
-        [group, sorted, parameter]
+        [grouped, parameter]
     );
 
     proj4.defs(
@@ -123,7 +124,6 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
         const legend = L.control({ position: "bottomright" });
 
         legend.onAdd = () => {
-            const grouped = group(sorted);
             const eLegendContainer = L.DomUtil.create("div", "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black");
 
             grouped.forEach((a) => {
@@ -161,7 +161,7 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
                 map.current.removeLayer(layer);
             });
         }
-    }, [mapLayer, parameter, getColor, sorted, group, onUpdatePreviewBounds]);
+    }, [mapLayer, parameter, getColor, grouped, onUpdatePreviewBounds]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
