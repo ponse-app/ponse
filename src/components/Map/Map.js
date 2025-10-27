@@ -94,12 +94,9 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
 
     useEffect(() => {
         if (map.current == null) {
+            console.log("Uusi pääkartta alustettu");
             map.current = L.map(mapContainer.current, { minZoom: 5 });
         } // stops map from intializing more than once
-    }, []);
-
-    useEffect(() => {
-        if (map.current == null) return;
 
         const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
@@ -172,6 +169,9 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
                 layer.off();
                 map.current.removeLayer(layer);
             });
+            /* map.current.remove();
+            map.current = null;*/
+            console.log("Map useEffect return");
         }
     }, [mapLayer, parameter, getColor, grouped, onUpdatePreviewBounds]);
 

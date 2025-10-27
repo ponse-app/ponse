@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 //import Map from "../components/Map/Map";
 import DataSelector from "../components/DataSelector/DataSelector";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 const Map = dynamic(() => import("../components/Map/Map"), {
     ssr: !!false,
@@ -19,11 +19,10 @@ export default function Home() {
     const [parameter, setParameter] = useState("miehet");
 
     const [preview1, setPreview1] = useState(null);
-    //const previewMap1 = useRef(null);
 
-    const updatePreviewBounds = (bounds) => {
+    const updatePreviewBounds = useCallback((bounds) => {
         setPreview1(bounds);
-    };
+    }, []);
 
     return (
         <div className="font-sans min-h-screen h-dvh w-dvw">
@@ -33,12 +32,10 @@ export default function Home() {
                         setParameter={setParameter}
                     />
                     <PreviewMap
-                        //previewRef={previewMap1}
                         preview={preview1}
                     />
                 </div>
                 <Map
-                    //ref={largeMapRef}
                     onUpdatePreviewBounds={updatePreviewBounds}
                     parameter={parameter} />
             </main>

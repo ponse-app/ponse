@@ -19,6 +19,12 @@ const PreviewMap = ({ preview }) => {
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
     );
 
+
+    const featureStyle = useRef(null);
+    const pnoLayer = useRef(null);
+    const layerBounds = useRef(null);
+    const [selectedPno, SetSelectedPno] = useState(null);
+    const hoveredPno = useRef(null);
     useEffect(() => {
         if (map.current == null) {
             map.current = L.map(mapContainer.current, {
@@ -29,15 +35,6 @@ const PreviewMap = ({ preview }) => {
                 dragging: false,
             });
         } // stops map from intializing more than once
-    }, []);
-
-    const featureStyle = useRef(null);
-    const pnoLayer = useRef(null);
-    const layerBounds = useRef(null);
-    const [selectedPno, SetSelectedPno] = useState(null);
-    const hoveredPno = useRef(null);
-    useEffect(() => {
-        if (map.current == null) return;
 
         featureStyle.current = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
@@ -62,7 +59,6 @@ const PreviewMap = ({ preview }) => {
             style: featureStyle.current,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
-                    console.log("New postnumber", layer);
                     if (hoveredPno.current != layer) {
 
                         if (hoveredPno.current != null) {
@@ -108,6 +104,9 @@ const PreviewMap = ({ preview }) => {
                 layer.off();
                 map.current.removeLayer(layer);
             });
+            map.current.remove();
+            map.current = null;
+            console.log("PreviewMap useEffect return");
         }
 
     }, []);
@@ -120,10 +119,10 @@ const PreviewMap = ({ preview }) => {
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
     }
-    
+
     return (
         <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] left-0 bottom-0"
-        style={styles}>
+            style={styles}>
         </div>
     );
 };
