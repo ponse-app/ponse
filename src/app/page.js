@@ -22,6 +22,7 @@ export default function Home() {
 
     const updatePreviewBounds = useCallback((bounds) => {
         setPreview1(bounds);
+
     }, []);
 
     return (

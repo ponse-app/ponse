@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useImperativeHandle } from "react";
+import React, { useRef, useEffect, useState, useImperativeHandle, memo } from "react";
 import "leaflet/dist/leaflet.css";
 import pno_stat from "../../app/pno_tilasto.json";
 import kunta_stat from "../../app/kunta_vaki2024.json";
@@ -20,8 +20,6 @@ const PreviewMap = ({ preview }) => {
     );
 
 
-    const featureStyle = useRef(null);
-    const pnoLayer = useRef(null);
     const layerBounds = useRef(null);
     const [selectedPno, SetSelectedPno] = useState(null);
     const hoveredPno = useRef(null);
@@ -36,7 +34,7 @@ const PreviewMap = ({ preview }) => {
             });
         } // stops map from intializing more than once
 
-        featureStyle.current = (feature) => {
+        const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
             return {
                 /* fillColor: getColor(feature.properties[parameter]), */
@@ -55,14 +53,14 @@ const PreviewMap = ({ preview }) => {
         );
 
 
-        pnoLayer.current = L.Proj.geoJson(pno_stat, {
-            style: featureStyle.current,
+        const pnoLayer = L.Proj.geoJson(pno_stat, {
+            style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
                     if (hoveredPno.current != layer) {
 
                         if (hoveredPno.current != null) {
-                            hoveredPno.current.setStyle(featureStyle.current());
+                            hoveredPno.current.setStyle(featureStyle());
                         }
                         hoveredPno.current = layer;
                         layer.setStyle({
@@ -95,7 +93,7 @@ const PreviewMap = ({ preview }) => {
         const layerControl = L.control.layers({}, overlays).addTo(map.current);
 
 
-        layerBounds.current = pnoLayer.current.getBounds();
+        layerBounds.current = pnoLayer.getBounds();
 
         return () => {
             if (map.current == null) return;
@@ -117,14 +115,14 @@ const PreviewMap = ({ preview }) => {
     map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
 
     const styles = {
-        visibility: preview ? 'visible' : 'hidden',
-    }
+        visibility: preview ? 'visible' : 'none',
+    } 
 
     return (
         <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] left-0 bottom-0"
-            style={styles}>
-        </div>
+            //style={styles}>
+        ></div>
     );
 };
 
-export default PreviewMap;
+export default memo(PreviewMap);

@@ -122,7 +122,7 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter }) => {
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("click", (e) => {
                     //setMapLayer(pno_stat);
-                    map.current.fitBounds(e.target.getBounds());
+                    map.current?.fitBounds(e.target.getBounds(), { animate: true });
                     onUpdatePreviewBounds(e.target.getBounds());
                 });
             },
