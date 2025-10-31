@@ -16,13 +16,13 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     const geoJsonLayer = useRef(null);
 
     const sortBy = () => {
-        const sorted = mapLayer.features.sort(
+        const sorted = mapLayer.features.toSorted(
             (a, b) => b.properties[parameter] - a.properties[parameter]
         );
-
+        
         return sorted;
     };
-
+    
     const sorted = sortBy();
 
     const group = useCallback((toBeGrouped) => {
