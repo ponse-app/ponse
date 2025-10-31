@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const Map = ({ onUpdatePreviewBounds, ref, parameter, setKuntaName }) => {
+const Map = ({ onUpdatePreviewBounds, parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [mapLayer, setMapLayer] = useState(kunta_stat);
@@ -124,7 +124,6 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter, setKuntaName }) => {
                     //setMapLayer(pno_stat);
                     map.current?.fitBounds(e.target.getBounds(), { animate: true });
                     onUpdatePreviewBounds(e.target.getBounds(), feature.properties.nimi);
-                    //setKuntaName(feature.properties.nimi);
                 });
             },
         }).addTo(map.current);
