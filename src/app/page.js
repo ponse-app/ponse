@@ -14,20 +14,22 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
 
 export default function Home() {
 
-    const [kuntaName, setKuntaName] = useState(" ")
+    //const [kuntaName, setKuntaName] = useState(" ");
 
     const [parameter, setParameter] = useState("miehet");
 
     const [previewTable, setPreviewTable] = useState([]);
 
-    const updatePreviewBounds = useCallback((bounds) => {
+    const updatePreviewBounds = useCallback((bounds, kuntaName) => {
         if (previewTable.length >= 2) {
-            setPreviewTable([previewTable[0], bounds]);
+            setPreviewTable([previewTable[0], {bounds: bounds, 
+                kuntaName: kuntaName}])
+            /* setPreviewTable([previewTable[0], bounds]); */
         }
         else {
-            setPreviewTable([...previewTable,
-                bounds
-            ])
+            setPreviewTable([...previewTable, {
+                bounds: bounds,
+                kuntaName: kuntaName}])
         }
         //setPreview1(bounds);
     }, [previewTable]);
@@ -40,12 +42,12 @@ export default function Home() {
                         setParameter={setParameter}
                     />
                     <PreviewMap
-                        preview={previewTable[0]}
-                        kuntaName={kuntaName}
+                        preview={previewTable[0]?.bounds}
+                        kuntaName={previewTable[0]?.kuntaName}
                         position={0}/>
                     <PreviewMap
-                        preview={previewTable[1]}
-                        kuntaName={kuntaName}
+                        preview={previewTable[1]?.bounds}
+                        kuntaName={previewTable[1]?.kuntaName}
                         position={1}/>
                 </div>
                 <Map

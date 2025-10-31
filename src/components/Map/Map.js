@@ -123,8 +123,8 @@ const Map = ({ onUpdatePreviewBounds, ref, parameter, setKuntaName }) => {
                 layer.addEventListener("click", (e) => {
                     //setMapLayer(pno_stat);
                     map.current?.fitBounds(e.target.getBounds(), { animate: true });
-                    onUpdatePreviewBounds(e.target.getBounds());
-                    setKuntaName(feature.properties.nimi);
+                    onUpdatePreviewBounds(e.target.getBounds(), feature.properties.nimi);
+                    //setKuntaName(feature.properties.nimi);
                 });
             },
         }).addTo(map.current);
