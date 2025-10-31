@@ -14,7 +14,7 @@ const Map = ({ setParameter }) => {
                     <fieldset>
                         <legend>Valitse parametrit:</legend>
                         <ParameterSelector
-                            setParameter={(value) => setParameter(value)}
+                            setParameter={setParameter}
                             inputName={"parameter1"}
                         />
                         {/* <ParameterSelector inputName={"parameter2"} />
