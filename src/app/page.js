@@ -18,12 +18,19 @@ export default function Home() {
 
     const [parameter, setParameter] = useState("miehet");
 
-    const [preview1, setPreview1] = useState(null);
+    const [previewTable, setPreviewTable] = useState([]);
 
     const updatePreviewBounds = useCallback((bounds) => {
-        setPreview1(bounds);
-
-    }, []);
+        if (previewTable.length >= 2) {
+            setPreviewTable([previewTable[0], bounds]);
+        }
+        else {
+            setPreviewTable([...previewTable,
+                bounds
+            ])
+        }
+        //setPreview1(bounds);
+    }, [previewTable]);
 
     return (
         <div className="font-sans min-h-screen h-dvh w-dvw">
@@ -33,8 +40,11 @@ export default function Home() {
                         setParameter={setParameter}
                     />
                     <PreviewMap
-                        preview={preview1}
-                    />
+                        preview={previewTable[0]}
+                        position={0}/>
+                    <PreviewMap
+                        preview={previewTable[1]}
+                        position={1}/>
                 </div>
                 <Map
                     onUpdatePreviewBounds={updatePreviewBounds}

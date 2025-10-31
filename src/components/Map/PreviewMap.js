@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const PreviewMap = ({ preview }) => {
+const PreviewMap = ({ preview, position }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
@@ -115,13 +115,20 @@ const PreviewMap = ({ preview }) => {
     map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
 
     const styles = {
-        visibility: preview ? 'visible' : 'none',
-    } 
+        visibility: preview ? 'visible' : 'hidden',
+        left: 0,
+        right: ""
+    }
+
+    if (position == 1) {
+        styles.left = "";
+        styles.right = 0;
+    }
 
     return (
-        <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] left-0 bottom-0"
-            //style={styles}>
-        ></div>
+        <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] bottom-0"
+            style={styles}>
+        </div>
     );
 };
 
