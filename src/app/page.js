@@ -14,7 +14,7 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
 
 export default function Home() {
 
-
+    const [kuntaName, setKuntaName] = useState(" ")
 
     const [parameter, setParameter] = useState("miehet");
 
@@ -41,14 +41,17 @@ export default function Home() {
                     />
                     <PreviewMap
                         preview={previewTable[0]}
+                        kuntaName={kuntaName}
                         position={0}/>
                     <PreviewMap
                         preview={previewTable[1]}
+                        kuntaName={kuntaName}
                         position={1}/>
                 </div>
                 <Map
                     onUpdatePreviewBounds={updatePreviewBounds}
-                    parameter={parameter} />
+                    parameter={parameter} 
+                    setKuntaName={(value) => setKuntaName(value)} />
             </main>
         </div>
     );

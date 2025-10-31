@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const PreviewMap = ({ preview, position }) => {
+const PreviewMap = ({ preview, kuntaName, position }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
@@ -126,8 +126,11 @@ const PreviewMap = ({ preview, position }) => {
     }
 
     return (
-        <div ref={mapContainer} className="absolute h-[25vh] w-[25vw] bottom-0"
-            style={styles}>
+        <div className ="absolute bottom-0"
+        style={styles}>
+            <p className="text-center">{kuntaName}</p>
+            <div ref={mapContainer} className="h-[25vh] w-[25vw]"
+            ></div>
         </div>
     );
 };
