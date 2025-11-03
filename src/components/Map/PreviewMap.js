@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const PreviewMap = ({ preview, kuntaName, position, handlePreviewSelection, isSelectedPreview }) => {
+const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection, isSelectedPreview }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
@@ -23,16 +23,21 @@ const PreviewMap = ({ preview, kuntaName, position, handlePreviewSelection, isSe
     const layerBounds = useRef(null);
     const [selectedPno, SetSelectedPno] = useState(null);
     const hoveredPno = useRef(null);
+
     useEffect(() => {
         if (map.current == null) {
             map.current = L.map(mapContainer.current, {
-                zoomControl: false,
+                /* zoomControl: false,
                 scrollWheelZoom: false,
                 doubleClickZoom: false,
                 zoom: false,
-                dragging: false,
+                dragging: false, */
             });
         } // stops map from intializing more than once
+        if (!previewFeature) {
+            console.log("previewFeature ei ole annettu", previewFeature);
+            return;
+        }
 
         const featureStyle = (feature) => {
             // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
@@ -52,8 +57,30 @@ const PreviewMap = ({ preview, kuntaName, position, handlePreviewSelection, isSe
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
 
+        console.log("feature: ", previewFeature);
 
-        const pnoLayer = L.Proj.geoJson(pno_stat, {
+        // Tässä etsitään kunnan postinumeroalueita
+        let postnumbers = [];
+        for (const pno of pno_stat.features) {
+            if (pno.properties.kunta == previewFeature.properties.kunta) {
+                postnumbers.push(pno);
+                //console.log(pno);
+            }
+        }
+        var collection = {
+            features: postnumbers,
+            type: 'FeatureCollection',
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:EPSG::3067"
+                }
+            },
+        };
+
+
+        const pnoLayer = L.Proj.geoJson(
+            collection, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
@@ -75,6 +102,16 @@ const PreviewMap = ({ preview, kuntaName, position, handlePreviewSelection, isSe
                 });
             },
         }).addTo(map.current);
+        console.log("collection: ", collection);
+        console.log("bounds: ", pnoLayer.getBounds());
+        map.current.fitBounds(pnoLayer.getBounds(), {
+            animate: false,
+        });
+        map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
+        /* setTimeout(() => {
+            map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
+        }, 100); */
+
         const kuntaLayer = L.Proj.geoJson(kunta_stat, {
             style: {
                 fillColor: "#000000",
@@ -90,34 +127,27 @@ const PreviewMap = ({ preview, kuntaName, position, handlePreviewSelection, isSe
         var overlays = {
             "kunnat": kuntaLayer
         }
-        const layerControl = L.control.layers({}, overlays).addTo(map.current);
+        //const layerControl = L.control.layers({}, overlays).addTo(map.current);
 
-
-        layerBounds.current = pnoLayer.getBounds();
 
         return () => {
             if (map.current == null) return;
-            layerControl.remove();
+            //layerControl.remove();
             map.current?.eachLayer((layer) => {
                 layer.off();
                 map.current.removeLayer(layer);
-            });
-            map.current.remove();
-            map.current = null;
+            });/* 
+        map.current.remove();
+        map.current = null; */
             console.log("PreviewMap useEffect return");
         }
 
-    }, []);
-
-    if (preview) {
-        map.current?.fitBounds(preview, { animate: false });
-    }
-    map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
+    }, [previewFeature, preview]); // Block user pan the map out of view.
 
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
         left: 0,
-        right: ""
+        right: "",
     }
 
     if (position == 1) {
