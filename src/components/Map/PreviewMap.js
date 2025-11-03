@@ -71,109 +71,108 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             features: postnumbers,
             type: 'FeatureCollection',
             "crs": {
-                    "type": "name",
-                    "properties": {
-                        "name": "urn:ogc:def:crs:EPSG::3067"
-                    }
-                },
-            };
-        
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:EPSG::3067"
+                }
+            },
+        };
+
 
         const pnoLayer = L.Proj.geoJson(
             collection, {
-        style: featureStyle,
-        onEachFeature: function (feature, layer) {
-            layer.addEventListener("mouseover", (e) => {
-                if (hoveredPno.current != layer) {
+            style: featureStyle,
+            onEachFeature: function (feature, layer) {
+                layer.addEventListener("mouseover", (e) => {
+                    if (hoveredPno.current != layer) {
 
-                    if (hoveredPno.current != null) {
-                        hoveredPno.current.setStyle(featureStyle());
+                        if (hoveredPno.current != null) {
+                            hoveredPno.current.setStyle(featureStyle());
+                        }
+                        hoveredPno.current = layer;
+                        layer.setStyle({
+                            fillColor: "#222222",
+                            weight: 2,
+                            opacity: 1,
+                            color: "yellow",
+                            dashArray: "3",
+                            fillOpacity: 1,
+                        });
                     }
-                    hoveredPno.current = layer;
-                    layer.setStyle({
-                        fillColor: "#222222",
-                        weight: 2,
-                        opacity: 1,
-                        color: "yellow",
-                        dashArray: "3",
-                        fillOpacity: 1,
-                    });
-                }
-            });
-        },
-    }).addTo(map.current);
-    /* console.log("collection: ", collection);
-    console.log("bounds: ", pnoLayer.getBounds()); */
-    map.current.fitBounds(pnoLayer.getBounds());
+                });
+            },
+        }).addTo(map.current);
+        console.log("collection: ", collection);
+        console.log("bounds: ", pnoLayer.getBounds());
+        map.current.fitBounds(pnoLayer.getBounds(), {
+            animate: false,
+        });
+        map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
+        /* setTimeout(() => {
+            map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
+        }, 100); */
 
-    const kuntaLayer = L.Proj.geoJson(kunta_stat, {
-        style: {
-            fillColor: "#000000",
-            weight: 2,
-            opacity: 0.5,
-            color: "blue",
-            dashArray: "3",
-            fillOpacity: 0,
-        },
-        interactive: false,
-    }).addTo(map.current);
+        const kuntaLayer = L.Proj.geoJson(kunta_stat, {
+            style: {
+                fillColor: "#000000",
+                weight: 2,
+                opacity: 0.5,
+                color: "blue",
+                dashArray: "3",
+                fillOpacity: 0,
+            },
+            interactive: false,
+        }).addTo(map.current);
 
-    var overlays = {
-        "kunnat": kuntaLayer
-    }
-    //const layerControl = L.control.layers({}, overlays).addTo(map.current);
+        var overlays = {
+            "kunnat": kuntaLayer
+        }
+        //const layerControl = L.control.layers({}, overlays).addTo(map.current);
 
 
-    layerBounds.current = pnoLayer.getBounds();
-
-    return () => {
-        if (map.current == null) return;
-        //layerControl.remove();
-        map.current?.eachLayer((layer) => {
-            layer.off();
-            map.current.removeLayer(layer);
-        });/* 
+        return () => {
+            if (map.current == null) return;
+            //layerControl.remove();
+            map.current?.eachLayer((layer) => {
+                layer.off();
+                map.current.removeLayer(layer);
+            });/* 
         map.current.remove();
         map.current = null; */
-        console.log("PreviewMap useEffect return");
+            console.log("PreviewMap useEffect return");
+        }
+
+    }, [previewFeature, preview]); // Block user pan the map out of view.
+
+    const styles = {
+        visibility: preview ? 'visible' : 'hidden',
+        left: 0,
+        right: "",
     }
 
-}, [previewFeature, preview]);
+    if (position == 1) {
+        styles.left = "";
+        styles.right = 0;
+    }
 
-if (preview) {
-    //map.current?.fitBounds(preview, { animate: false });
-}
-map.current?.setMaxBounds(layerBounds.current?.pad(0.1)); // Block user pan the map out of view.
-
-const styles = {
-    visibility: preview ? 'visible' : 'hidden',
-    left: 0,
-    right: "",
-}
-
-if (position == 1) {
-    styles.left = "";
-    styles.right = 0;
-}
-
-const selectedStyle = {
-    color: isSelectedPreview ? "yellow" : "red",
-}
+    const selectedStyle = {
+        color: isSelectedPreview ? "yellow" : "red",
+    }
 
 
-return (
-    <div className="absolute bottom-0"
-        style={styles}>
-        <p className="text-center"
-            style={selectedStyle}
-            onClick={(e) => {
-                handlePreviewSelection(position)
-            }}
-        >{kuntaName}</p>
-        <div ref={mapContainer} className="h-[25vh] w-[25vw]"
-        ></div>
-    </div>
-);
+    return (
+        <div className="absolute bottom-0"
+            style={styles}>
+            <p className="text-center"
+                style={selectedStyle}
+                onClick={(e) => {
+                    handlePreviewSelection(position)
+                }}
+            >{kuntaName}</p>
+            <div ref={mapContainer} className="h-[25vh] w-[25vw]"
+            ></div>
+        </div>
+    );
 };
 
 export default memo(PreviewMap);
