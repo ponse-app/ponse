@@ -19,17 +19,16 @@ export default function Home() {
     const [selectedPreview, setSelectedPreview] = useState(0);
 
     const updatePreviewBounds = useCallback(
-        (bounds, kuntaName) => {
+        (bounds, kuntaName, feature) => {
             if (selectedPreview == 1) {
                 setPreviewTable([
                     previewTable[0],
-                    { bounds: bounds, kuntaName: kuntaName },
+                    { bounds: bounds, kuntaName: kuntaName, previewFeature: feature },
                 ]);
-                /* setPreviewTable([previewTable[0], bounds]); */
             }
             else {
                 setPreviewTable([
-                    { bounds: bounds, kuntaName: kuntaName },
+                    { bounds: bounds, kuntaName: kuntaName, previewFeature: feature },
                     previewTable[1]
                 ]);
                 if (previewTable[1] == null) {
@@ -56,6 +55,7 @@ export default function Home() {
                     <DataSelector setParameter={setParameter} />
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
+                        previewFeature={previewTable[0]?.previewFeature}
                         kuntaName={previewTable[0]?.kuntaName}
                         handlePreviewSelection={handlePreviewSelection}
                         isSelectedPreview={selectedPreview == 0}
@@ -63,6 +63,7 @@ export default function Home() {
                     />
                     <PreviewMap
                         preview={previewTable[1]?.bounds}
+                        previewFeature={previewTable[1]?.previewFeature}
                         kuntaName={previewTable[1]?.kuntaName}
                         handlePreviewSelection={handlePreviewSelection}
                         isSelectedPreview={selectedPreview == 1}
