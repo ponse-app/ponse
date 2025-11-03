@@ -15,28 +15,38 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
 export default function Home() {
     const [parameter, setParameter] = useState("miehet");
 
-    const [previewTable, setPreviewTable] = useState([]);
+    const [previewTable, setPreviewTable] = useState([null, null]);
+    const [selectedPreview, setSelectedPreview] = useState(0);
 
     const updatePreviewBounds = useCallback(
         (bounds, kuntaName) => {
-            if (previewTable.length >= 2) {
+            if (selectedPreview == 1) {
                 setPreviewTable([
                     previewTable[0],
                     { bounds: bounds, kuntaName: kuntaName },
                 ]);
                 /* setPreviewTable([previewTable[0], bounds]); */
-            } else {
+            }
+            else {
                 setPreviewTable([
-                    ...previewTable,
-                    {
-                        bounds: bounds,
-                        kuntaName: kuntaName,
-                    },
+                    { bounds: bounds, kuntaName: kuntaName },
+                    previewTable[1]
                 ]);
+                if (previewTable[1] == null) {
+                    setSelectedPreview(1);
+                }
             }
             //setPreview1(bounds);
         },
-        [previewTable]
+        [previewTable, selectedPreview]
+    );
+
+    const handlePreviewSelection = useCallback(
+        (index) => {
+            setSelectedPreview(index);
+            //console.log("Selected preview :", selectedPreview.current);
+        },
+        []
     );
 
     return (
@@ -47,11 +57,15 @@ export default function Home() {
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
                         kuntaName={previewTable[0]?.kuntaName}
+                        handlePreviewSelection={handlePreviewSelection}
+                        isSelectedPreview={selectedPreview == 0}
                         position={0}
                     />
                     <PreviewMap
                         preview={previewTable[1]?.bounds}
                         kuntaName={previewTable[1]?.kuntaName}
+                        handlePreviewSelection={handlePreviewSelection}
+                        isSelectedPreview={selectedPreview == 1}
                         position={1}
                     />
                 </div>

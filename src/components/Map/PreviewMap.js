@@ -9,7 +9,7 @@ import "proj4leaflet";
 
 import L from "leaflet";
 
-const PreviewMap = ({ preview, kuntaName, position }) => {
+const PreviewMap = ({ preview, kuntaName, position, handlePreviewSelection, isSelectedPreview }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
@@ -125,10 +125,20 @@ const PreviewMap = ({ preview, kuntaName, position }) => {
         styles.right = 0;
     }
 
+    const selectedStyle = {
+        color: isSelectedPreview ? "yellow" : "red",
+    }
+
+
     return (
-        <div className ="absolute bottom-0"
-        style={styles}>
-            <p className="text-center">{kuntaName}</p>
+        <div className="absolute bottom-0"
+            style={styles}>
+            <p className="text-center"
+                style={selectedStyle}
+                onClick={(e) => {
+                    handlePreviewSelection(position)
+                }}
+            >{kuntaName}</p>
             <div ref={mapContainer} className="h-[25vh] w-[25vw]"
             ></div>
         </div>
