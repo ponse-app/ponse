@@ -107,7 +107,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         map.current.fitBounds(pnoLayer.getBounds(), {
             animate: false,
         });
-        map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
+        map.current.setMaxBounds(pnoLayer.getBounds().pad(0.3));
         /* setTimeout(() => {
             map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
         }, 100); */
