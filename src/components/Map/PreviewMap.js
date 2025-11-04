@@ -6,6 +6,7 @@ import pno_stat from "../../app/pno_tilasto.json";
 import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
+import PreviewStatTable from "./PreviewStatTable";
 
 import L from "leaflet";
 
@@ -100,10 +101,15 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                         });
                     }
                 });
+                layer.addEventListener("click", (e) => {
+                    console.log(feature.properties);
+                    SetSelectedPno(feature.properties);
+                    console.log(selectedPno);
+                });
             },
         }).addTo(map.current);
-        console.log("collection: ", collection);
-        console.log("bounds: ", pnoLayer.getBounds());
+        //console.log("collection: ", collection);
+        //console.log("bounds: ", pnoLayer.getBounds());
         map.current.fitBounds(pnoLayer.getBounds(), {
             animate: false,
         });
@@ -142,7 +148,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             console.log("PreviewMap useEffect return");
         }
 
-    }, [previewFeature, preview]); // Block user pan the map out of view.
+    }, [previewFeature, preview, selectedPno]); // Block user pan the map out of view.
 
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
@@ -163,6 +169,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     return (
         <div className="absolute bottom-0"
             style={styles}>
+                <PreviewStatTable pnoInfo={selectedPno} />
             <p className="text-center"
                 style={selectedStyle}
                 onClick={(e) => {
