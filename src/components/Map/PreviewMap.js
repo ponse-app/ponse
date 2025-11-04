@@ -14,16 +14,10 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     const mapContainer = useRef(null);
     const map = useRef(null);
 
-
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
     );
-
-
-    const layerBounds = useRef(null);
-    const [selectedPno, SetSelectedPno] = useState(null);
-    const hoveredPno = useRef(null);
 
     useEffect(() => {
         if (map.current == null) {

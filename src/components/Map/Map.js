@@ -13,7 +13,6 @@ import L from "leaflet";
 const Map = ({ onUpdatePreviewBounds, parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [mapLayer, setMapLayer] = useState(kunta_stat);
     const geoJsonLayer = useRef(null);
 
     const sorted = sortBy(kunta_stat.features, parameter);
@@ -32,7 +31,6 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
         } // stops map from intializing more than once
 
         const featureStyle = (feature) => {
-            // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
             return {
                 fillColor: getColor(
                     feature.properties[parameter],
@@ -54,11 +52,10 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         geoJsonLayer.current?.remove();
 
-        const pnoLayer = L.Proj.geoJson(mapLayer, {
+        const pnoLayer = L.Proj.geoJson(kunta_stat, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("click", (e) => {
-                    //setMapLayer(pno_stat);
                     map.current?.fitBounds(e.target.getBounds(), {
                         animate: true,
                     });
@@ -76,7 +73,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
         legend.addTo(map.current);
 
         const layerBounds = pnoLayer.getBounds();
-        if (mapLayer == kunta_stat && !geoJsonLayer.current) {
+        if (!geoJsonLayer.current) {
             map.current.fitBounds(layerBounds); // Centers the map
         }
         map.current.setMaxBounds(layerBounds.pad(0.1)); // Block user pan the map out of view.
@@ -94,7 +91,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
             map.current = null;*/
             console.log("Map useEffect return");
         };
-    }, [mapLayer, parameter, grouped, onUpdatePreviewBounds]);
+    }, [parameter, grouped, onUpdatePreviewBounds]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
