@@ -69,4 +69,40 @@ const sortBy = (features, parameter) => {
     return sorted;
 };
 
-export { getColor, group, sortBy };
+const createLegend = (parameter, grouped) => {
+    const legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = () => {
+        const eLegendContainer = L.DomUtil.create(
+            "div",
+            "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black"
+        );
+
+        grouped.forEach((a) => {
+            const startValue = a[a.length - 1].properties[parameter];
+            const endValue = a[0].properties[parameter];
+
+            const eLegendLine = L.DomUtil.create(
+                "p",
+                "legend-line flex gap-2 text-[0.9em]"
+            );
+            eLegendLine.textContent = `${startValue}–${endValue}`;
+
+            const eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
+            eColorBox.style.backgroundColor = getColor(
+                startValue,
+                grouped,
+                parameter
+            );
+
+            eLegendLine.prepend(eColorBox);
+            eLegendContainer.append(eLegendLine);
+        });
+
+        return eLegendContainer;
+    };
+
+    return legend;
+};
+
+export { getColor, group, sortBy, createLegend };
