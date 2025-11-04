@@ -10,23 +10,39 @@ const PreviewStatTable = ({pnoInfo}) => {
 
     useEffect(() => {
         for (let property in pnoInfo) {
-            console.log(typeof(pnoInfo));
+            //console.log(typeof(pnoInfo));
         if (property == parameter) {
-            setRows(previousRows => [...previousRows,
+            setRows(previousRows => {
+                if (previousRows.some(previousRow => previousRow.key === pnoInfo.id)) {
+                    return previousRows;
+                }
+                
+                return [...previousRows, {
+                key: pnoInfo.id,
+                postnumber: pnoInfo.postinumeroalue,
+                value: pnoInfo[property]
+            }]
+        })
+            //console.log(rows);
+            /* setRows(previousRows => [...previousRows,
                 <tr key={pnoInfo.id}>
                     <td>{pnoInfo.postinumeroalue}</td>
                     <td>{pnoInfo[property]}</td>
                 </tr>]
-            )
+            ) */
         }
     }   
     }, [pnoInfo])
 
     return (
         <div>
-            <table>
+            <table className="m-2.5">
                 <tbody>
-                    {rows}
+                    {rows.map((row) => 
+                    <tr key={row.key}>
+                        <td className="p-3 border-2 border-blue-400 border-collapse">{row.postnumber}</td>
+                        <td className="p-3 border-2 border-blue-400 border-collapse">{row.value}</td>
+                    </tr>)}
                 </tbody>
             </table>
         </div>
