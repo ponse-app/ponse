@@ -169,7 +169,9 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     return (
         <div className="absolute bottom-0"
             style={styles}>
-                <PreviewStatTable pnoInfo={selectedPno} />
+                <PreviewStatTable
+                    pnoInfo={selectedPno}
+                    kuntaName={kuntaName} />
             <p className="text-center"
                 style={selectedStyle}
                 onClick={(e) => {

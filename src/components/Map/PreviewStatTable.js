@@ -1,12 +1,26 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, use, useEffect, useState } from "react";
 
-const PreviewStatTable = ({pnoInfo}) => {
+const PreviewStatTable = ({pnoInfo, kuntaName}) => {
 
     const parameter = "he_miehet";
 
     const [rows, setRows] = useState([]);
+
+    console.log(pnoInfo);
+
+    const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
+
+    useEffect(() => {
+        if (!pnoInfo) {
+            return;
+        }
+        if (kuntaNameCurrent != kuntaName) {
+            setKuntaNameCurrent(kuntaName)
+            setRows([]);
+        }
+    }, [pnoInfo, kuntaNameCurrent, kuntaName])
 
     useEffect(() => {
         for (let property in pnoInfo) {
@@ -37,6 +51,12 @@ const PreviewStatTable = ({pnoInfo}) => {
     return (
         <div>
             <table className="m-2.5">
+                <thead>
+                    <tr>
+                        <th>Postinumero</th>
+                        <th>Arvo</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {rows.map((row) => 
                     <tr key={row.key}>
