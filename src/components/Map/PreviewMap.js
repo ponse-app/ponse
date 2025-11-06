@@ -110,10 +110,13 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         }).addTo(map.current);
         //console.log("collection: ", collection);
         //console.log("bounds: ", pnoLayer.getBounds());
-        map.current.fitBounds(pnoLayer.getBounds(), {
+        console.log(previewFeature, selectedPno);
+        if (previewFeature.properties.kunta != selectedPno?.kunta) {
+             map.current.fitBounds(pnoLayer.getBounds(), {
             animate: false,
         });
         map.current.setMaxBounds(pnoLayer.getBounds().pad(0.3));
+        }
         /* setTimeout(() => {
             map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
         }, 100); */
