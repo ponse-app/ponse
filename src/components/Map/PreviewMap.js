@@ -16,6 +16,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     const map = useRef(null);
 
     const [selectedPno, SetSelectedPno] = useState(null);
+    const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
 
     proj4.defs(
         "EPSG:3067",
@@ -62,7 +63,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 }
             },
         };
-        
+
         const equivalencyTable = {
             "miehet": "he_miehet",
             "naiset": "he_naiset",
@@ -73,7 +74,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         const sorted = sortBy(postnumbers, equivalentParameter);
 
         const grouped = group(sorted, equivalentParameter, Math.min(sorted.length, 9));
-        
+
         const featureStyle = (feature) => {
             return {
                 fillColor: getColor(feature.properties[equivalentParameter], grouped, equivalentParameter),
@@ -90,14 +91,14 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
-                        layer.setStyle({
-                            fillColor: "#222222",
-                            weight: 2,
-                            opacity: 1,
-                            color: "yellow",
-                            dashArray: "3",
-                            fillOpacity: 1,
-                        });
+                    layer.setStyle({
+                        fillColor: "#222222",
+                        weight: 2,
+                        opacity: 1,
+                        color: "yellow",
+                        dashArray: "3",
+                        fillOpacity: 1,
+                    });
                 });
                 layer.addEventListener("mouseout", (e) => {
                     e.target.setStyle(featureStyle(feature));
@@ -112,11 +113,12 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         //console.log("collection: ", collection);
         //console.log("bounds: ", pnoLayer.getBounds());
         console.log(previewFeature, selectedPno);
-        if (previewFeature.properties.kunta != selectedPno?.kunta) {
-             map.current.fitBounds(pnoLayer.getBounds(), {
-            animate: false,
-        });
-        map.current.setMaxBounds(pnoLayer.getBounds().pad(0.3));
+        if (kuntaNameCurrent != kuntaName) {
+            setKuntaNameCurrent(kuntaName)
+            map.current.fitBounds(pnoLayer.getBounds(), {
+                animate: false,
+            });
+            map.current.setMaxBounds(pnoLayer.getBounds().pad(0.3));
         }
         /* setTimeout(() => {
             map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
@@ -146,7 +148,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
         return () => {
             legend.remove();
-            
+
             if (map.current == null) return;
             //layerControl.remove();
             map.current?.eachLayer((layer) => {
@@ -158,7 +160,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             console.log("PreviewMap useEffect return");
         }
 
-    }, [previewFeature, preview, parameter, selectedPno]); // Block user pan the map out of view.
+    }, [previewFeature, preview, parameter, selectedPno, kuntaName, kuntaNameCurrent]); // Block user pan the map out of view.
 
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
@@ -179,9 +181,9 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     return (
         <div className="absolute bottom-0"
             style={styles}>
-                <PreviewStatTable
-                    pnoInfo={selectedPno}
-                    kuntaName={kuntaName} />
+            <PreviewStatTable
+                pnoInfo={selectedPno}
+                kuntaName={kuntaName} />
             <p className="text-center"
                 style={selectedStyle}
                 onClick={(e) => {
