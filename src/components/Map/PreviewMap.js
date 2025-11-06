@@ -69,7 +69,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
         const sorted = sortBy(postnumbers, equivalentParameter);
 
-        const grouped = group(sorted, equivalentParameter, Math.min(sorted.length, 10));
+        const grouped = group(sorted, equivalentParameter, Math.min(sorted.length, 9));
         
         const featureStyle = (feature) => {
             return {
