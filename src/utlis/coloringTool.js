@@ -1,6 +1,8 @@
 const getColor = (value, grouped, parameter) => {
     const amountOfGaps = grouped.length;
 
+    if (amountOfGaps === 1) return 'hsl(0 0 0)';
+
     let whichGap = 0;
     for (let i = 0; i < amountOfGaps; i++) {
         const currentGap = grouped[i];
