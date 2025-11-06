@@ -6,24 +6,21 @@ import pno_stat from "../../app/pno_tilasto.json";
 import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
+import { getColor, group, sortBy, createLegend } from "@/utlis/coloringTool";
 import PreviewStatTable from "./PreviewStatTable";
 
 import L from "leaflet";
 
-const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection, isSelectedPreview }) => {
+const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection, isSelectedPreview, parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
 
+    const [selectedPno, SetSelectedPno] = useState(null);
 
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
     );
-
-
-    const layerBounds = useRef(null);
-    const [selectedPno, SetSelectedPno] = useState(null);
-    const hoveredPno = useRef(null);
 
     useEffect(() => {
         if (map.current == null) {
@@ -39,19 +36,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             console.log("previewFeature ei ole annettu", previewFeature);
             return;
         }
-
-        const featureStyle = (feature) => {
-            // console.log(feature.properties.vaesto); // Just for demonstrating purposes. This is how you can access to the properties and calculate the right color for that feature
-            return {
-                /* fillColor: getColor(feature.properties[parameter]), */
-                fillColor: "#000000",
-                weight: 1.5,
-                opacity: 1,
-                color: "white",
-                dashArray: "3",
-                fillOpacity: 1,
-            };
-        };
 
         proj4.defs(
             "EPSG:3067",
@@ -78,19 +62,34 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 }
             },
         };
+        
+        const equivalencyTable = {
+            "miehet": "he_miehet",
+            "naiset": "he_naiset",
+        }
 
+        const equivalentParameter = equivalencyTable[parameter];
+
+        const sorted = sortBy(postnumbers, equivalentParameter);
+
+        const grouped = group(sorted, equivalentParameter, Math.min(sorted.length, 9));
+        
+        const featureStyle = (feature) => {
+            return {
+                fillColor: getColor(feature.properties[equivalentParameter], grouped, equivalentParameter),
+                weight: 1.5,
+                opacity: 1,
+                color: "white",
+                dashArray: "3",
+                fillOpacity: 1,
+            };
+        };
 
         const pnoLayer = L.Proj.geoJson(
             collection, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
-                    if (hoveredPno.current != layer) {
-
-                        if (hoveredPno.current != null) {
-                            hoveredPno.current.setStyle(featureStyle());
-                        }
-                        hoveredPno.current = layer;
                         layer.setStyle({
                             fillColor: "#222222",
                             weight: 2,
@@ -99,8 +98,10 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                             dashArray: "3",
                             fillOpacity: 1,
                         });
-                    }
                 });
+                layer.addEventListener("mouseout", (e) => {
+                    e.target.setStyle(featureStyle(feature));
+                })
                 layer.addEventListener("click", (e) => {
                     console.log(feature.properties);
                     SetSelectedPno(feature.properties);
@@ -133,6 +134,10 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             interactive: false,
         }).addTo(map.current);
 
+        // Add legend
+        const legend = createLegend(equivalencyTable[parameter], grouped);
+        legend.addTo(map.current);
+
         var overlays = {
             "kunnat": kuntaLayer
         }
@@ -140,6 +145,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
 
         return () => {
+            legend.remove();
+            
             if (map.current == null) return;
             //layerControl.remove();
             map.current?.eachLayer((layer) => {
@@ -151,7 +158,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             console.log("PreviewMap useEffect return");
         }
 
-    }, [previewFeature, preview, selectedPno]); // Block user pan the map out of view.
+    }, [previewFeature, preview, parameter, selectedPno]); // Block user pan the map out of view.
 
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
