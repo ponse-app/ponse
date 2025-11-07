@@ -8,6 +8,7 @@ import proj4 from "proj4";
 import "proj4leaflet";
 import { getColor, group, sortBy, createLegend } from "@/utlis/coloringTool";
 import PreviewStatTable from "./PreviewStatTable";
+import { preProcessData } from "@/utlis/dataPreProcessor";
 
 import L from "leaflet";
 
@@ -71,13 +72,22 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
         const equivalentParameter = equivalencyTable[parameter];
 
-        const sorted = sortBy(postnumbers, equivalentParameter);
+        const preProcessedData = {
+            ...collection,
+            features: preProcessData(collection.features, parameter)
+        }
 
-        const grouped = group(sorted, equivalentParameter, Math.min(sorted.length, 9));
+        console.log('preProcessedData', preProcessedData)
+
+        const sorted = sortBy(preProcessedData.features, parameter);
+
+        const grouped = group(sorted, parameter, Math.min(sorted.length, 9));
+
+        console.log('grouped', grouped)
 
         const featureStyle = (feature) => {
             return {
-                fillColor: getColor(feature.properties[equivalentParameter], grouped, equivalentParameter),
+                fillColor: getColor(feature.properties[parameter], grouped, parameter),
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
@@ -87,7 +97,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         };
 
         const pnoLayer = L.Proj.geoJson(
-            collection, {
+            preProcessedData, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
@@ -137,7 +147,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         }).addTo(map.current);
 
         // Add legend
-        const legend = createLegend(equivalencyTable[parameter], grouped);
+        const legend = createLegend(parameter, grouped);
         legend.addTo(map.current);
 
         var overlays = {

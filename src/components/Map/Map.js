@@ -7,6 +7,7 @@ import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 import { getColor, group, sortBy, createLegend } from "../../utlis/coloringTool";
+import { preProcessData } from "@/utlis/dataPreProcessor";
 
 import L from "leaflet";
 
@@ -15,7 +16,12 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     const map = useRef(null);
     const geoJsonLayer = useRef(null);
 
-    const sorted = sortBy(kunta_stat.features, parameter);
+    const preProcessedData = {
+        ...kunta_stat,
+        features: preProcessData(kunta_stat.features, parameter)
+    }
+
+    const sorted = sortBy(preProcessedData.features, parameter);
 
     const grouped = group(sorted, parameter, 30);
 
@@ -52,7 +58,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         geoJsonLayer.current?.remove();
 
-        const pnoLayer = L.Proj.geoJson(kunta_stat, {
+        const pnoLayer = L.Proj.geoJson(preProcessedData, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("click", (e) => {
