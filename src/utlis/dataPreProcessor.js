@@ -27,6 +27,40 @@ const preProcessData = (features, parameter) => {
     });
   }
 
+  // Calculate properties based on these options
+  const calculationMap = {
+    vakimaara: {
+      parameters: ["miehet", "naiset"],
+      operator: "+",
+    },
+  };
+
+  const calc = (feature) => {
+    switch (calculationMap[parameter].operator) {
+      case "+":
+        const sum = calculationMap[parameter].parameters.reduce((sum, cur) => {
+          if (feature.properties.hasOwnProperty(cur))
+            return feature.properties[cur] + sum;
+
+          if (feature.properties.hasOwnProperty(equivalencyTable[cur]))
+            return feature.properties[equivalencyTable[cur]] + sum;
+        }, 0);
+        return sum;
+    }
+  };
+
+  if (calculationMap.hasOwnProperty(parameter)) {
+    return features.map((feature) => {
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          [parameter]: calc(feature),
+        },
+      };
+    });
+  }
+
   // Municipality data needs calculated from postnumber data
   const values = {};
 
