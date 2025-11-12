@@ -1,16 +1,19 @@
 "use client";
 
 import { memo, use, useEffect, useState } from "react";
+import pno_stat from "../../app/pno_tilasto.json";
+import React from "react";
 
-const PreviewStatTable = ({pnoInfo, kuntaName}) => {
-
-    const parameter = "he_miehet";
+const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
 
     const [rows, setRows] = useState([]);
 
-    console.log(pnoInfo);
+    //console.log(pnoInfo);
+    console.log("parameter", parameter);
 
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
+
+    const [parameterCurrent, setParameterCurrent] = useState("he_miehet");
 
     useEffect(() => {
         if (!pnoInfo) {
@@ -21,6 +24,27 @@ const PreviewStatTable = ({pnoInfo, kuntaName}) => {
             setRows([]);
         }
     }, [pnoInfo, kuntaNameCurrent, kuntaName])
+
+    useEffect(() => {
+        if (parameterCurrent != parameter) {
+            setParameterCurrent(parameter);
+        }
+
+        setRows(previousRows => {
+           return previousRows.map(previousRow => {
+                for (let pno of pno_stat.features) {
+                    if (pno.properties.id == previousRow.key) {
+                        return {
+                            ...previousRow,
+                            value: pno.properties[parameterCurrent]
+                        };
+                    };
+                }
+                return previousRow;  // Jos ei löydy niin jättää vanhan rivin. Tähän voi keksiä jonkun paremmankin ratkaisun
+                                     // Näin ei pitäisi kuitenkaan käydä
+            })
+        })
+    }, [parameter, parameterCurrent])
 
     useEffect(() => {
         for (let property in pnoInfo) {
@@ -46,7 +70,7 @@ const PreviewStatTable = ({pnoInfo, kuntaName}) => {
             ) */
         }
     }   
-    }, [pnoInfo])
+    }, [pnoInfo, parameter])
 
     return (
         <div>

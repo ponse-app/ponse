@@ -14,9 +14,14 @@ import L from "leaflet";
 const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection, isSelectedPreview, parameter }) => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-
+    
     const [selectedPno, SetSelectedPno] = useState(null);
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
+    
+    const equivalencyTable = {
+        "miehet": "he_miehet",
+        "naiset": "he_naiset",
+    }
 
     proj4.defs(
         "EPSG:3067",
@@ -64,10 +69,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             },
         };
 
-        const equivalencyTable = {
-            "miehet": "he_miehet",
-            "naiset": "he_naiset",
-        }
 
         const equivalentParameter = equivalencyTable[parameter];
 
@@ -183,7 +184,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             style={styles}>
             <PreviewStatTable
                 pnoInfo={selectedPno}
-                kuntaName={kuntaName} />
+                kuntaName={kuntaName}
+                parameter={equivalencyTable[parameter]} />
             <p className="text-center"
                 style={selectedStyle}
                 onClick={(e) => {
