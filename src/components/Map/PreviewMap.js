@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState, useImperativeHandle, memo } from "react";
 import "leaflet/dist/leaflet.css";
-import pno_stat from "../../app/pno_tilasto.json";
+import pno_stat from "../../app/pno_tilasto_2024.json";
 import kunta_stat from "../../app/kunta_vaki2024.json";
 import proj4 from "proj4";
 import "proj4leaflet";

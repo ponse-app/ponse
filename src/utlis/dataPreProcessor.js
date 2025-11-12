@@ -1,4 +1,4 @@
-import pno_stat from "@/app/pno_tilasto.json";
+import pno_stat from "@/app/pno_tilasto_2024.json";
 
 const preProcessData = (features, parameter) => {
   if (features.length === 0) return;

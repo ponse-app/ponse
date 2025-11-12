@@ -3,7 +3,6 @@
 import React, { useRef, useEffect, useState, useCallback, memo } from "react";
 import "leaflet/dist/leaflet.css";
 import kunta_stat from "../../app/kunta_vaki2024.json";
-//import pno_stat from "../../app/pno_tilasto.json";
 import proj4 from "proj4";
 import "proj4leaflet";
 import { getColor, group, sortBy, createLegend } from "../../utlis/coloringTool";
