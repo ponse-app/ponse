@@ -40,8 +40,10 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
                         };
                     };
                 }
-                return previousRow;  // Jos ei löydy niin jättää vanhan rivin. Tähän voi keksiä jonkun paremmankin ratkaisun
-                                     // Näin ei pitäisi kuitenkaan käydä
+
+                // If for loop can't find a match returns the previousRow. This shouldn't happen but can implement
+                //something better if needed.
+                return previousRow;
             })
         })
     }, [parameter, parameterCurrent])
@@ -60,6 +62,7 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
                 
                 return [...previousRows, {
                 key: pnoInfo.id,
+                name: pnoInfo.nimi,
                 postnumber: pnoInfo.postinumeroalue,
                 value: pnoInfo[property]
             }]
@@ -89,6 +92,7 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
                 <tbody>
                     {rows.map((row) => 
                     <tr key={row.key}>
+                        <td className="p-3 border-2 border-blue-400 border-collapse">{row.name}</td>
                         <td className="p-3 border-2 border-blue-400 border-collapse">{row.postnumber}</td>
                         <td className="p-3 border-2 border-blue-400 border-collapse">{row.value}</td>
                     </tr>)}
