@@ -47,6 +47,9 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
     }, [parameter, parameterCurrent])
 
     useEffect(() => {
+        if (!pnoInfo) {
+            return;
+        }
         for (let property in pnoInfo) {
             //console.log(typeof(pnoInfo));
         if (property == parameter) {
@@ -73,14 +76,16 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
     }, [pnoInfo, parameter])
 
     return (
-        <div>
+        <div className="max-h-[50vh] overflow-y-auto">
             <table className="m-2.5">
-                <thead>
+                {rows.length!=0 ? (
+                    <thead>
                     <tr>
                         <th>Postinumero</th>
                         <th>Arvo</th>
                     </tr>
-                </thead>
+                </thead>                    
+                ) : null}
                 <tbody>
                     {rows.map((row) => 
                     <tr key={row.key}>

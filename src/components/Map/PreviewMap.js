@@ -115,7 +115,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         //console.log("bounds: ", pnoLayer.getBounds());
         console.log(previewFeature, selectedPno);
         if (kuntaNameCurrent != kuntaName) {
-            setKuntaNameCurrent(kuntaName)
+            setKuntaNameCurrent(kuntaName);
+            SetSelectedPno(null);
             map.current.fitBounds(pnoLayer.getBounds(), {
                 animate: false,
             });
