@@ -7,9 +7,6 @@ const preProcessData = (features, parameter) => {
   if (features[0].properties.hasOwnProperty(parameter)) return features;
 
   // Try find corresponding parameter with mapping
-  // TODO: mieti halutaanko tätä, vai vaaditaanko vain että kutsujalla on vastuu oikean parametrin käyttämisestä
-  // Hyöty olisi ehkä se, että tässä tulee tehtyä vähän turhaa työtä, kun voitaisiin vaan käyttää suoraan oikeaa
-  // parametria sen sijaan että muokataan json kutsujalle sopivaksi
   const equivalencyTable = {
     miehet: "he_miehet",
     naiset: "he_naiset",
