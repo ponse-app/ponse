@@ -80,20 +80,28 @@ const createLegend = (parameter, grouped) => {
             "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black"
         );
 
-        grouped.forEach((a) => {
-            const startValue = a[a.length - 1].properties[parameter];
-            const endValue = a[0].properties[parameter];
+        grouped.forEach((group, index, array) => {
+            const startValue = group[group.length - 1].properties[parameter];
+            const endValue = group[0].properties[parameter];
 
             const eLegendLine = L.DomUtil.create(
                 "p",
                 "legend-line flex gap-2 text-[0.9em]"
             );
-            eLegendLine.textContent = `${startValue}–${endValue}`;
+            if (startValue === -1) {
+                const prevGroup = array[index - 1];
+                const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter]
+                eLegendLine.textContent = `< ${prevStartValue}`
+            } else if (startValue === endValue) {
+                eLegendLine.textContent = `${startValue}`
+            } else {
+                eLegendLine.textContent = `${startValue}–${endValue}`;
+            }
 
             const eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
             eColorBox.style.backgroundColor = getColor(
                 startValue,
-                grouped,
+                array,
                 parameter
             );
 
