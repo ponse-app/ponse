@@ -51,7 +51,7 @@ export default function Home() {
     return (
         <div className="font-sans min-h-screen h-dvh w-dvw">
             <main className="relative h-[100%] w-[100%]">
-                <div className="absolute h-full w-[50%]">
+                <div className="absolute h-full w-[50%] grid grid-rows-3 grid-cols-4">
                     <DataSelector setParameter={setParameter} />
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
