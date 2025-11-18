@@ -166,13 +166,14 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
-        left: 0,
+        gridColumnStart: 1,
+        gridColumnEnd: 3,
         right: "",
     }
 
     if (position == 1) {
-        styles.left = "";
-        styles.right = 0;
+        styles.gridColumnStart = 3;
+        styles.gridColumnEnd = 5;
     }
 
     const selectedStyle = {
@@ -181,7 +182,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
 
     return (
-        <div className="absolute bottom-0"
+        <div className="absolute bottom-0 max-w-[100%]"
             style={styles}>
             <PreviewStatTable
                 pnoInfo={selectedPno}
