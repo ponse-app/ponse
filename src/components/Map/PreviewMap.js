@@ -166,14 +166,13 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     const styles = {
         visibility: preview ? 'visible' : 'hidden',
-        gridColumnStart: 1,
-        gridColumnEnd: 3,
-        right: "",
+        left: 0,
+        right: ""
     }
 
     if (position == 1) {
-        styles.gridColumnStart = 3;
-        styles.gridColumnEnd = 5;
+        styles.left =  "",
+        styles.right = 0
     }
 
     const selectedStyle = {
@@ -182,7 +181,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
 
     return (
-        <div className="absolute bottom-0 max-w-[100%]"
+        <div className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col flex-none"
             style={styles}>
             <PreviewStatTable
                 pnoInfo={selectedPno}
@@ -194,7 +193,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                     handlePreviewSelection(position)
                 }}
             >{kuntaName}</p>
-            <div ref={mapContainer} className="h-[25vh] w-[25vw]"
+            <div ref={mapContainer} className="h-[25vh] lg:w-[25vw] w-[50vw] flex-none"
             ></div>
         </div>
     );

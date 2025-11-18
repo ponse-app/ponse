@@ -50,9 +50,13 @@ export default function Home() {
 
     return (
         <div className="font-sans min-h-screen h-dvh w-dvw">
-            <main className="relative h-[100%] w-[100%]">
-                <div className="absolute h-full w-[50%] grid grid-rows-3 grid-cols-4">
-                    <DataSelector setParameter={setParameter} />
+            <main className="relative flex flex-col h-[100%] w-[100%]">
+                <DataSelector setParameter={setParameter} />
+                <Map
+                    onUpdatePreviewBounds={updatePreviewBounds}
+                    parameter={parameter}
+                />
+                <div className="lg:absolute relative lg:top-0 h-1/2 lg:h-full w-full lg:w-[50%] lg:block flex">
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
                         previewFeature={previewTable[0]?.previewFeature}
@@ -72,10 +76,6 @@ export default function Home() {
                         parameter={parameter}
                     />
                 </div>
-                <Map
-                    onUpdatePreviewBounds={updatePreviewBounds}
-                    parameter={parameter}
-                />
             </main>
         </div>
     );
