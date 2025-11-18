@@ -10,7 +10,7 @@ const preProcessData = (features, parameter) => {
   const equivalencyTable = {
     miehet: "he_miehet",
     naiset: "he_naiset",
-    vakimaara: "he_vakiy",
+    vaesto: "he_vakiy",
   };
 
   if (features[0].properties.hasOwnProperty(equivalencyTable[parameter])) {
