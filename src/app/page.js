@@ -12,6 +12,8 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
     ssr: !!false,
 });
 
+import MenuButton from "@/components/MenuButton";
+
 export default function Home() {
     const [parameter, setParameter] = useState("miehet");
 
@@ -52,6 +54,7 @@ export default function Home() {
         <div className="font-sans min-h-screen h-dvh w-dvw">
             <main className="relative h-[100%] w-[100%]">
                 <div className="absolute h-full w-[50%] grid grid-rows-3 grid-cols-4">
+                    <MenuButton />
                     <DataSelector setParameter={setParameter} />
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
