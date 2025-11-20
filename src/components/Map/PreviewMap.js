@@ -181,7 +181,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
 
     return (
-        <div className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col flex-none"
+        <div className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
             style={styles}>
             <PreviewStatTable
                 pnoInfo={selectedPno}
