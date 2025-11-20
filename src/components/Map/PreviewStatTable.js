@@ -1,16 +1,19 @@
 "use client";
 
 import { memo, use, useEffect, useState } from "react";
+import pno_stat from "../../app/pno_tilasto.json";
+import React from "react";
 
-const PreviewStatTable = ({pnoInfo, kuntaName}) => {
-
-    const parameter = "he_miehet";
+const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
 
     const [rows, setRows] = useState([]);
 
-    console.log(pnoInfo);
+    //console.log(pnoInfo);
+    console.log("parameter", parameter);
 
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
+
+    const [parameterCurrent, setParameterCurrent] = useState("he_miehet");
 
     useEffect(() => {
         if (!pnoInfo) {
@@ -23,6 +26,32 @@ const PreviewStatTable = ({pnoInfo, kuntaName}) => {
     }, [pnoInfo, kuntaNameCurrent, kuntaName])
 
     useEffect(() => {
+        if (parameterCurrent != parameter) {
+            setParameterCurrent(parameter);
+        }
+
+        setRows(previousRows => {
+           return previousRows.map(previousRow => {
+                for (let pno of pno_stat.features) {
+                    if (pno.properties.id == previousRow.key) {
+                        return {
+                            ...previousRow,
+                            value: pno.properties[parameterCurrent]
+                        };
+                    };
+                }
+
+                // If for loop can't find a match returns the previousRow. This shouldn't happen but can implement
+                //something better if needed.
+                return previousRow;
+            })
+        })
+    }, [parameter, parameterCurrent])
+
+    useEffect(() => {
+        if (!pnoInfo) {
+            return;
+        }
         for (let property in pnoInfo) {
             //console.log(typeof(pnoInfo));
         if (property == parameter) {
@@ -33,6 +62,7 @@ const PreviewStatTable = ({pnoInfo, kuntaName}) => {
                 
                 return [...previousRows, {
                 key: pnoInfo.id,
+                name: pnoInfo.nimi,
                 postnumber: pnoInfo.postinumeroalue,
                 value: pnoInfo[property]
             }]
@@ -46,20 +76,23 @@ const PreviewStatTable = ({pnoInfo, kuntaName}) => {
             ) */
         }
     }   
-    }, [pnoInfo])
+    }, [pnoInfo, parameter])
 
     return (
-        <div>
+        <div className="max-h-[50vh] overflow-y-auto">
             <table className="m-2.5">
-                <thead>
+                {rows.length!=0 ? (
+                    <thead>
                     <tr>
                         <th>Postinumero</th>
                         <th>Arvo</th>
                     </tr>
-                </thead>
+                </thead>                    
+                ) : null}
                 <tbody>
                     {rows.map((row) => 
                     <tr key={row.key}>
+                        <td className="p-3 border-2 border-blue-400 border-collapse">{row.name}</td>
                         <td className="p-3 border-2 border-blue-400 border-collapse">{row.postnumber}</td>
                         <td className="p-3 border-2 border-blue-400 border-collapse">{row.value}</td>
                     </tr>)}
