@@ -18,11 +18,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     
     const [selectedPno, SetSelectedPno] = useState(null);
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
-    
-    const equivalencyTable = {
-        "miehet": "he_miehet",
-        "naiset": "he_naiset",
-    }
 
     proj4.defs(
         "EPSG:3067",
@@ -70,21 +65,14 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             },
         };
 
-
-        const equivalentParameter = equivalencyTable[parameter];
-
         const preProcessedData = {
             ...collection,
             features: preProcessData(collection.features, parameter)
         }
 
-        console.log('preProcessedData', preProcessedData)
-
         const sorted = sortBy(preProcessedData.features, parameter);
-
+        
         const grouped = group(sorted, parameter, Math.min(sorted.length, 9));
-
-        console.log('grouped', grouped)
 
         const featureStyle = (feature) => {
             return {
