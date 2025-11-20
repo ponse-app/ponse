@@ -76,13 +76,17 @@ const processData = (feature, parameter) => {
         );
     }
   };
+  
+  const round = (num) => {
+      return Math.round((num + Number.EPSILON) * 10) / 10;
+  }
 
   if (calculationMap.hasOwnProperty(parameter)) {
     return {
       ...feature,
       properties: {
         ...feature.properties,
-        [parameter]: calc(feature),
+        [parameter]: round(calc(feature)),
       },
     };
   }
