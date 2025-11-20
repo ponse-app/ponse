@@ -15,21 +15,21 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     const map = useRef(null);
     const geoJsonLayer = useRef(null);
 
-    const preProcessedData = {
-        ...kunta_stat,
-        features: preProcessData(kunta_stat.features, parameter)
-    }
-
-    const sorted = sortBy(preProcessedData.features, parameter);
-
-    const grouped = group(sorted, parameter, 30);
-
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
     );
 
     useEffect(() => {
+        const preProcessedData = {
+            ...kunta_stat,
+            features: preProcessData(kunta_stat.features, parameter)
+        }
+
+        const sorted = sortBy(preProcessedData.features, parameter);
+
+        const grouped = group(sorted, parameter, 30);
+
         if (map.current == null) {
             console.log("Uusi pääkartta alustettu");
             map.current = L.map(mapContainer.current, { minZoom: 5 });
@@ -96,7 +96,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
             map.current = null;*/
             console.log("Map useEffect return");
         };
-    }, [parameter, grouped, onUpdatePreviewBounds]);
+    }, [parameter, onUpdatePreviewBounds]);
 
     return (
         <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
