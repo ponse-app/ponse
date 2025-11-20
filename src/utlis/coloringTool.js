@@ -75,10 +75,24 @@ const createLegend = (parameter, grouped) => {
     const legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {
-        const eLegendContainer = L.DomUtil.create(
+
+        let eLegendContainer;
+
+        if (grouped.length > 10) {
+            eLegendContainer = L.DomUtil.create(
             "div",
-            "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black"
-        );
+            "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[35vh] lg:max-h-[95vh]"
+            );
+        }
+        else {
+            eLegendContainer = L.DomUtil.create(
+            "div",
+            "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[21vh]"
+            );
+        }
+
+        L.DomEvent.disableClickPropagation(eLegendContainer);
+        L.DomEvent.disableScrollPropagation(eLegendContainer);
 
         grouped.forEach((group, index, array) => {
             const startValue = group[group.length - 1].properties[parameter];
