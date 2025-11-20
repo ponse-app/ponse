@@ -2,10 +2,10 @@
 
 import { memo, use, useEffect, useState } from "react";
 import pno_stat from "../../app/pno_tilasto.json";
+import { preProcessData } from "@/utlis/dataPreProcessor";
 import React from "react";
 
 const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
-
     const [rows, setRows] = useState([]);
 
     //console.log(pnoInfo);
@@ -26,13 +26,18 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
     }, [pnoInfo, kuntaNameCurrent, kuntaName])
 
     useEffect(() => {
+        const preProcessedData = {
+            ...pno_stat,
+            features: preProcessData(pno_stat.features, parameterCurrent)
+        }
+
         if (parameterCurrent != parameter) {
             setParameterCurrent(parameter);
         }
 
         setRows(previousRows => {
            return previousRows.map(previousRow => {
-                for (let pno of pno_stat.features) {
+                for (let pno of preProcessedData.features) {
                     if (pno.properties.id == previousRow.key) {
                         return {
                             ...previousRow,

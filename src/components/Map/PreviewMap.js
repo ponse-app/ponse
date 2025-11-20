@@ -196,7 +196,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             <PreviewStatTable
                 pnoInfo={selectedPno}
                 kuntaName={kuntaName}
-                parameter={equivalencyTable[parameter]} />
+                parameter={parameter} />
             <p className="text-center"
                 style={selectedStyle}
                 onClick={(e) => {
