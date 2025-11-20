@@ -84,12 +84,12 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
     }, [pnoInfo, parameter])
 
     return (
-        <div className="max-h-[50vh] overflow-y-auto">
+        <div className="max-h-1/2 lg:max-h-[50vh] overflow-y-auto max-w-[100%] flex justify-center">
             <table className="m-2.5">
                 {rows.length!=0 ? (
                     <thead>
                     <tr>
-                        <th>Postinumero</th>
+                        <th>Postinumeroalue</th>
                         <th>Arvo</th>
                     </tr>
                 </thead>                    
@@ -97,8 +97,7 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
                 <tbody>
                     {rows.map((row) => 
                     <tr key={row.key}>
-                        <td className="p-3 border-2 border-blue-400 border-collapse">{row.name}</td>
-                        <td className="p-3 border-2 border-blue-400 border-collapse">{row.postnumber}</td>
+                        <td className="p-3 border-2 border-blue-400 border-collapse text-wrap">{row.name}<br/>{row.postnumber}</td>
                         <td className="p-3 border-2 border-blue-400 border-collapse">{row.value}</td>
                     </tr>)}
                 </tbody>

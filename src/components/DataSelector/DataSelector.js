@@ -8,8 +8,8 @@ const Map = ({ setParameter }) => {
      */
 
     return (
-        <div className="absolute w-full h-full flex flex-col items-center">
-            <form action={""} method="post" className="z-10">
+        <div className="top-0 w-full flex flex-col items-center lg:items-baseline mb-2">
+            <form action={""} method="post" className="z-10 ml-3">
                 <div className="bg-gray-500 w-fit p-1 mt-5">
                     <fieldset>
                         <legend>Valitse parametrit:</legend>

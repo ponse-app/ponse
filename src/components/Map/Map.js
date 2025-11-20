@@ -99,7 +99,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     }, [parameter, onUpdatePreviewBounds]);
 
     return (
-        <div ref={mapContainer} className="absolute h-full w-1/2 right-0"></div>
+        <div ref={mapContainer} className="lg:absolute relative block min-h-[50vh] mb-10 lg:mb-0 lg:h-full lg:w-1/2 w-full right-0"></div>
     );
 };
 
