@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 //import Map from "../components/Map/Map";
 import DataSelector from "../components/DataSelector/DataSelector";
+import Logo from "../components/TopBar/Logo";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 const Map = dynamic(() => import("../components/Map/Map"), {
@@ -12,7 +13,7 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
     ssr: !!false,
 });
 
-import MenuButton from "@/components/MenuButton";
+import MenuButton from "@/components/TopBar/MenuButton";
 
 export default function Home() {
     const [parameter, setParameter] = useState("miehet");
@@ -53,7 +54,10 @@ export default function Home() {
     return (
         <div className="font-sans min-h-screen lg:h-dvh w-dvw">
             <main className="relative flex flex-col lg:h-[100%] w-[100%] min-h-fit">
+                <div className="relative h-[10vh]">
                     <MenuButton />
+                    <Logo />
+                </div>
                 <DataSelector setParameter={setParameter} />
                 <Map
                     onUpdatePreviewBounds={updatePreviewBounds}

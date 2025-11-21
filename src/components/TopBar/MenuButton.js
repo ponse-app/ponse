@@ -45,7 +45,7 @@ function MenuButton() {
 
     return (
         <div>
-            <div className="bg-gray-500 w-20 h-20 z-[100] rounded-md select-none"
+            <div className="bg-gray-500 w-[10vh] h-[10vh] z-[100] rounded-md select-none"
             onMouseMove={(e) => handleMouseEnter(e)}
             style={MiniMenuStyles}>
                 <p className="w-full text-center">━━━</p>

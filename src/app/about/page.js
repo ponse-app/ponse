@@ -1,5 +1,5 @@
 "use client"
-import MenuButton from "@/components/MenuButton";
+import MenuButton from "@/components/TopBar/MenuButton";
 
 export default function Home() {
 
