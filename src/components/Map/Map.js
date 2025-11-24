@@ -70,8 +70,34 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                         feature
                     );
                 });
+                layer.addEventListener("mouseover", (e) => {
+                    info.update(feature);
+                });
+                layer.addEventListener("mouseout", (e) => {
+                    info.update();
+                });
             },
         }).addTo(map.current);
+
+        var info = L.control();
+
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create(
+                'div',
+                'box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px');
+            this.update();
+            return this._div;
+        };
+
+        info.update = function (feature) {
+            this._div.innerHTML = '<h4 style="color:blue;text-align:center;">Kunta: </h4>' + (feature ?
+                '<b style="align-items:center">' + feature.properties.nimi + '</b>' +
+                '<p></p>'+ feature.properties[parameter] 
+                : 'Hoveraa kunnan päällä');
+        };
+        
+        info.addTo(map.current);
+
 
         // Add legend
         const legend = createLegend(parameter, grouped);
@@ -86,6 +112,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         return () => {
             legend.remove();
+            info.remove();
 
             if (map.current == null) return;
             map.current?.eachLayer((layer) => {
