@@ -62,6 +62,8 @@ function MenuButton() {
                 href="/instructions">Käyttöohje</Link>
                 <Link className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400"
                 href="/about">Tietoja</Link>
+                <Link className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400"
+                href="/bestForYou">Paras kunta sinulle</Link>
             </div>
         </div>
     );
