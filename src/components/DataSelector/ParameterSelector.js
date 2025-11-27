@@ -19,6 +19,7 @@ const Map = ({ inputName, setParameter }) => {
                 <option value="vaesto">Väkimäärä</option>
                 <option value="ra_ke">Kesämökit yhteensä *</option>
                 <option value="pt_opisk">Päätoimiset opiskelijat yhteensä *</option>
+                <option value="hr_mtu">Mediaanipalkka</option>
             </select>
         </div>
     );

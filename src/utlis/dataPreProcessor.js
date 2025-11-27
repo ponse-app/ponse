@@ -49,6 +49,15 @@ const processData = (feature, parameter) => {
       parameters: ["ika_13_17", "vaesto"],
       operator: "/",
     },
+    ika_65: {
+      parameters: ["he_65_69", "he_70_74", "he_75_79", "he_80_84", "he_85_"],
+      operator: "+",
+    },
+    
+    ika_65_p: {
+      parameters: ["ika_65", "vaesto"],
+      operator: "/",
+    },
   };
 
   const calc = (feature) => {
@@ -62,17 +71,17 @@ const processData = (feature, parameter) => {
       case "/":
         const [firstCalculatedParameter, secondCalculatedParameter] =
           calculationMap[parameter].parameters;
+        
+        const divider = processData(feature, secondCalculatedParameter).properties[secondCalculatedParameter];
 
         // TODO: ei haluta aina kertoa sadalla, vaan ainoastaan jakaa.
         // Pitää siis luoda erillinen kertolaskuoperaatio
+        if (divider === 0) {
+          return 0;
+        }
         return (
-          (processData(feature, firstCalculatedParameter).properties[
-            firstCalculatedParameter
-          ] /
-            processData(feature, secondCalculatedParameter).properties[
-              secondCalculatedParameter
-            ]) *
-          100
+          (processData(feature, firstCalculatedParameter).properties[firstCalculatedParameter]
+          / divider) * 100
         );
     }
   };
