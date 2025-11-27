@@ -6,9 +6,20 @@ const preProcessData = (features, parameter) => {
   return features.map((feature) => processData(feature, parameter));
 };
 
+
+const fixMinusOne = (value) => {
+  if (value === -1) return 1;
+  return value;
+}
+
 const processData = (feature, parameter) => {
   // If parameter is found from features, then nothing is needed to do
-  if (feature.properties.hasOwnProperty(parameter)) return feature;
+  if (feature.properties.hasOwnProperty(parameter)) {
+    feature.properties[parameter] = fixMinusOne(feature.properties[parameter]);
+    
+    return feature;
+  }
+
 
   // Try find corresponding parameter with mapping
   const equivalencyTable = {
@@ -22,7 +33,7 @@ const processData = (feature, parameter) => {
       ...feature,
       properties: {
         ...feature.properties,
-        [parameter]: feature.properties[equivalencyTable[parameter]],
+        [parameter]: fixMinusOne(feature.properties[equivalencyTable[parameter]]),
       },
     };
   }

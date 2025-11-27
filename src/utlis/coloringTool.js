@@ -102,7 +102,7 @@ const createLegend = (parameter, grouped) => {
                 "p",
                 "legend-line flex gap-2 text-[0.9em]"
             );
-            if (startValue === -1) {
+            if (startValue === 1) {
                 const prevGroup = array[index - 1];
                 const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter]
                 eLegendLine.textContent = `< ${prevStartValue}`
