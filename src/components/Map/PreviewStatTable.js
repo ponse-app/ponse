@@ -84,7 +84,7 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
     }, [pnoInfo, parameter])
 
     return (
-        <div className="max-h-1/2 lg:max-h-[50vh] overflow-y-auto max-w-[100%] flex justify-center">
+        <div className="max-h-1/2 lg:max-h-[40vh] overflow-y-auto max-w-[100%] flex justify-center">
             <table className="m-2.5">
                 {rows.length!=0 ? (
                     <thead>
