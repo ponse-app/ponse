@@ -26,8 +26,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     useEffect(() => {
         if (map.current == null) {
-            map.current = L.map(mapContainer.current, {
-            });
+            map.current = L.map(mapContainer.current, {});
         } // stops map from intializing more than once
         if (!previewFeature) {
             console.log("previewFeature ei ole annettu", previewFeature);
@@ -50,19 +49,19 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         }
         var collection = {
             features: postnumbers,
-            type: 'FeatureCollection',
-            "crs": {
-                "type": "name",
-                "properties": {
-                    "name": "urn:ogc:def:crs:EPSG::3067"
-                }
+            type: "FeatureCollection",
+            crs: {
+                type: "name",
+                properties: {
+                    name: "urn:ogc:def:crs:EPSG::3067",
+                },
             },
         };
 
         const preProcessedData = {
             ...collection,
-            features: preProcessData(collection.features, parameter)
-        }
+            features: preProcessData(collection.features, parameter),
+        };
 
         const sorted = sortBy(preProcessedData.features, parameter);
         
@@ -95,7 +94,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 });
                 layer.addEventListener("mouseout", (e) => {
                     e.target.setStyle(featureStyle(feature));
-                })
+                });
                 layer.addEventListener("click", (e) => {
                     console.log(feature.properties);
                     SetSelectedPno(feature.properties);
@@ -138,15 +137,14 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 map.current.removeLayer(layer);
             });
             console.log("PreviewMap useEffect return");
-        }
-
+        };
     }, [previewFeature, preview, parameter, selectedPno, kuntaName, kuntaNameCurrent]); // Block user pan the map out of view.
 
     const styles = {
-        visibility: preview ? 'visible' : 'hidden',
+        visibility: preview ? "visible" : "hidden",
         left: 0,
-        right: ""
-    }
+        right: "",
+    };
 
     if (position == 1) {
         styles.left =  "",
@@ -155,24 +153,28 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     const selectedStyle = {
         color: isSelectedPreview ? "yellow" : "red",
-    }
-
+    };
 
     return (
-        <div className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
-            style={styles}>
+        <div
+            className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
+            style={styles}
+        >
             <PreviewStatTable
                 pnoInfo={selectedPno}
                 kuntaName={kuntaName}
-                parameter={parameter} />
-            <p className="text-center"
+                parameter={parameter}
+            />
+            <p
+                className="text-center"
                 style={selectedStyle}
                 onClick={(e) => {
-                    handlePreviewSelection(position)
+                    handlePreviewSelection(position);
                 }}
-            >{kuntaName}</p>
-            <div ref={mapContainer} className="h-[25vh] lg:w-[25vw] w-[50vw] flex-none"
-            ></div>
+            >
+                {kuntaName}
+            </p>
+            <div ref={mapContainer} className="h-[25vh] lg:w-[25vw] w-[50vw] flex-none"></div>
         </div>
     );
 };

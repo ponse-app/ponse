@@ -28,11 +28,10 @@ export default function Home() {
                     previewTable[0],
                     { bounds: bounds, kuntaName: kuntaName, previewFeature: feature },
                 ]);
-            }
-            else {
+            } else {
                 setPreviewTable([
                     { bounds: bounds, kuntaName: kuntaName, previewFeature: feature },
-                    previewTable[1]
+                    previewTable[1],
                 ]);
                 if (previewTable[1] == null) {
                     setSelectedPreview(1);
@@ -42,12 +41,9 @@ export default function Home() {
         [previewTable, selectedPreview]
     );
 
-    const handlePreviewSelection = useCallback(
-        (index) => {
-            setSelectedPreview(index);
-        },
-        []
-    );
+    const handlePreviewSelection = useCallback((index) => {
+        setSelectedPreview(index);
+    }, []);
 
     return (
         <div className="font-sans min-h-screen lg:h-dvh w-dvw">

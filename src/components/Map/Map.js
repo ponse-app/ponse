@@ -23,8 +23,8 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     useEffect(() => {
         const preProcessedData = {
             ...kunta_stat,
-            features: preProcessData(kunta_stat.features, parameter)
-        }
+            features: preProcessData(kunta_stat.features, parameter),
+        };
 
         const sorted = sortBy(preProcessedData.features, parameter);
 
@@ -83,21 +83,26 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         info.onAdd = function (map) {
             this._div = L.DomUtil.create(
-                'div',
-                'box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px');
+                "div",
+                "box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px"
+            );
             this.update();
             return this._div;
         };
 
         info.update = function (feature) {
-            this._div.innerHTML = '<h4 style="color:blue;text-align:center;">Kunta: </h4>' + (feature ?
-                '<b style="align-items:center">' + feature.properties.nimi + '</b>' +
-                '<p></p>'+ feature.properties[parameter] 
-                : 'Hoveraa kunnan päällä');
+            this._div.innerHTML =
+                '<h4 style="color:blue;text-align:center;">Kunta: </h4>' +
+                (feature
+                    ? '<b style="align-items:center">' +
+                      feature.properties.nimi +
+                      "</b>" +
+                      "<p></p>" +
+                      feature.properties[parameter]
+                    : "Hoveraa kunnan päällä");
         };
-        
-        info.addTo(map.current);
 
+        info.addTo(map.current);
 
         // Add legend
         const legend = createLegend(parameter, grouped);
@@ -124,7 +129,10 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     }, [parameter, onUpdatePreviewBounds]);
 
     return (
-        <div ref={mapContainer} className="lg:absolute relative block min-h-[50vh] mb-10 lg:mb-0 lg:h-full lg:w-1/2 w-full right-0"></div>
+        <div
+            ref={mapContainer}
+            className="lg:absolute relative block min-h-[50vh] mb-10 lg:mb-0 lg:h-full lg:w-1/2 w-full right-0"
+        ></div>
     );
 };
 

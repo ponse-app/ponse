@@ -1,7 +1,7 @@
 const getColor = (value, grouped, parameter) => {
     const amountOfGaps = grouped.length;
 
-    if (amountOfGaps === 1) return 'hsl(0 0 0)';
+    if (amountOfGaps === 1) return "hsl(0 0 0)";
 
     let whichGap = 0;
     for (let i = 0; i < amountOfGaps; i++) {
@@ -75,21 +75,20 @@ const createLegend = (parameter, grouped) => {
     const legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {
-
         let eLegendContainer;
 
         // This is for the large map
         if (grouped.length > 10) {
             eLegendContainer = L.DomUtil.create(
-            "div",
-            "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[35vh] lg:max-h-[95vh]"
+                "div",
+                "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[35vh] lg:max-h-[95vh]"
             );
         }
         // This is for the small previewMaps
         else {
             eLegendContainer = L.DomUtil.create(
-            "div",
-            "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[21vh]"
+                "div",
+                "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[21vh]"
             );
         }
 
@@ -106,10 +105,10 @@ const createLegend = (parameter, grouped) => {
             );
             if (startValue === -1) {
                 const prevGroup = array[index - 1];
-                const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter]
-                eLegendLine.textContent = `< ${prevStartValue}`
+                const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter];
+                eLegendLine.textContent = `< ${prevStartValue}`;
             } else if (startValue === endValue) {
-                eLegendLine.textContent = `${startValue}`
+                eLegendLine.textContent = `${startValue}`;
             } else {
                 eLegendLine.textContent = `${startValue}–${endValue}`;
             }
