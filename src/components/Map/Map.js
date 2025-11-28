@@ -119,8 +119,6 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                 layer.off();
                 map.current.removeLayer(layer);
             });
-            /* map.current.remove();
-            map.current = null;*/
             console.log("Map useEffect return");
         };
     }, [parameter, onUpdatePreviewBounds]);

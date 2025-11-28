@@ -38,7 +38,6 @@ export default function Home() {
                     setSelectedPreview(1);
                 }
             }
-            //setPreview1(bounds);
         },
         [previewTable, selectedPreview]
     );
@@ -46,7 +45,6 @@ export default function Home() {
     const handlePreviewSelection = useCallback(
         (index) => {
             setSelectedPreview(index);
-            //console.log("Selected preview :", selectedPreview.current);
         },
         []
     );

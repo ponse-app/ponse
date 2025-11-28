@@ -1,12 +1,7 @@
 "use client";
 import ParameterSelector from "./ParameterSelector";
 
-const Map = ({ setParameter }) => {
-    /**
-     * <label htmlFor="input1">Anna parametri: </label>
-                        <input type="text" className="bg-gray-700" id="input1" />
-     */
-
+const DataSelector = ({ setParameter }) => {
     return (
         <div className="top-0 w-full flex flex-col items-center lg:items-baseline mb-2">
             <form action={""} method="post" className="z-10 ml-3">
@@ -17,9 +12,6 @@ const Map = ({ setParameter }) => {
                             setParameter={setParameter}
                             inputName={"parameter1"}
                         />
-                        {/* <ParameterSelector inputName={"parameter2"} />
-                        <ParameterSelector inputName={"parameter3"} />
-                        <ParameterSelector inputName={"parameter4"} /> */}
                     </fieldset>
                 </div>
                 <p className="bg-gray-700 text-center">Lähde: Tilastokeskus</p>
@@ -28,4 +20,4 @@ const Map = ({ setParameter }) => {
     );
 };
 
-export default Map;
+export default DataSelector;

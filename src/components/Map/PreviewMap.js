@@ -27,11 +27,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     useEffect(() => {
         if (map.current == null) {
             map.current = L.map(mapContainer.current, {
-                /* zoomControl: false,
-                scrollWheelZoom: false,
-                doubleClickZoom: false,
-                zoom: false,
-                dragging: false, */
             });
         } // stops map from intializing more than once
         if (!previewFeature) {
@@ -46,12 +41,11 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
         console.log("feature: ", previewFeature);
 
-        // Tässä etsitään kunnan postinumeroalueita
+        // Here we look for the postnumbers of the municipality
         let postnumbers = [];
         for (const pno of pno_stat.features) {
             if (pno.properties.kunta == previewFeature.properties.kunta) {
                 postnumbers.push(pno);
-                //console.log(pno);
             }
         }
         var collection = {
@@ -109,8 +103,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 });
             },
         }).addTo(map.current);
-        //console.log("collection: ", collection);
-        //console.log("bounds: ", pnoLayer.getBounds());
         console.log(previewFeature, selectedPno);
         if (kuntaNameCurrent != kuntaName) {
             setKuntaNameCurrent(kuntaName);
@@ -120,9 +112,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             });
             map.current.setMaxBounds(pnoLayer.getBounds().pad(0.3));
         }
-        /* setTimeout(() => {
-            map.current.setMaxBounds(pnoLayer.getBounds().pad(0.1));
-        }, 100); */
 
         const kuntaLayer = L.Proj.geoJson(kunta_stat, {
             style: {
@@ -140,23 +129,14 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         const legend = createLegend(parameter, grouped);
         legend.addTo(map.current);
 
-        var overlays = {
-            "kunnat": kuntaLayer
-        }
-        //const layerControl = L.control.layers({}, overlays).addTo(map.current);
-
-
         return () => {
             legend.remove();
 
             if (map.current == null) return;
-            //layerControl.remove();
             map.current?.eachLayer((layer) => {
                 layer.off();
                 map.current.removeLayer(layer);
-            });/* 
-        map.current.remove();
-        map.current = null; */
+            });
             console.log("PreviewMap useEffect return");
         }
 

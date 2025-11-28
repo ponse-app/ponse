@@ -78,12 +78,14 @@ const createLegend = (parameter, grouped) => {
 
         let eLegendContainer;
 
+        // This is for the large map
         if (grouped.length > 10) {
             eLegendContainer = L.DomUtil.create(
             "div",
             "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[35vh] lg:max-h-[95vh]"
             );
         }
+        // This is for the small previewMaps
         else {
             eLegendContainer = L.DomUtil.create(
             "div",

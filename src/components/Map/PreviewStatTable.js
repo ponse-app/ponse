@@ -8,7 +8,6 @@ import React from "react";
 const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
     const [rows, setRows] = useState([]);
 
-    //console.log(pnoInfo);
     console.log("parameter", parameter);
 
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
@@ -58,7 +57,6 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
             return;
         }
         for (let property in pnoInfo) {
-            //console.log(typeof(pnoInfo));
         if (property == parameter) {
             setRows(previousRows => {
                 if (previousRows.some(previousRow => previousRow.key === pnoInfo.id)) {
@@ -72,13 +70,6 @@ const PreviewStatTable = ({pnoInfo, kuntaName, parameter}) => {
                 value: pnoInfo[property]
             }]
         })
-            //console.log(rows);
-            /* setRows(previousRows => [...previousRows,
-                <tr key={pnoInfo.id}>
-                    <td>{pnoInfo.postinumeroalue}</td>
-                    <td>{pnoInfo[property]}</td>
-                </tr>]
-            ) */
         }
     }   
     }, [pnoInfo, parameter])

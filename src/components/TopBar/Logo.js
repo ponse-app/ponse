@@ -1,9 +1,6 @@
-
 import { memo } from "react";
 
-
 function Logo() {
-
 
     return (
         <div className="absolute p-[3vh] right-0 lg:right-[65vw]">
@@ -12,7 +9,5 @@ function Logo() {
     );
 
 }
-
-
 
 export default memo(Logo);
