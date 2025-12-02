@@ -104,6 +104,42 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         info.addTo(map.current);
 
+        const collator = new Intl.Collator("fi", { sensitivity: "base" });
+
+        let search = L.control({ position: "topleft" });
+
+        search.onAdd = function () {
+            this._div_search = L.DomUtil.create(
+                "input",
+                "box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px"
+            );
+            this._div_search.placeholder = "Hae kuntaa";
+            this._div_search.addEventListener("change", (e) => {
+                e.preventDefault();
+                console.log(map.current);
+                map.current.eachLayer((layer) => {
+                    if (
+                        collator.compare(
+                            layer.feature?.properties.nimi.trim(),
+                            e.target.value.trim()
+                        ) == 0
+                    ) {
+                        map.current.fitBounds(layer.getBounds(), {
+                            animate: true,
+                        });
+                        onUpdatePreviewBounds(
+                            layer.getBounds(),
+                            layer.feature?.properties.nimi,
+                            layer.feature
+                        );
+                    }
+                });
+            });
+            return this._div_search;
+        };
+
+        search.addTo(map.current);
+
         // Add legend
         const legend = createLegend(parameter, grouped);
         legend.addTo(map.current);
@@ -118,6 +154,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
         return () => {
             legend.remove();
             info.remove();
+            search.remove();
 
             if (map.current == null) return;
             map.current?.eachLayer((layer) => {

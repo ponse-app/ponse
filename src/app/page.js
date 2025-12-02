@@ -14,7 +14,6 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
 });
 
 import MenuButton from "@/components/TopBar/MenuButton";
-import Municipalitysearch from "@/components/DataSelector/MunicipalitySearch";
 
 export default function Home() {
     const [parameter, setParameter] = useState("miehet");
@@ -53,12 +52,8 @@ export default function Home() {
                     <MenuButton />
                     <Logo />
                 </div>
-                <Municipalitysearch></Municipalitysearch>
                 <DataSelector setParameter={setParameter} />
-                <Map
-                    onUpdatePreviewBounds={updatePreviewBounds}
-                    parameter={parameter}
-                />
+                <Map onUpdatePreviewBounds={updatePreviewBounds} parameter={parameter} />
                 <div className="lg:absolute relative lg:top-0 lg:h-full w-full lg:w-[50%] lg:block flex">
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
