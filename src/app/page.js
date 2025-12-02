@@ -53,10 +53,7 @@ export default function Home() {
                     <Logo />
                 </div>
                 <DataSelector setParameter={setParameter} />
-                <Map
-                    onUpdatePreviewBounds={updatePreviewBounds}
-                    parameter={parameter}
-                />
+                <Map onUpdatePreviewBounds={updatePreviewBounds} parameter={parameter} />
                 <div className="lg:absolute relative lg:top-0 lg:h-full w-full lg:w-[50%] lg:block flex">
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
