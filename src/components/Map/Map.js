@@ -132,8 +132,13 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                             layer.feature?.properties.nimi,
                             layer.feature
                         );
+                    } else {
+                        e.target.style.backgroundColor = "#EE4B2B";
                     }
                 });
+            });
+            this._div_search.addEventListener("input", (e) => {
+                e.target.style.backgroundColor = "";
             });
             return this._div_search;
         };
