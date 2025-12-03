@@ -22,7 +22,7 @@ const DataSelector = ({ setParameter }) => {
     }
     
     return (
-        <div className="top-0 w-full flex flex-col items-center lg:items-baseline mb-2">
+        <div className="top-0 w-full lg:w-[50%] flex flex-col items-center lg:items-baseline mb-2">
             <form action={""} method="post" className="z-10 ml-3">
                 <div className="flex bg-gray-500 w-fit p-1 mt-5">
                     <fieldset className="text-center flex items-center">
