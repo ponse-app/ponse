@@ -8,8 +8,6 @@ import React from "react";
 const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
     const [rows, setRows] = useState([]);
 
-    console.log("parameter", parameter);
-
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
 
     const [parameterCurrent, setParameterCurrent] = useState("he_miehet");

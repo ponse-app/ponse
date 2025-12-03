@@ -114,28 +114,30 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                 "box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px"
             );
             this._div_search.placeholder = "Hae kuntaa";
-            this._div_search.addEventListener("change", (e) => {
-                e.preventDefault();
-                console.log(map.current);
-                map.current.eachLayer((layer) => {
-                    if (
-                        collator.compare(
-                            layer.feature?.properties.nimi.trim(),
-                            e.target.value.trim()
-                        ) == 0
-                    ) {
-                        map.current.fitBounds(layer.getBounds(), {
-                            animate: true,
-                        });
-                        onUpdatePreviewBounds(
-                            layer.getBounds(),
-                            layer.feature?.properties.nimi,
-                            layer.feature
-                        );
-                    } else {
-                        e.target.style.backgroundColor = "#EE4B2B";
-                    }
-                });
+            this._div_search.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    console.log(map.current);
+                    e.preventDefault();
+                    map.current.eachLayer((layer) => {
+                        if (
+                            collator.compare(
+                                layer.feature?.properties.nimi.trim(),
+                                e.target.value.trim()
+                            ) == 0
+                        ) {
+                            map.current.fitBounds(layer.getBounds(), {
+                                animate: true,
+                            });
+                            onUpdatePreviewBounds(
+                                layer.getBounds(),
+                                layer.feature?.properties.nimi,
+                                layer.feature
+                            );
+                        } else {
+                            e.target.style.backgroundColor = "#EE4B2B";
+                        }
+                    });
+                }
             });
             this._div_search.addEventListener("input", (e) => {
                 e.target.style.backgroundColor = "";

@@ -19,6 +19,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     const [selectedPno, SetSelectedPno] = useState(null);
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
 
+    const preProcessedRef = useRef([]);
+
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
@@ -38,8 +40,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
         );
 
-        console.log("feature: ", previewFeature);
-
         // Here we look for the postnumbers of the municipality
         let postnumbers = [];
         for (const pno of pno_stat.features) {
@@ -47,6 +47,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 postnumbers.push(pno);
             }
         }
+
         var collection = {
             features: postnumbers,
             type: "FeatureCollection",
@@ -62,9 +63,10 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             ...collection,
             features: preProcessData(collection.features, parameter),
         };
+        preProcessedRef.current = preProcessedData;
 
         const sorted = sortBy(preProcessedData.features, parameter);
-        
+
         const grouped = group(sorted, parameter, Math.min(sorted.length, 9));
 
         const featureStyle = (feature) => {
@@ -78,8 +80,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             };
         };
 
-        const pnoLayer = L.Proj.geoJson(
-            preProcessedData, {
+        const pnoLayer = L.Proj.geoJson(preProcessedData, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
                 layer.addEventListener("mouseover", (e) => {
@@ -96,13 +97,11 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                     e.target.setStyle(featureStyle(feature));
                 });
                 layer.addEventListener("click", (e) => {
-                    console.log(feature.properties);
                     SetSelectedPno(feature.properties);
-                    console.log(selectedPno);
                 });
             },
         }).addTo(map.current);
-        console.log(previewFeature, selectedPno);
+
         if (kuntaNameCurrent != kuntaName) {
             setKuntaNameCurrent(kuntaName);
             SetSelectedPno(null);
@@ -147,33 +146,63 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     };
 
     if (position == 1) {
-        styles.left =  "",
-        styles.right = 0
+        (styles.left = ""), (styles.right = 0);
     }
 
     const selectedStyle = {
         color: isSelectedPreview ? "yellow" : "red",
     };
 
+    const collator = new Intl.Collator("fi", { sensitivity: "base" });
+
+    function handleSearch(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            for (let pno of preProcessedRef.current.features) {
+                if (
+                    collator.compare(pno.properties.nimi.trim(), e.target.value.trim()) == 0 ||
+                    collator.compare(
+                        pno.properties.postinumeroalue.trim(),
+                        e.target.value.trim()
+                    ) == 0
+                ) {
+                    SetSelectedPno(pno.properties);
+                    e.target.style.backgroundColor = "";
+                    e.target.value = "";
+                    break;
+                } else {
+                    e.target.style.backgroundColor = "#EE4B2B";
+                }
+            }
+        }
+    }
+
     return (
         <div
             className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
             style={styles}
         >
-            <PreviewStatTable
-                pnoInfo={selectedPno}
-                kuntaName={kuntaName}
-                parameter={parameter}
-            />
-            <p
-                className="text-center"
-                style={selectedStyle}
-                onClick={(e) => {
-                    handlePreviewSelection(position);
-                }}
-            >
-                {kuntaName}
-            </p>
+            <PreviewStatTable pnoInfo={selectedPno} kuntaName={kuntaName} parameter={parameter} />
+            <div className="flex lg:flex-row items-center gap-2 flex-col-reverse">
+                <input
+                    type="text"
+                    className="box bg-white shadow-black text-black rounded-md p-2 max-w-1/2"
+                    placeholder="Hae postinumeroa"
+                    onKeyDown={(e) => handleSearch(e)}
+                    onInput={(e) => {
+                        e.target.style.backgroundColor = "";
+                    }}
+                ></input>
+                <p
+                    className="text-center"
+                    style={selectedStyle}
+                    onClick={(e) => {
+                        handlePreviewSelection(position);
+                    }}
+                >
+                    {kuntaName}
+                </p>
+            </div>
             <div ref={mapContainer} className="h-[25vh] lg:w-[25vw] w-[50vw] flex-none"></div>
         </div>
     );
