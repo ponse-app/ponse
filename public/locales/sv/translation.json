@@ -1,0 +1,10 @@
+{
+    "source": "Källa: Statistikcentralen",
+    "chooseParameter": "Valitse parametri:",
+    "parameter": {
+        "men": "Miesten määrä"
+    },
+    "map": {
+        "hoverInfo": "Hoveraa kunnan päällä"
+    }
+}

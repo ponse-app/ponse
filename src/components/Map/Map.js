@@ -9,8 +9,12 @@ import { getColor, group, sortBy, createLegend } from "../../utlis/coloringTool"
 import { preProcessData } from "@/utlis/dataPreProcessor";
 
 import L from "leaflet";
+import { useTranslation } from "react-i18next";
 
 const Map = ({ onUpdatePreviewBounds, parameter }) => {
+
+    const [t, i18n] = useTranslation();
+
     const mapContainer = useRef(null);
     const map = useRef(null);
     const geoJsonLayer = useRef(null);
@@ -31,7 +35,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
         const grouped = group(sorted, parameter, 30);
 
         if (map.current == null) {
-            console.log("Uusi pääkartta alustettu");
+            //console.log("Uusi pääkartta alustettu");
             map.current = L.map(mapContainer.current, { minZoom: 5 });
         } // stops map from intializing more than once
 
@@ -99,7 +103,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                       "</b>" +
                       "<p></p>" +
                       feature.properties[parameter]
-                    : "Hoveraa kunnan päällä");
+                    : t('map.hoverInfo'));
         };
 
         info.addTo(map.current);

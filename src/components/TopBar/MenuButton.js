@@ -1,7 +1,20 @@
+"use client"
 import { memo, useState } from "react";
 import Link from "next/link";
 
+import { useTranslation } from "react-i18next";
+
+const lngs = {
+    fi: { nativeName: 'Suomi' },
+    en: { nativeName: 'English' },
+    //sv: { nativeName: 'Svenska' },
+}
+
 function MenuButton() {
+
+    //i18n
+    const { t, i18n } = useTranslation();
+
     const [miniMenuVisibility, setMiniMenuVisibility] = useState(true);
     const [menuVisibility, setMenuVisibility] = useState(false);
 
@@ -44,16 +57,14 @@ function MenuButton() {
     return (
         <div>
             <div
-                className="bg-gray-500 w-[10vh] h-[10vh] z-[100] rounded-md select-none"
+                className="bg-gray-600 w-[10vh] h-[10vh] z-[100] rounded-md select-none flex items-center"
                 onMouseMove={(e) => handleMouseEnter(e)}
                 style={MiniMenuStyles}
             >
-                <p className="w-full text-center">━━━</p>
-                <p className="w-full text-center">━━━</p>
-                <p className="w-full text-center">━━━</p>
+                <p className="w-full text-center">{t('menu.name')}</p>
             </div>
             <div
-                className="bg-gray-500 w-40 h-30 z-[100] rounded-md select-none flex items-center flex-col justify-center text-center pt-10 pb-10"
+                className="bg-gray-600 w-40 h-fit z-[10000] rounded-md select-none flex items-center flex-col justify-center text-center pt-10 pb-10"
                 onMouseMove={(e) => handleMenuMouseEnter(e)}
                 onMouseLeave={(e) => handleMenuMouseLeave(e)}
                 style={MenuStyles}
@@ -62,17 +73,29 @@ function MenuButton() {
                     className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400 select-none"
                     href="/"
                 >
-                    Koti
+                    {t('menu.home')}
                 </Link>
                 <Link
                     className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400"
                     href="/instructions"
                 >
-                    Käyttöohje
+                    {t('menu.instructions')}
                 </Link>
                 <Link className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400" href="/about">
-                    Tietoja
+                    {t('menu.about')}
                 </Link>
+                <div className="pt-1 pb-1 w-[80%] rounded-2xl flex flex-col justify-evenly">
+                    {Object.keys(lngs).map((lng) => (
+                        <input key={lng} type="button"
+                        style={{fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal'}}
+                        className="hover:bg-gray-400"
+                            value={lng}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                i18n.changeLanguage(lng);
+                            }} />
+                    ))}
+                </div>
             </div>
         </div>
     );

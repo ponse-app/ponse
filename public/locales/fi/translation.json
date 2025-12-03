@@ -1,0 +1,16 @@
+{
+    "source": "Lähde: Tilastokeskus",
+    "menu": {
+        "name": "Valikko",
+        "home": "Kotisivu",
+        "instructions": "Käyttöohje",
+        "about": "Tietoja"
+    },
+    "chooseParameter": "Valitse parametri:",
+    "parameter": {
+        "men": "Miesten määrä"
+    },
+    "map": {
+        "hoverInfo": "Hoveraa kunnan päällä"
+    }
+}

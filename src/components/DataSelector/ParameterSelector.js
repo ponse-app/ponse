@@ -1,6 +1,13 @@
 "use client";
 
+import i18next from "../../i18n/config"
+import { useTranslation } from "react-i18next";
+
 const ParameterSelector = ({ inputName, setParameter }) => {
+
+    // i18n
+    const [t, i18n] = useTranslation();
+
     return (
         <div className="bg-gray-500 w-fit m-5">
             <select
@@ -8,7 +15,7 @@ const ParameterSelector = ({ inputName, setParameter }) => {
                 className="bg-gray-700"
                 id="input1"
             >
-                <option value="miehet">Miesten määrä</option>
+                <option value="miehet">{t('parameter.men')}</option>
                 <option value="naiset">Naisten määrä</option>
                 <option value="ika_65_p">ika_65_p</option>
                 <option value="ika_13_17">ika_13_17</option>
