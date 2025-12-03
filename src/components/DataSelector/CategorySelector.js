@@ -1,6 +1,6 @@
 "use client";
 
-const ParameterSelector = ({ inputName, setParameter, parameters }) => {
+const CategorySelector = ({ inputName, setParameter, parameters }) => {
     console.log('here:', parameters)
     return (
         <div className="bg-gray-500 w-fit m-5">
@@ -9,7 +9,7 @@ const ParameterSelector = ({ inputName, setParameter, parameters }) => {
                 className="bg-gray-700 w-[100%]"
                 id="input1">
 
-                {parameters?.map(([dataName, showName]) => <option key={dataName} value={dataName}>{showName}</option> )}
+                {parameters?.map(([dataName, showName]) => <option value={dataName}>{showName}</option> )}
             </select>
         </div>
     );
