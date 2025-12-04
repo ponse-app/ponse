@@ -4,7 +4,7 @@ function Logo() {
 
     return (
         <div className="absolute p-[3vh] right-0 lg:right-[65vw]">
-            <p>Postinumero-sovellus!</p>
+            <h1>Ponse</h1>
         </div>
     );
 

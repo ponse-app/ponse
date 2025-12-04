@@ -30,3 +30,8 @@ body {
 input {
   border-color: yellow;
 }
+
+h1 {
+  font-size: x-large;
+  font-weight: bold;
+}
