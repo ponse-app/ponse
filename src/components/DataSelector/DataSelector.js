@@ -11,7 +11,11 @@ const DataSelector = ({ setParameter }) => {
         },
         "Rakennukset ja asunnot": {
             "ra_ke" : "Kesämökkien määrä",
-            "ra_raky" : "Rakennukset yhteensä"
+            "ra_raky" : "Rakennukset yhteensä",
+        },
+        "Asukkaiden käytettävissä olevat rahatulot": {
+            "hr_mtu" : "Asukkaiden mediaanitulot",
+            "hr_ktu": "Asukkaiden keskitulot",
         }
     }
     
