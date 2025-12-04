@@ -15,7 +15,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
     const [parameterCurrent, setParameterCurrent] = useState("he_miehet");
 
     const fixMinusOne = (value) => {
-        if (value === -1) return "Ei tarkkaa tietoa! :(";
+        if (value === 1) return "Ei tarkkaa tietoa! :(";
         return value;
     }
 
