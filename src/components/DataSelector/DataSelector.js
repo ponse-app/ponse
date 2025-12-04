@@ -8,7 +8,9 @@ const DataSelector = ({ setParameter }) => {
         "Asukasrakenne": {
             "miehet" : "Miesten määrä",
             "naiset" : "Naisten määrä",
-            "ika_65_p": "ika_65_p"
+            "ika_65_p": "ika_65_p",
+            "he_0_2": "he_0_2",
+            "ika_3_12": "ika_3_12",
         },
         "Rakennukset ja asunnot": {
             "ra_ke" : "Kesämökkien määrä",

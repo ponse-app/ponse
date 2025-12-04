@@ -64,30 +64,45 @@ const processData = (feature, parameter) => {
       parameters: ["ika_65", "vaesto"],
       operator: "/",
     },
+
+    ika_3_12: {
+      parameters: ["he_3_6", "he_7_12"],
+      operator: "+"
+    }
   };
 
   const calc = (feature) => {
     switch (definitionMap[parameter].operator) {
       case "+":
-        const sum = definitionMap[parameter].parameters.reduce((sum, cur) => {
-          return fixMinusOne(processData(feature, cur).properties[cur] + sum);
-        }, 0);
+        const parameters = definitionMap[parameter].parameters;
+
+        let sum = 0;
+        for (let i = 0; i < parameters.length; i++) {
+          const value = processData(feature, parameters[i]).properties[parameters[i]];
+          
+          // If there's even one -1, we cannot calculate the sum
+          if (value === -1) return -1;
+
+          sum += value;
+        }
+
         return sum;
 
       case "/":
         const [firstCalculatedParameter, secondCalculatedParameter] =
         definitionMap[parameter].parameters;
-        
-        const divider = fixMinusOne(processData(feature, secondCalculatedParameter).properties[secondCalculatedParameter]);
+
+        const dividend = processData(feature, firstCalculatedParameter).properties[firstCalculatedParameter];
+        const divider = processData(feature, secondCalculatedParameter).properties[secondCalculatedParameter];
+
+        // If there are bad values, we cannot calculate the value
+        if (dividend === -1 || divider === -1
+                            || divider === 0) return -1;
 
         // TODO: ei haluta aina kertoa sadalla, vaan ainoastaan jakaa.
         // Pitää siis luoda erillinen kertolaskuoperaatio
-        if (divider === 0) {
-          return 0;
-        }
         return (
-          (fixMinusOne(processData(feature, firstCalculatedParameter).properties[firstCalculatedParameter])
-          / divider) * 100
+          (dividend / divider) * 100
         );
     }
   };
