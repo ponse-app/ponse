@@ -71,7 +71,7 @@ const sortBy = (features, parameter) => {
     return sorted;
 };
 
-const createLegend = (parameter, grouped) => {
+const createLegend = (parameter, grouped, hoverValue) => {
     const legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {
@@ -99,10 +99,7 @@ const createLegend = (parameter, grouped) => {
             const startValue = group[group.length - 1].properties[parameter];
             const endValue = group[0].properties[parameter];
 
-            const eLegendLine = L.DomUtil.create(
-                "p",
-                "legend-line flex gap-2 text-[0.9em]"
-            );
+            const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
             if (startValue === 1) {
                 const prevGroup = array[index - 1];
                 const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter];
@@ -112,13 +109,13 @@ const createLegend = (parameter, grouped) => {
             } else {
                 eLegendLine.textContent = `${startValue}–${endValue}`;
             }
+            if (hoverValue >= startValue && hoverValue <= endValue && hoverValue != null) {
+                eLegendLine.style.backgroundColor = "#7B9ACC";
+                eLegendLine.style.color = "#FCF6F5";
+            }
 
             const eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
-            eColorBox.style.backgroundColor = getColor(
-                startValue,
-                array,
-                parameter
-            );
+            eColorBox.style.backgroundColor = getColor(startValue, array, parameter);
 
             eLegendLine.prepend(eColorBox);
             eLegendContainer.append(eLegendLine);

@@ -15,6 +15,9 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
     const map = useRef(null);
     const geoJsonLayer = useRef(null);
 
+    const [hoverValue, setHoverValue] = useState(null);
+    const groupedRef = useRef(null);
+
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
@@ -28,7 +31,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         const sorted = sortBy(preProcessedData.features, parameter);
 
-        const grouped = group(sorted, parameter, 30);
+        groupedRef.current = group(sorted, parameter, 30);
 
         if (map.current == null) {
             console.log("Uusi pääkartta alustettu");
@@ -37,11 +40,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         const featureStyle = (feature) => {
             return {
-                fillColor: getColor(
-                    feature.properties[parameter],
-                    grouped,
-                    parameter
-                ),
+                fillColor: getColor(feature.properties[parameter], groupedRef.current, parameter),
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
@@ -64,11 +63,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                     map.current?.fitBounds(e.target.getBounds(), {
                         animate: true,
                     });
-                    onUpdatePreviewBounds(
-                        e.target.getBounds(),
-                        feature.properties.nimi,
-                        feature
-                    );
+                    onUpdatePreviewBounds(e.target.getBounds(), feature.properties.nimi, feature);
                 });
                 layer.addEventListener("mouseover", (e) => {
                     info.update(feature);
@@ -100,6 +95,8 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                       "<p></p>" +
                       feature.properties[parameter]
                     : "Hoveraa kunnan päällä");
+
+            setHoverValue(feature?.properties[parameter]);
         };
 
         info.addTo(map.current);
@@ -147,10 +144,6 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         search.addTo(map.current);
 
-        // Add legend
-        const legend = createLegend(parameter, grouped);
-        legend.addTo(map.current);
-
         const layerBounds = pnoLayer.getBounds();
         if (!geoJsonLayer.current) {
             map.current.fitBounds(layerBounds); // Centers the map
@@ -159,7 +152,6 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
         geoJsonLayer.current = pnoLayer;
 
         return () => {
-            legend.remove();
             info.remove();
             search.remove();
 
@@ -171,6 +163,16 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
             console.log("Map useEffect return");
         };
     }, [parameter, onUpdatePreviewBounds]);
+
+    useEffect(() => {
+        // Add legend
+        const legend = createLegend(parameter, groupedRef.current, hoverValue);
+        legend.addTo(map.current);
+
+        return () => {
+            legend.remove();
+        };
+    }, [hoverValue, parameter]);
 
     return (
         <div

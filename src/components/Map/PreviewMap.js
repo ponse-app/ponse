@@ -21,6 +21,9 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     const preProcessedRef = useRef([]);
 
+    const [hoverValue, setHoverValue] = useState(null);
+    const groupedRef = useRef(null);
+
     proj4.defs(
         "EPSG:3067",
         "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
@@ -67,11 +70,11 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
         const sorted = sortBy(preProcessedData.features, parameter);
 
-        const grouped = group(sorted, parameter, Math.min(sorted.length, 9));
+        groupedRef.current = group(sorted, parameter, Math.min(sorted.length, 9));
 
         const featureStyle = (feature) => {
             return {
-                fillColor: getColor(feature.properties[parameter], grouped, parameter),
+                fillColor: getColor(feature.properties[parameter], groupedRef.current, parameter),
                 weight: 1.5,
                 opacity: 1,
                 color: "white",
@@ -92,9 +95,11 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                         dashArray: "3",
                         fillOpacity: 1,
                     });
+                    setHoverValue(feature?.properties[parameter]);
                 });
                 layer.addEventListener("mouseout", (e) => {
                     e.target.setStyle(featureStyle(feature));
+                    setHoverValue(null);
                 });
                 layer.addEventListener("click", (e) => {
                     SetSelectedPno(feature.properties);
@@ -123,13 +128,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             interactive: false,
         }).addTo(map.current);
 
-        // Add legend
-        const legend = createLegend(parameter, grouped);
-        legend.addTo(map.current);
-
         return () => {
-            legend.remove();
-
             if (map.current == null) return;
             map.current?.eachLayer((layer) => {
                 layer.off();
@@ -138,6 +137,17 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             console.log("PreviewMap useEffect return");
         };
     }, [previewFeature, preview, parameter, selectedPno, kuntaName, kuntaNameCurrent]); // Block user pan the map out of view.
+
+    useEffect(() => {
+        // Add legend
+        if (!preview) return;
+        const legend = createLegend(parameter, groupedRef.current, hoverValue);
+        legend.addTo(map.current);
+
+        return () => {
+            legend.remove();
+        };
+    }, [hoverValue, parameter, preview]);
 
     const styles = {
         visibility: preview ? "visible" : "hidden",
