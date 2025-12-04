@@ -8,18 +8,13 @@ const preProcessData = (features, parameter) => {
 
 
 const fixMinusOne = (value) => {
-  if (value === -1) return 1;
+  if (value === -1) return 0;
   return value;
 }
 
 const processData = (feature, parameter) => {
   // If parameter is found from features, then nothing is needed to do
-  if (feature.properties.hasOwnProperty(parameter)) {
-    feature.properties[parameter] = fixMinusOne(feature.properties[parameter]);
-    
-    return feature;
-  }
-
+  if (feature.properties.hasOwnProperty(parameter)) return feature;
 
   // Try find corresponding parameter with mapping
   const equivalencyTable = {
@@ -33,7 +28,7 @@ const processData = (feature, parameter) => {
       ...feature,
       properties: {
         ...feature.properties,
-        [parameter]: fixMinusOne(feature.properties[equivalencyTable[parameter]]),
+        [parameter]: feature.properties[equivalencyTable[parameter]],
       },
     };
   }
@@ -75,7 +70,7 @@ const processData = (feature, parameter) => {
     switch (definitionMap[parameter].operator) {
       case "+":
         const sum = definitionMap[parameter].parameters.reduce((sum, cur) => {
-          return processData(feature, cur).properties[cur] + sum;
+          return fixMinusOne(processData(feature, cur).properties[cur] + sum);
         }, 0);
         return sum;
 
@@ -83,7 +78,7 @@ const processData = (feature, parameter) => {
         const [firstCalculatedParameter, secondCalculatedParameter] =
         definitionMap[parameter].parameters;
         
-        const divider = processData(feature, secondCalculatedParameter).properties[secondCalculatedParameter];
+        const divider = fixMinusOne(processData(feature, secondCalculatedParameter).properties[secondCalculatedParameter]);
 
         // TODO: ei haluta aina kertoa sadalla, vaan ainoastaan jakaa.
         // Pitää siis luoda erillinen kertolaskuoperaatio
@@ -91,7 +86,7 @@ const processData = (feature, parameter) => {
           return 0;
         }
         return (
-          (processData(feature, firstCalculatedParameter).properties[firstCalculatedParameter]
+          (fixMinusOne(processData(feature, firstCalculatedParameter).properties[firstCalculatedParameter])
           / divider) * 100
         );
     }
@@ -168,7 +163,7 @@ const processData = (feature, parameter) => {
     properties: {
       ...feature.properties,
       [parameter]: postnumberValues.reduce(
-        (sum, current) => sum + current,
+        (sum, current) => sum + fixMinusOne(current),
         0
       ),
     },
