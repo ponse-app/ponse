@@ -14,6 +14,11 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
 
     const [parameterCurrent, setParameterCurrent] = useState("he_miehet");
 
+    const fixMinusOne = (value) => {
+        if (value === -1) return "Ei tarkkaa tietoa! :(";
+        return value;
+    }
+
     useEffect(() => {
         if (!pnoInfo) {
             return;
@@ -40,7 +45,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                     if (pno.properties.id == previousRow.key) {
                         return {
                             ...previousRow,
-                            value: pno.properties[parameterCurrent],
+                            value: fixMinusOne(pno.properties[parameterCurrent]),
                         };
                     }
                 }
@@ -69,7 +74,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                             key: pnoInfo.id,
                             name: pnoInfo.nimi,
                             postnumber: pnoInfo.postinumeroalue,
-                            value: pnoInfo[property],
+                            value: fixMinusOne(pnoInfo[property]),
                         },
                     ];
                 });
