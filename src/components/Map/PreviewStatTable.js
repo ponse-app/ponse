@@ -4,8 +4,12 @@ import { memo, use, useEffect, useState } from "react";
 import pno_stat from "../../app/pno_tilasto.json";
 import { preProcessData } from "@/utlis/dataPreProcessor";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
+
+    const [t, i18n] = useTranslation();
+
     const [rows, setRows] = useState([]);
 
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
@@ -81,8 +85,8 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                 {rows.length != 0 ? (
                     <thead>
                         <tr>
-                            <th>Postinumeroalue</th>
-                            <th>Arvo</th>
+                            <th>{t('statTable.postalCodeArea')}</th>
+                            <th>{t('statTable.value')}</th>
                         </tr>
                     </thead>
                 ) : null}

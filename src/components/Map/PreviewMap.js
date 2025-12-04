@@ -11,8 +11,12 @@ import PreviewStatTable from "./PreviewStatTable";
 import { preProcessData } from "@/utlis/dataPreProcessor";
 
 import L from "leaflet";
+import { useTranslation } from "react-i18next";
 
 const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection, isSelectedPreview, parameter }) => {
+   
+    const [t, i18n] = useTranslation();
+   
     const mapContainer = useRef(null);
     const map = useRef(null);
     
@@ -187,7 +191,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 <input
                     type="text"
                     className="box bg-white shadow-black text-black rounded-md p-2 max-w-1/2"
-                    placeholder="Hae postinumeroa"
+                    placeholder={t('previewMap.search')}
                     onKeyDown={(e) => handleSearch(e)}
                     onInput={(e) => {
                         e.target.style.backgroundColor = "";

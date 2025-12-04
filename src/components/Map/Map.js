@@ -96,7 +96,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         info.update = function (feature) {
             this._div.innerHTML =
-                '<h4 style="color:blue;text-align:center;">Kunta: </h4>' +
+                '<h4 style="color:blue;text-align:center;">'+t('map.municipalityText')+' </h4>' +
                 (feature
                     ? '<b style="align-items:center">' +
                       feature.properties.nimi +
@@ -117,7 +117,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                 "input",
                 "box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px"
             );
-            this._div_search.placeholder = "Hae kuntaa";
+            this._div_search.placeholder = t('map.search');
             this._div_search.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
                     console.log(map.current);
@@ -174,7 +174,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
             });
             console.log("Map useEffect return");
         };
-    }, [parameter, onUpdatePreviewBounds]);
+    }, [parameter, onUpdatePreviewBounds, t]);
 
     return (
         <div

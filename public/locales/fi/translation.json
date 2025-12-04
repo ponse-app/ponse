@@ -8,9 +8,28 @@
     },
     "chooseParameter": "Valitse parametri:",
     "parameter": {
-        "men": "Miesten määrä"
+        "miehet": "Miesten määrä",
+        "naiset": "Naisten määrä",
+        "ika_65_p": "ika_65_p",
+        "ika_13_17": "ika_13_17",
+        "ika_13_17_p": "ika_13_17_p",
+        "ika_18_24": "ika_18_24",
+        "ika_13_24": "ika_13_24",
+        "vaesto": "Väkimäärä",
+        "ra_ke": "Kesämökit yhteensä",
+        "pt_opisk": "Päätoimiset opiskelijat yhteensä",
+        "hr_mtu": "Mediaanipalkka"
     },
     "map": {
-        "hoverInfo": "Hoveraa kunnan päällä"
+        "municipalityText": "Kunta",
+        "hoverInfo": "Hoveraa kunnan päällä",
+        "search": "Hae kuntaa"
+    },
+    "previewMap": {
+        "search": "Hae postinumeroa"
+    },
+    "statTable": {
+        "postalCodeArea": "Postinumeroalue",
+        "value": "Arvo"
     }
 }
