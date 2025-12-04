@@ -28,7 +28,7 @@ const processData = (feature, parameter) => {
   }
 
   // Calculate properties based on these options
-  const calculationMap = {
+  const definitionMap = {
     vakimaara: {
       parameters: ["miehet", "naiset"],
       operator: "+",
@@ -52,16 +52,16 @@ const processData = (feature, parameter) => {
   };
 
   const calc = (feature) => {
-    switch (calculationMap[parameter].operator) {
+    switch (definitionMap[parameter].operator) {
       case "+":
-        const sum = calculationMap[parameter].parameters.reduce((sum, cur) => {
+        const sum = definitionMap[parameter].parameters.reduce((sum, cur) => {
           return processData(feature, cur).properties[cur] + sum;
         }, 0);
         return sum;
 
       case "/":
         const [firstCalculatedParameter, secondCalculatedParameter] =
-          calculationMap[parameter].parameters;
+          definitionMap[parameter].parameters;
 
         // TODO: ei haluta aina kertoa sadalla, vaan ainoastaan jakaa.
         // Pitää siis luoda erillinen kertolaskuoperaatio
@@ -76,12 +76,12 @@ const processData = (feature, parameter) => {
         );
     }
   };
-  
-  const round = (num) => {
-      return Math.round((num + Number.EPSILON) * 10) / 10;
-  }
 
-  if (calculationMap.hasOwnProperty(parameter)) {
+  const round = (num) => {
+    return Math.round((num + Number.EPSILON) * 10) / 10;
+  };
+
+  if (definitionMap.hasOwnProperty(parameter)) {
     return {
       ...feature,
       properties: {
@@ -91,26 +91,63 @@ const processData = (feature, parameter) => {
     };
   }
 
+  const calcMedian = (values) => {
+    if (values.length === 0) return 0;
+
+    values = [...values].sort((a, b) => a - b);
+
+    const half = Math.floor(values.length / 2);
+
+    return values.length % 2
+      ? values[half]
+      : (values[half - 1] + values[half]) / 2;
+  };
+
+  const calcAverage = (values) => {
+    if (values.length === 0) return 0;
+
+    const sum = [...values].reduce((partialSum, a) => partialSum + a, 0);
+
+    return sum / values.length;
+  };
+
   // Municipality data needs calculated from postnumber data
-  const values = {};
+  const calculationMap = {
+    tr_mtu: {
+      function: calcMedian,
+    },
+    hr_mtu: {
+      function: calcMedian,
+    },
+    tr_ktu: {
+      function: calcAverage,
+    },
+    hr_ktu: {
+      function: calcAverage,
+    }
+  };
 
-  pno_stat.features
+  const postnumberValues = pno_stat.features
     .filter((pno) => pno.properties.kunta === feature.properties.kunta)
-    .forEach((feature) => {
-      const municipalityId = feature.properties.kunta;
+    .map((feature) => feature.properties[parameter]);
 
-      if (!values.hasOwnProperty(municipalityId)) {
-        values[municipalityId] = [feature.properties[parameter]];
-      } else {
-        values[municipalityId].push(feature.properties[parameter]);
-      }
-    });
+  if (calculationMap[parameter]) {
+    return {
+      ...feature,
+      properties: {
+        ...feature.properties,
+        [parameter]: round(calculationMap[parameter].function(
+          postnumberValues.filter(value => value != 0 && value != -1)
+        )),
+      },
+    };
+  }
 
   return {
     ...feature,
     properties: {
       ...feature.properties,
-      [parameter]: values[feature.properties.kunta].reduce(
+      [parameter]: postnumberValues.reduce(
         (sum, current) => sum + current,
         0
       ),
