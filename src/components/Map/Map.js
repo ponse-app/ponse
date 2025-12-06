@@ -9,8 +9,12 @@ import { getColor, group, sortBy, createLegend } from "../../utlis/coloringTool"
 import { preProcessData } from "@/utlis/dataPreProcessor";
 
 import L from "leaflet";
+import { useTranslation } from "react-i18next";
 
 const Map = ({ onUpdatePreviewBounds, parameter }) => {
+
+    const [t, i18n] = useTranslation();
+
     const mapContainer = useRef(null);
     const map = useRef(null);
     const geoJsonLayer = useRef(null);
@@ -34,7 +38,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
         groupedRef.current = group(sorted, parameter, 30);
 
         if (map.current == null) {
-            console.log("Uusi pääkartta alustettu");
+            //console.log("Uusi pääkartta alustettu");
             map.current = L.map(mapContainer.current, { minZoom: 5 });
         } // stops map from intializing more than once
 
@@ -87,14 +91,14 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
         info.update = function (feature) {
             this._div.innerHTML =
-                '<h4 style="color:blue;text-align:center;">Kunta: </h4>' +
+                '<h4 style="color:blue;text-align:center;">'+t('map.municipalityText')+' </h4>' +
                 (feature
                     ? '<b style="align-items:center">' +
                       feature.properties.nimi +
                       "</b>" +
                       "<p></p>" +
                       feature.properties[parameter]
-                    : "Hoveraa kunnan päällä");
+                    : t('map.hoverInfo'));
 
             setHoverValue(feature?.properties[parameter]);
         };
@@ -110,7 +114,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
                 "input",
                 "box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px"
             );
-            this._div_search.placeholder = "Hae kuntaa";
+            this._div_search.placeholder = t('map.search');
             this._div_search.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
                     console.log(map.current);

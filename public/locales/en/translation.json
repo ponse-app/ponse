@@ -1,0 +1,35 @@
+{
+    "source": "Source: Statistics Finland",
+    "menu": {
+        "name": "Menu",
+        "home": "Home",
+        "instructions": "Instructions",
+        "about": "About"
+    },
+    "chooseParameter": "Choose a parameter:",
+    "parameter": {
+        "miehet": "Number of men",
+        "naiset": "Number of women",
+        "ika_65_p": "ika_65_p",
+        "ika_13_17": "ika_13_17",
+        "ika_13_17_p": "ika_13_17_p",
+        "ika_18_24": "ika_18_24",
+        "ika_13_24": "ika_13_24",
+        "vaesto": "Population",
+        "ra_ke": "Summer cottages",
+        "pt_opisk": "Full-time students",
+        "hr_mtu": "Median wage"
+    },
+    "map": {
+        "municipalityText": "Municipality",
+        "hoverInfo": "Hover over a municipality",
+        "search": "Search for municipality"
+    },
+    "previewMap": {
+        "search": "Search for postnumber"
+    },
+    "statTable": {
+        "postalCodeArea": "Postal code area",
+        "value": "Value"
+    }
+}
