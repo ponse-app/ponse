@@ -10,7 +10,7 @@ export default function Home() {
         <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
             <MenuButton />
             <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-[50vw]">
-                <h1>Käyttöohje:</h1>
+                <h1>{t('instructions.title')}</h1>
                 <p className="w-full">
                     {t('instructions.largeMapInfo')}
                     {/* {t('instructions.largeMapInfo','Voit valita kunnan klikkaamalla isoa karttaa. Voit valita kunnan myös'+
@@ -23,16 +23,14 @@ export default function Home() {
                     <Image fill src="/images/LargeMapPicture.png" alt="Large map" />
                 </div>
                 <p>
-                    Voit valita parametrin valitsemalla &quot;Valitse parametrit&quot; -laatikon
-                    dropdown menusta.
+                    {t('instructions.parameterSelectorInfo')}
+                    
                 </p>
                 <div className="w-full h-[20vw] relative">
                     <Image fill src="/images/ParameterSelectorPicture.png" alt="Parameter selector" />
                 </div>
                 <p className="w-full">
-                    Klikattuasi kuntaa kartalta aukeaa sivulle pienempi kartta tarkempaa
-                    kuntakohtaista tarkastelua varten. Kartalta näet kunnan postinumeroalueet ja
-                    valitun parametrin mukaisen värityksen (nyt Kittilä ja miesten määrä).
+                    {t('instructions.smallMapInfo')}
                 </p>
                 <div className="w-full h-[30vw] relative">
                     <Image fill src="/images/PreviewMapPicture.png" alt="Preview map" />

@@ -10,7 +10,7 @@ const lngs = {
     //sv: { nativeName: 'Svenska' },
 }
 
-function MenuButton( { updateLng }) {
+function MenuButton() {
 
 
     //i18n
@@ -94,7 +94,7 @@ function MenuButton( { updateLng }) {
                             value={lng}
                             onClick={(e) => {
                                 e.preventDefault();
-                                updateLng(lng);
+                                i18n.changeLanguage(lng);
                             }} />
                     ))}
                 </div>

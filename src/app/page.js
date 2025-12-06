@@ -20,10 +20,6 @@ export default function Home() {
 
     const [t, i18n] = useTranslation();
 
-    const updateLng = useCallback((lng) => {
-        i18n.changeLanguage(lng);
-    }, [i18n])
-
     const [parameter, setParameter] = useState("miehet");
 
     const [previewTable, setPreviewTable] = useState([null, null]);
@@ -58,7 +54,7 @@ export default function Home() {
         <div className="font-sans min-h-screen lg:h-dvh w-dvw">
             <main className="relative flex flex-col lg:h-[100%] w-[100%] min-h-fit">
                 <div className="relative h-[10vh]">
-                    <MenuButton updateLng={updateLng} />
+                    <MenuButton />
                     <Logo />
                 </div>
                 <DataSelector setParameter={setParameter} />

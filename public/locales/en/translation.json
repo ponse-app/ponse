@@ -31,5 +31,11 @@
     "statTable": {
         "postalCodeArea": "Postal code area",
         "value": "Value"
+    },
+    "instructions": {
+        "title": "Instructions",
+        "largeMapInfo": "You can choose a municipality by clicking on the large map. You can also choose a municipality by searching for it in the search bar. Selected parameter in the picture is number of men. Map legend shows color coded info of values. Hovering over a municipality shows quick info on the top right corner. Next you will learn about parameter selection.",
+        "parameterSelectorInfo": "You can choose a parameter by clicking on the drop down menu of \"Choose a parameter\" (in the picture it's \"Valitse parametrit\") box.",
+        "smallMapInfo": "After selecting a municipality a smaller map appears for more specific examination. In the map you can see postal code areas and color coded values. Picture is currently showing Kittilä and number of men."
     }
 }
