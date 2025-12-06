@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Postnumber Stuff",
-  description: "Info about postnumber zones",
+    title: "Ponse",
+    description: "Info about postnumber zones",
 };
 
 export default function RootLayout({ children }) {

@@ -48,7 +48,7 @@ export default function Home() {
     return (
         <div className="font-sans min-h-screen lg:h-dvh w-dvw">
             <main className="relative flex flex-col lg:h-[100%] w-[100%] min-h-fit">
-                <div className="relative h-[10vh]">
+                <div className="relative h-[10vh] lg:w-[50vw] w-[100vw]">
                     <MenuButton />
                     <Logo />
                 </div>
