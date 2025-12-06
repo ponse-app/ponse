@@ -61,7 +61,7 @@ function MenuButton() {
                 onMouseMove={(e) => handleMouseEnter(e)}
                 style={MiniMenuStyles}
             >
-                <p className="w-full text-center">{t('menu.name')}</p>
+                <p className="w-full text-center">{t('menu.name', "Menu")}</p>
             </div>
             <div
                 className="bg-gray-600 w-40 h-fit z-[10000] rounded-md select-none flex items-center flex-col justify-center text-center pt-10 pb-10"
