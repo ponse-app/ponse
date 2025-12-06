@@ -10,10 +10,12 @@ const lngs = {
     //sv: { nativeName: 'Svenska' },
 }
 
-function MenuButton() {
+function MenuButton( { updateLng }) {
+
 
     //i18n
-    const { t, i18n } = useTranslation();
+    const { t, i18n, ready } = useTranslation();
+
 
     const [miniMenuVisibility, setMiniMenuVisibility] = useState(true);
     const [menuVisibility, setMenuVisibility] = useState(false);
@@ -87,12 +89,12 @@ function MenuButton() {
                 <div className="pt-1 pb-1 w-[80%] rounded-2xl flex flex-col justify-evenly">
                     {Object.keys(lngs).map((lng) => (
                         <input key={lng} type="button"
-                        style={{fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal'}}
-                        className="hover:bg-gray-400"
+                            style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }}
+                            className="hover:bg-gray-400"
                             value={lng}
                             onClick={(e) => {
                                 e.preventDefault();
-                                i18n.changeLanguage(lng);
+                                updateLng(lng);
                             }} />
                     ))}
                 </div>

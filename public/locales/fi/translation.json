@@ -31,5 +31,10 @@
     "statTable": {
         "postalCodeArea": "Postinumeroalue",
         "value": "Arvo"
+    },
+    "instructions": {
+        "title": "Käyttöohje",
+        "largeMapInfo": "Voit valita kunnan klikkaamalla isoa karttaa. Voit valita kunnan myös kirjoittamalla kunnan nimen hakupalkkiin. Tässä parametrina on valittu miesten määrä. Karttaselite kertoo mikä väri vastaa mitäkin parametrin arvoa. Hoveraamalla kunnan päällä näet myös pikainfon kunnasta oikeassa yläkulmassa. Seuraavaksi opit parametrin valitsemisen.",
+        "parameterSelectorInfo": "Voit valita parametrin valitsemalla &quot;Valitse parametrit&quot; -laatikon dropdown menusta."
     }
 }

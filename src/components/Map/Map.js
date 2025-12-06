@@ -11,7 +11,7 @@ import { preProcessData } from "@/utlis/dataPreProcessor";
 import L from "leaflet";
 import { useTranslation } from "react-i18next";
 
-const Map = ({ onUpdatePreviewBounds, parameter }) => {
+const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
 
     const [t, i18n] = useTranslation();
 
@@ -166,7 +166,7 @@ const Map = ({ onUpdatePreviewBounds, parameter }) => {
             });
             console.log("Map useEffect return");
         };
-    }, [parameter, onUpdatePreviewBounds]);
+    }, [parameter, onUpdatePreviewBounds, t]);
 
     useEffect(() => {
         // Add legend

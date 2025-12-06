@@ -1,6 +1,5 @@
 "use client";
 
-import i18next from "../../i18n/config"
 import { useTranslation } from "react-i18next";
 
 const ParameterSelector = ({ inputName, setParameter }) => {

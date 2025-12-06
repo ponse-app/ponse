@@ -13,7 +13,8 @@ import { preProcessData } from "@/utlis/dataPreProcessor";
 import L from "leaflet";
 import { useTranslation } from "react-i18next";
 
-const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection, isSelectedPreview, parameter }) => {
+const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection,
+    isSelectedPreview, parameter, lng }) => {
    
     const [t, i18n] = useTranslation();
    
@@ -38,7 +39,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             map.current = L.map(mapContainer.current, {});
         } // stops map from intializing more than once
         if (!previewFeature) {
-            console.log("previewFeature ei ole annettu", previewFeature);
             return;
         }
 
@@ -138,7 +138,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 layer.off();
                 map.current.removeLayer(layer);
             });
-            console.log("PreviewMap useEffect return");
         };
     }, [previewFeature, preview, parameter, selectedPno, kuntaName, kuntaNameCurrent]); // Block user pan the map out of view.
 

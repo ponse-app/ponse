@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Suspense } from "react";
+import I18nProvider from "../i18n/I18nProvider";
+import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,13 +19,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return (
 
-    <html lang="en">
+  const cookieStore = cookies();
+  const lang = cookieStore.get('NEXT_LOCALE')?.value || 'fi';
+
+  return (
+    <html lang="fi">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <I18nProvider>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );
