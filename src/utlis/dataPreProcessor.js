@@ -173,6 +173,20 @@ const processData = (feature, parameter) => {
       operator: "/",
     },
 
+    ra_asrak_p: {
+      parameters: ["ra_asrak", "ra_raky"],
+      operator: "/"
+    },
+    //Use parameter "ra_asunn" as divider (which is ready in data) so we can calcute the % only from residental buildings.
+    ra_pt_as_p: {
+      parameters: ["ra_pt_as", "ra_asunn"],
+      operator: "/"
+    },
+    ra_kt_as_p: {
+      parameters: ["ra_kt_as", "ra_asunn"],
+      operator: "/"
+    },
+
   };
 
   const calc = (feature) => {
@@ -274,6 +288,10 @@ const processData = (feature, parameter) => {
       function: calcAverage,
     },
     hr_ktu: {
+      function: calcAverage,
+    },
+
+    ra_as_kpa: {
       function: calcAverage,
     },
   };

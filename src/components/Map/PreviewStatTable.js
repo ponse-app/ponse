@@ -12,7 +12,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
 
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
 
-    const [parameterCurrent, setParameterCurrent] = useState("he_miehet");
+    const [parameterCurrent, setParameterCurrent] = useState("pinta_ala");
 
     const fixMinusOne = (value) => {
         if (value === 1) return "Ei tarkkaa tietoa! :(";

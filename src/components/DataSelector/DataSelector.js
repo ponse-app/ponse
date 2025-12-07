@@ -3,7 +3,7 @@ import { useState } from "react";
 import ParameterSelector from "./ParameterSelector";
 
 const DataSelector = ({ setParameter }) => {
-    const [Category, setCategory] = useState("Asukasrakenne")
+    const [Category, setCategory] = useState("Yleiset tiedot");
     const Categories = {
         "Yleiset tiedot": {
             "pinta_ala" : "Pinta-ala (m²)",
@@ -15,7 +15,9 @@ const DataSelector = ({ setParameter }) => {
         "Asukasrakenne": {
             "vaesto" : "Väkiluku",
             "miehet" : "Miesten määrä",
+            "he_miehet_p" : "Miesten osuus väkiluvusta (%)",
             "naiset" : "Naisten määrä",
+            "he_naiset_p" : "Naisten osuus väkiluvusta (%)",
             "he_kika" : "Asukkaiden keski-ikä",
             "he_0_2" : "0-2 -vuotiaat",
             "ika_3_12" : "3-12 -vuotiaat",
@@ -26,8 +28,6 @@ const DataSelector = ({ setParameter }) => {
             "ika_0_17_p" : "Alaikäisten osuus väkiluvusta (%)",
             "ika_25_64_p" : "25-64 -vuotiaiden osuus väkiluvusta (%)",
             "ika_65_p" : "Yli 65-vuotiaiden osuus väkiluvusta (%)",
-            "he_miehet_p" : "Miesten osuus väkiluvusta (%)",
-            "he_naiset_p" : "Naisten osuus väkiluvusta (%)"
         },
         "Asukkaiden koulutusaste (korkein suoritettu koulutusaste)": {
             "ko_perus_p" : "Perusasteen suorittaneet (%)",
@@ -61,10 +61,20 @@ const DataSelector = ({ setParameter }) => {
             "tr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat taloudet (%)",
             "tr_hy_tul_p" : "Ylimpään tuloluokkaan kuuluvat taloudet (%)",
         },
-
         "Rakennukset ja asunnot": {
             "ra_ke" : "Kesämökkien määrä",
             "ra_raky" : "Rakennukset yhteensä",
+            "ra_asrak" : "Asuinrakennukset yhteensä",
+            "ra_asrak_p" : "Asuinrakennusten osuus (%)",
+            "ra_as_kpa" : "Asuntojen keskipinta-ala (m²)",
+            "ra_pt_as_p" : "Pientaloasunnot (%)",
+            "ra_kt_as_p" : "Kerrostaloasunnot (%)",
+        },
+        "Työpaikat toimialoittain": {
+            "tp_tyopy" : "Työpaikat yhteensä",
+            "tp_alku_a" : "Alkutuotannon työpaikat",
+            "tp_jalo_bf" : "Jalostuksen työpaikat",
+            "tp_palv_gu" : "Palveluiden työpaikat",
         },
     }
 
