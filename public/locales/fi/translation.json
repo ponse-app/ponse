@@ -35,6 +35,7 @@
     "instructions": {
         "title": "Käyttöohje",
         "largeMapInfo": "Voit valita kunnan klikkaamalla isoa karttaa. Voit valita kunnan myös kirjoittamalla kunnan nimen hakupalkkiin. Tässä parametrina on valittu miesten määrä. Karttaselite kertoo mikä väri vastaa mitäkin parametrin arvoa. Hoveraamalla kunnan päällä näet myös pikainfon kunnasta oikeassa yläkulmassa. Seuraavaksi opit parametrin valitsemisen.",
+        "largeMapPicture": "/images/LargeMapPicture.png",
         "parameterSelectorInfo": "Voit valita parametrin valitsemalla \"Valitse parametrit\" -laatikon dropdown menusta.",
         "smallMapInfo": "Klikattuasi kuntaa kartalta aukeaa sivulle pienempi kartta tarkempaa kuntakohtaista tarkastelua varten. Kartalta näet kunnan postinumeroalueet ja valitun parametrin mukaisen värityksen (nyt Kittilä ja miesten määrä)."
     }

@@ -20,7 +20,7 @@ export default function Home() {
                     'parametrin valitsemisen.')} */}
                 </p>
                 <div className="w-full h-[50vw] relative">
-                    <Image fill src="/images/LargeMapPicture.png" alt="Large map" />
+                    <Image fill src={t("instructions.largeMapPicture")} alt="Large map" />
                 </div>
                 <p>
                     {t('instructions.parameterSelectorInfo')}
