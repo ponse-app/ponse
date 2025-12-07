@@ -93,7 +93,7 @@ const processData = (feature, parameter) => {
       operator: "/",
     },
 
-    //Käytetään jakajana datasta löytyvää "ko_ika18y"- parametria, sillä tilastot koskevat vain yli 18-vuotiatita.
+    //Use paremeter "ko_ika18y" as divider (which is ready in data) beacuse the data uses only over 18 year olds.
     ko_perus_p: {
       parameters: ["ko_perus", "ko_ika18y"],
       operator: "/",
@@ -123,7 +123,7 @@ const processData = (feature, parameter) => {
       operator: "/",
     },
 
-    //Käytetään jakajana datasta löytyvää "ko_ika18y"- parametria, sillä tilastot koskevat vain yli 18-vuotiatita.
+    //Use paremeter "ko_ika18y" as divider (which is ready in data) beacuse the data uses only over 18 year olds.
     hr_pi_tul_p: {
       parameters: ["hr_pi_tul", "ko_ika18y"],
       operator: "/",
@@ -136,6 +136,43 @@ const processData = (feature, parameter) => {
       parameters: ["hr_hy_tul", "ko_ika18y"],
       operator: "/",
     },
+
+    //Use paremeter "te_taly" as divider (which is ready in data) beacuse the data uses households.
+    te_yks_p: {
+      parameters: ["te_yks", "te_taly"],
+      operator: "/",
+    },
+    te_laps_p: {
+      parameters: ["te_laps", "te_taly"],
+      operator: "/",
+    },
+    te_yhlap_p: {
+      parameters: ["te_yhlap", "te_taly"],
+      operator: "/",
+    },
+    te_omis_as_p: {
+      parameters: ["te_omis_as", "te_taly"],
+      operator: "/",
+    },
+    te_vuok_as_p: {
+      parameters: ["te_vuok_as", "te_taly"],
+      operator: "/",
+    },
+
+    //Use paremeter "te_taly" as divider (which is ready in data) beacuse the data uses households.
+    tr_pi_tul_p: {
+      parameters: ["tr_pi_tul", "te_taly"],
+      operator: "/",
+    },
+    tr_ke_tul_p: {
+      parameters: ["tr_ke_tul", "te_taly"],
+      operator: "/",
+    },
+    tr_hy_tul_p: {
+      parameters: ["tr_hy_tul", "te_taly"],
+      operator: "/",
+    },
+
   };
 
   const calc = (feature) => {
@@ -219,19 +256,26 @@ const processData = (feature, parameter) => {
       function: calcAverage,
     },
 
-
     tr_mtu: {
       function: calcMedian,
     },
     hr_mtu: {
       function: calcMedian,
     },
+
+    te_takk: {
+      function: calcAverage,
+    },
+    te_as_valj: {
+      function: calcAverage,
+    },
+
     tr_ktu: {
       function: calcAverage,
     },
     hr_ktu: {
       function: calcAverage,
-    }
+    },
   };
 
   const postnumberValues = pno_stat.features

@@ -40,10 +40,28 @@ const DataSelector = ({ setParameter }) => {
         "Asukkaiden käytössä olevat rahatulot": {
             "hr_ktu" : "Asukkaiden keskitulot",
             "hr_mtu" : "Asukkaiden mediaanitulot",
-            "hr_pi_tul_p" : "Alimpaan tuloluokkaan kuuluvat asukkaat",
-            "hr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat asukkaat",
-            "hr_hy_tul_p" : "Ylimpään tuloluokkaan kuuluvat asukkaat",
+            "hr_pi_tul_p" : "Alimpaan tuloluokkaan kuuluvat asukkaat (%)",
+            "hr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat asukkaat (%)",
+            "hr_hy_tul_p" : "Ylimpään tuloluokkaan kuuluvat asukkaat (%)",
         },
+        "Talouksien koko ja elämänvaihe": {
+            "te_taly" : "Talouksia yhteensä",
+            "te_takk" : "Talouksien keskikoko (henkilöä)",
+            "te_as_valj" : "Asumisväljyys (m²/henkilö)",
+            "te_yks_p" : "Yksinasuvien taloudet (%)",
+            "te_laps_p" : "Lapsitaloudet (%)",
+            "te_yhlap_p" : "Yhden vanhemman lapsitaloudet (%)",
+            "te_omis_as_p" : "Omistusasunnoissa asuvat taloudet (%)",
+            "te_vuok_as_p" : "vuokra- ja asumisoikeusasunnoissa asuvat taloudet (%)",
+        },
+        "Talouksien käytössä olevat rahatulot": {
+            "tr_ktu" : "Talouksien keskitulot",
+            "tr_mtu" : "Talouksien mediaanitulot",
+            "tr_pi_tul_p" : "Alimpaan tuloluokkaan kuuluvat taloudet (%)",
+            "tr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat taloudet (%)",
+            "tr_hy_tul_p" : "Ylimpään tuloluokkaan kuuluvat taloudet (%)",
+        },
+
         "Rakennukset ja asunnot": {
             "ra_ke" : "Kesämökkien määrä",
             "ra_raky" : "Rakennukset yhteensä",
