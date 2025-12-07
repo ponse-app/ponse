@@ -1,0 +1,18 @@
+.imgDark {
+    display: none;
+}
+
+.imgDark,
+.imgLight {
+    width: auto;
+    height: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    .imgLight {
+        display: none;
+    }
+    .imgDark {
+        display: unset;
+    }
+}
