@@ -32,7 +32,7 @@ const DataSelector = ({ setParameter }) => {
         "Rakennukset ja asunnot": {
             "ra_ke" : "Kesämökkien määrä",
             "ra_raky" : "Rakennukset yhteensä",
-        }
+        },
     }
 
     const handleCategoryChange = (newCategory) => {
