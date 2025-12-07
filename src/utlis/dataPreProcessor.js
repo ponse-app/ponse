@@ -6,6 +6,12 @@ const preProcessData = (features, parameter) => {
   return features.map((feature) => processData(feature, parameter));
 };
 
+
+const fixMinusOne = (value) => {
+  if (value === -1) return 0;
+  return value;
+}
+
 const processData = (feature, parameter) => {
   // If parameter is found from features, then nothing is needed to do
   if (feature.properties.hasOwnProperty(parameter)) return feature;
@@ -28,60 +34,102 @@ const processData = (feature, parameter) => {
   }
 
   // Calculate properties based on these options
-  const calculationMap = {
+  const definitionMap = {
     vakimaara: {
       parameters: ["miehet", "naiset"],
       operator: "+",
     },
-    ika_13_17: {
-      parameters: ["he_13_15", "he_16_17"],
+    ika_3_12: {
+      parameters: ["he_3_6", "he_7_12"],
       operator: "+",
     },
-    ika_18_24: {
-      parameters: ["he_18_19", "he_20_24"],
+    ika_13_19: {
+      parameters: ["he_13_15", "he_16_17", "he_18_19"],
       operator: "+",
     },
-    ika_13_24: {
-      parameters: ["ika_13_17", "ika_18_24"],
+    ika_20_29: {
+      parameters: ["he_20_24", "he_25_29"],
       operator: "+",
     },
-    ika_13_17_p: {
-      parameters: ["ika_13_17", "vaesto"],
+    ika_30_64: {
+      parameters: ["he_30_34", "he_35_39", "he_40_44", "he_45_49", "he_50_54", "he_55_59", "he_60_64"],
+      operator: "+",
+    },
+    ika_65: {
+      parameters: ["he_65_69", "he_70_74", "he_75_79", "he_80_84", "he_85_"],
+      operator: "+",
+    },
+    ika_65_p: {
+      parameters: ["ika_65", "vaesto"],
+      operator: "/",
+    },
+    ika_0_17: {
+      parameters: ["he_0_2", "he_3_6", "he_7_12", "he_13_15", "he_16_17"],
+      operator: "+"
+    },
+    ika_0_17_p: {
+      parameters: ["ika_0_17", "vaesto"],
+      operator: "/"
+    },
+    ika_25_64: {
+      parameters: ["he_25_29", "he_30_34", "he_35_39", "he_40_44", "he_45_49", "he_50_54", "he_55_59", "he_60_64"],
+      operator: "+",
+    },
+    ika_25_64_p: {
+      parameters: ["ika_25_64", "vaesto"],
+      operator: "/"
+    },
+    he_miehet_p: {
+      parameters: ["miehet", "vaesto"],
+      operator: "/",
+    },
+    he_naiset_p: {
+      parameters: ["naiset", "vaesto"],
       operator: "/",
     },
   };
 
   const calc = (feature) => {
-    switch (calculationMap[parameter].operator) {
+    switch (definitionMap[parameter].operator) {
       case "+":
-        const sum = calculationMap[parameter].parameters.reduce((sum, cur) => {
-          return processData(feature, cur).properties[cur] + sum;
-        }, 0);
+        const parameters = definitionMap[parameter].parameters;
+
+        let sum = 0;
+        for (let i = 0; i < parameters.length; i++) {
+          const value = processData(feature, parameters[i]).properties[parameters[i]];
+
+          // If there's even one -1, we cannot calculate the sum
+          if (value === -1) return -1;
+
+          sum += value;
+        }
+
         return sum;
 
       case "/":
         const [firstCalculatedParameter, secondCalculatedParameter] =
-          calculationMap[parameter].parameters;
+        definitionMap[parameter].parameters;
+
+        const dividend = processData(feature, firstCalculatedParameter).properties[firstCalculatedParameter];
+        const divider = processData(feature, secondCalculatedParameter).properties[secondCalculatedParameter];
+
+        // If there are bad values, we cannot calculate the value
+        if (dividend === -1 || divider === -1
+                            || divider === 0) return -1;
 
         // TODO: ei haluta aina kertoa sadalla, vaan ainoastaan jakaa.
         // Pitää siis luoda erillinen kertolaskuoperaatio
         return (
-          (processData(feature, firstCalculatedParameter).properties[
-            firstCalculatedParameter
-          ] /
-            processData(feature, secondCalculatedParameter).properties[
-              secondCalculatedParameter
-            ]) *
-          100
+          (dividend / divider) * 100
         );
     }
   };
-  
-  const round = (num) => {
-      return Math.round((num + Number.EPSILON) * 10) / 10;
-  }
 
-  if (calculationMap.hasOwnProperty(parameter)) {
+  const round = (num) => {
+    return Math.round((num + Number.EPSILON) * 10) / 10;
+  };
+
+  if (definitionMap.hasOwnProperty(parameter)) {
     return {
       ...feature,
       properties: {
@@ -91,27 +139,69 @@ const processData = (feature, parameter) => {
     };
   }
 
+  const calcMedian = (values) => {
+    if (values.length === 0) return 0;
+
+    values = [...values].sort((a, b) => a - b);
+
+    const half = Math.floor(values.length / 2);
+
+    return values.length % 2
+      ? values[half]
+      : (values[half - 1] + values[half]) / 2;
+  };
+
+  const calcAverage = (values) => {
+    if (values.length === 0) return 0;
+
+    const sum = [...values].reduce((partialSum, a) => partialSum + a, 0);
+
+    return sum / values.length;
+  };
+
   // Municipality data needs calculated from postnumber data
-  const values = {};
+  const calculationMap = {
+    he_kika: {
+      function: calcAverage,
+    },
 
-  pno_stat.features
+
+    tr_mtu: {
+      function: calcMedian,
+    },
+    hr_mtu: {
+      function: calcMedian,
+    },
+    tr_ktu: {
+      function: calcAverage,
+    },
+    hr_ktu: {
+      function: calcAverage,
+    }
+  };
+
+  const postnumberValues = pno_stat.features
     .filter((pno) => pno.properties.kunta === feature.properties.kunta)
-    .forEach((feature) => {
-      const municipalityId = feature.properties.kunta;
+    .map((feature) => feature.properties[parameter]);
 
-      if (!values.hasOwnProperty(municipalityId)) {
-        values[municipalityId] = [feature.properties[parameter]];
-      } else {
-        values[municipalityId].push(feature.properties[parameter]);
-      }
-    });
+  if (calculationMap[parameter]) {
+    return {
+      ...feature,
+      properties: {
+        ...feature.properties,
+        [parameter]: round(calculationMap[parameter].function(
+          postnumberValues.filter(value => value != 0 && value != -1)
+        )),
+      },
+    };
+  }
 
   return {
     ...feature,
     properties: {
       ...feature.properties,
-      [parameter]: values[feature.properties.kunta].reduce(
-        (sum, current) => sum + current,
+      [parameter]: postnumberValues.reduce(
+        (sum, current) => sum + fixMinusOne(current),
         0
       ),
     },
