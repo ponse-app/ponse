@@ -27,13 +27,13 @@ export default function Home() {
                     
                 </p>
                 <div className="w-full h-[20vw] relative">
-                    <Image fill src="/images/ParameterSelectorPicture.png" alt="Parameter selector" />
+                    <Image fill src={t("instructions.parameterSelectorPicture")} alt="Parameter selector" />
                 </div>
                 <p className="w-full">
                     {t('instructions.smallMapInfo')}
                 </p>
                 <div className="w-full h-[30vw] relative">
-                    <Image fill src="/images/PreviewMapPicture.png" alt="Preview map" />
+                    <Image fill src={t("instructions.smallMapPicture")} alt="Preview map" />
                 </div>
             </main>
         </div>
