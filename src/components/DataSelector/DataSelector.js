@@ -29,6 +29,21 @@ const DataSelector = ({ setParameter }) => {
             "he_miehet_p" : "Miesten osuus väkiluvusta (%)",
             "he_naiset_p" : "Naisten osuus väkiluvusta (%)"
         },
+        "Asukkaiden koulutusaste (korkein suoritettu koulutusaste)": {
+            "ko_perus_p" : "Perusasteen suorittaneet (%)",
+            "ko_tas_p" : "Toisen asteen suorittaneet (%)",
+            "ko_yliop_p" : "Ylioppilastutkinnon suorittaneet (%)",
+            "ko_ammat_p" : "Ammatillisen tutkinnon suorittaneet (%)",
+            "ko_al_kork_p" : "Alemman korkeakoulututkinnon suorittaneet (%)",
+            "ko_yl_kork_p" : "Ylemmän korkeakoulututkinnon suorittaneet (%)",
+        },
+        "Asukkaiden käytössä olevat rahatulot": {
+            "hr_ktu" : "Asukkaiden keskitulot",
+            "hr_mtu" : "Asukkaiden mediaanitulot",
+            "hr_pi_tul_p" : "Alimpaan tuloluokkaan kuuluvat asukkaat",
+            "hr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat asukkaat",
+            "hr_hy_tul_p" : "Ylimpään tuloluokkaan kuuluvat asukkaat",
+        },
         "Rakennukset ja asunnot": {
             "ra_ke" : "Kesämökkien määrä",
             "ra_raky" : "Rakennukset yhteensä",

@@ -92,6 +92,50 @@ const processData = (feature, parameter) => {
       parameters: ["naiset", "vaesto"],
       operator: "/",
     },
+
+    //Käytetään jakajana datasta löytyvää "ko_ika18y"- parametria, sillä tilastot koskevat vain yli 18-vuotiatita.
+    ko_perus_p: {
+      parameters: ["ko_perus", "ko_ika18y"],
+      operator: "/",
+    },
+    ko_tas: {
+      parameters: ["ko_yliop", "ko_ammat"],
+      operator: "+",
+    },
+    ko_tas_p: {
+      parameters: ["ko_tas", "ko_ika18y"],
+      operator: "/",
+    },
+    ko_yliop_p: {
+      parameters: ["ko_yliop", "ko_ika18y"],
+      operator: "/",
+    },
+    ko_ammat_p: {
+      parameters: ["ko_ammat", "ko_ika18y"],
+      operator: "/",
+    },
+    ko_al_kork_p: {
+      parameters: ["ko_al_kork", "ko_ika18y"],
+      operator: "/",
+    },
+    ko_yl_kork_p: {
+      parameters: ["ko_yl_kork", "ko_ika18y"],
+      operator: "/",
+    },
+
+    //Käytetään jakajana datasta löytyvää "ko_ika18y"- parametria, sillä tilastot koskevat vain yli 18-vuotiatita.
+    hr_pi_tul_p: {
+      parameters: ["hr_pi_tul", "ko_ika18y"],
+      operator: "/",
+    },
+    hr_ke_tul_p: {
+      parameters: ["hr_ke_tul", "ko_ika18y"],
+      operator: "/",
+    },
+    hr_hy_tul_p: {
+      parameters: ["hr_hy_tul", "ko_ika18y"],
+      operator: "/",
+    },
   };
 
   const calc = (feature) => {
