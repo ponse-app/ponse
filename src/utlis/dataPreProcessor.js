@@ -12,12 +12,6 @@ const fixMinusOne = (value) => {
   return value;
 }
 
-
-const fixMinusOne = (value) => {
-  if (value === -1) return 1;
-  return value;
-}
-
 const processData = (feature, parameter) => {
   // If parameter is found from features, then nothing is needed to do
   if (feature.properties.hasOwnProperty(parameter)) {
@@ -45,7 +39,6 @@ const processData = (feature, parameter) => {
   }
 
   // Calculate properties based on these options
-  const definitionMap = {
   const definitionMap = {
     vakimaara: {
       parameters: ["miehet", "naiset"],
@@ -103,7 +96,6 @@ const processData = (feature, parameter) => {
 
   const calc = (feature) => {
     switch (definitionMap[parameter].operator) {
-    switch (definitionMap[parameter].operator) {
       case "+":
         const parameters = definitionMap[parameter].parameters;
 
@@ -145,10 +137,7 @@ const processData = (feature, parameter) => {
   const round = (num) => {
     return Math.round((num + Number.EPSILON) * 10) / 10;
   };
-    return Math.round((num + Number.EPSILON) * 10) / 10;
-  };
 
-  if (definitionMap.hasOwnProperty(parameter)) {
   if (definitionMap.hasOwnProperty(parameter)) {
     return {
       ...feature,
@@ -159,25 +148,6 @@ const processData = (feature, parameter) => {
     };
   }
 
-  const calcMedian = (values) => {
-    if (values.length === 0) return 0;
-
-    values = [...values].sort((a, b) => a - b);
-
-    const half = Math.floor(values.length / 2);
-
-    return values.length % 2
-      ? values[half]
-      : (values[half - 1] + values[half]) / 2;
-  };
-
-  const calcAverage = (values) => {
-    if (values.length === 0) return 0;
-
-    const sum = [...values].reduce((partialSum, a) => partialSum + a, 0);
-
-    return sum / values.length;
-  };
 
   const calcMedian = (values) => {
     if (values.length === 0) return 0;
@@ -222,19 +192,6 @@ const processData = (feature, parameter) => {
 
   const postnumberValues = pno_stat.features
     .filter((pno) => pno.properties.kunta === feature.properties.kunta)
-    .map((feature) => feature.properties[parameter]);
-
-  if (calculationMap[parameter]) {
-    return {
-      ...feature,
-      properties: {
-        ...feature.properties,
-        [parameter]: round(calculationMap[parameter].function(
-          postnumberValues.filter(value => value != 0 && value != -1)
-        )),
-      },
-    };
-  }
     .map((feature) => feature.properties[parameter]);
 
   if (calculationMap[parameter]) {
