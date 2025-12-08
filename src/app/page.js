@@ -20,7 +20,7 @@ export default function Home() {
 
     const [t, i18n] = useTranslation();
 
-    const [parameter, setParameter] = useState("miehet");
+    const [parameter, setParameter] = useState("pinta_ala_km2");
 
     const [previewTable, setPreviewTable] = useState([null, null]);
     const [selectedPreview, setSelectedPreview] = useState(0);

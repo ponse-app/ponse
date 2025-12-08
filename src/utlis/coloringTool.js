@@ -53,6 +53,8 @@ const group = (toBeGrouped, parameter, maxAmountOfGroups) => {
         if (
             toBeGrouped[i].properties[parameter] ===
             toBeGrouped[i + 1]?.properties[parameter]
+            ||
+            toBeGrouped[i + 1]?.properties[parameter] === -1
         )
             continue;
 
@@ -99,8 +101,11 @@ const createLegend = (parameter, grouped, hoverValue) => {
             const startValue = group[group.length - 1].properties[parameter];
             const endValue = group[0].properties[parameter];
 
-            const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
-            if (startValue === 1) {
+            const eLegendLine = L.DomUtil.create(
+                "p",
+                "legend-line flex gap-2 text-[0.9em]"
+            );
+            if (startValue === -1) {
                 const prevGroup = array[index - 1];
                 const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter];
                 eLegendLine.textContent = `< ${prevStartValue}`;
