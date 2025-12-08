@@ -1,9 +1,16 @@
 const getColor = (value, grouped, parameter) => {
-    const amountOfGaps = grouped.length;
+    let amountOfGaps = grouped.length;
 
-    if (amountOfGaps === 1) return "hsl(0 0 0)";
+    // If the last group contains -1, then amount of gaps is one less.
+    // This is because we don't want the last group to be considered in the coloring.
+    // The last group should be the only one which contains -1 values, if there's a such group.
+    if (grouped[grouped.length - 1][0].properties[parameter] === -1)
+        amountOfGaps = amountOfGaps - 1;
 
-    let whichGap = 0;
+    if (amountOfGaps === 1) return "hsl(0 0 100)";
+
+    // Start whichGap from -1 so we can determine if the gap is not found
+    let whichGap = -1;
     for (let i = 0; i < amountOfGaps; i++) {
         const currentGap = grouped[i];
         if (
@@ -14,6 +21,10 @@ const getColor = (value, grouped, parameter) => {
             break;
         }
     }
+
+    // If the gap is not found, return specific color
+    // This happens if the value is not part of any group, eg. value is -1.
+    if (whichGap === -1) return "hsl(0 0 0)";
 
     const gapPercentage = (whichGap / (amountOfGaps - 1)) * 100;
 
@@ -35,32 +46,36 @@ const group = (toBeGrouped, parameter, maxAmountOfGroups) => {
     // Aims to group items equidistantly (every group have the same amount of items)
     // but designed to keep same values in the same group
 
+    const withoutMinusOnes = toBeGrouped.filter((feature) => feature.properties[parameter] !== -1);
+    const onlyMinusOnes = toBeGrouped.filter((feature) => feature.properties[parameter] === -1);
+
     const interval = Math.ceil(toBeGrouped.length / maxAmountOfGroups); // Roughfly how many items in a group
 
     let grouped = []; // Array for the final group
 
-    for (let i = 0, groupNumber = 0; i < toBeGrouped.length; i++) {
+    for (let i = 0, groupNumber = 0; i < withoutMinusOnes.length; i++) {
         // If there's not a group already and a one is needed, create a new one
         if (grouped.length <= groupNumber) {
             grouped.push([]);
         }
 
         // Push current value to current group
-        grouped[groupNumber].push(toBeGrouped[i]);
+        grouped[groupNumber].push(withoutMinusOnes[i]);
 
         // Check if current value is the same as next one.
         // If it's then delay group change to keep same values in the same group
         if (
-            toBeGrouped[i].properties[parameter] ===
-            toBeGrouped[i + 1]?.properties[parameter]
-            ||
-            toBeGrouped[i + 1]?.properties[parameter] === -1
+            withoutMinusOnes[i].properties[parameter] ===
+            withoutMinusOnes[i + 1]?.properties[parameter]
         )
             continue;
 
         // If current group have enough items, change group
         if (grouped[groupNumber].length >= interval) groupNumber++;
     }
+
+    // Put -1 values to the own group
+    if (onlyMinusOnes.length > 0) return [...grouped, [...onlyMinusOnes]];
 
     return grouped;
 };
@@ -97,7 +112,7 @@ const createLegend = (parameter, grouped, hoverValue) => {
         L.DomEvent.disableClickPropagation(eLegendContainer);
         L.DomEvent.disableScrollPropagation(eLegendContainer);
 
-        grouped.forEach((group, index, array) => {
+        grouped.forEach((group, _, array) => {
             const startValue = group[group.length - 1].properties[parameter];
             const endValue = group[0].properties[parameter];
 
@@ -106,9 +121,7 @@ const createLegend = (parameter, grouped, hoverValue) => {
                 "legend-line flex gap-2 text-[0.9em]"
             );
             if (startValue === -1) {
-                const prevGroup = array[index - 1];
-                const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter];
-                eLegendLine.textContent = `< ${prevStartValue}`;
+                eLegendLine.textContent = `Ei dataa`;
             } else if (startValue === endValue) {
                 eLegendLine.textContent = `${startValue}`;
             } else {
