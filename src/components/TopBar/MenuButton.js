@@ -38,7 +38,7 @@ function MenuButton() {
         timeoutId = setTimeout(() => {
             setMiniMenuVisibility(true);
             setMenuVisibility(false);
-        }, 1000);
+        }, 300);
     }
 
     const MiniMenuStyles = {

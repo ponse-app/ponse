@@ -39,7 +39,7 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
 
         if (map.current == null) {
             //console.log("Uusi pääkartta alustettu");
-            map.current = L.map(mapContainer.current, { minZoom: 5 });
+            map.current = L.map(mapContainer.current, { minZoom: 5, maxZoom: 10 });
         } // stops map from intializing more than once
 
         const featureStyle = (feature) => {

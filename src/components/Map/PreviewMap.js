@@ -36,7 +36,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     useEffect(() => {
         if (map.current == null) {
-            map.current = L.map(mapContainer.current, {});
+            map.current = L.map(mapContainer.current, { minZoom: 5, maxZoom: 13 });
         } // stops map from intializing more than once
         if (!previewFeature) {
             return;
