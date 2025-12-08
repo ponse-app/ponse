@@ -44,6 +44,30 @@ const processData = (feature, parameter) => {
       parameters: ["pinta_ala", 1000000],
       operator: "pinta-ala/",
     },
+    ika_18_74: {
+      parameters: ["he_18_19", "he_20_24", "he_25_29", "he_30_34", "he_35_39", "he_40_44", "he_45_49", "he_50_54", "he_55_59", "he_60_64", "he_65_69", "he_70_74"],
+      operator: "+",
+    },
+    pt_tyoll_p: {
+      parameters: ["pt_tyoll", "ika_18_74"],
+      operator: "/",
+    },
+    ika_16_64: {
+      parameters: ["he_16_17", "he_18_19", "he_20_24", "he_25_29", "he_30_34", "he_35_39", "he_40_44", "he_45_49", "he_50_54", "he_55_59", "he_60_64"],
+      operator: "+",
+    },
+    pt_tyott_p: {
+      parameters: ["pt_tyott", "ika_16_64"],
+      operator: "/",
+    },
+    pt_opisk_p: {
+      parameters: ["pt_opisk", "vaesto"],
+      operator: "/",
+    },
+    pt_elakel_p: {
+      parameters: ["pt_elakel", "vaesto"],
+      operator: "/",
+    },
 
     vakimaara: {
       parameters: ["miehet", "naiset"],

@@ -7,10 +7,10 @@ const DataSelector = ({ setParameter }) => {
     const Categories = {
         "Yleiset tiedot": {
             "pinta_ala_km2" : "Pinta-ala (km²)",
-            "pt_tyoll" : "Työllisten määrä",
-            "pt_tyott" : "Työttömien määrä",
-            "pt_opisk" : "Opiskelijoiden määrä",
-            "pt_elakel" : "Eläkeläisten määrä",
+            "pt_tyoll_p" : "Työllisten määrä (%)",
+            "pt_tyott_p" : "Työttömien määrä (%)",
+            "pt_opisk_p" : "Opiskelijoiden määrä (%)",
+            "pt_elakel_p" : "Eläkeläisten määrä (%)",
         },
         "Asukasrakenne": {
             "vaesto" : "Väkiluku",
@@ -38,8 +38,8 @@ const DataSelector = ({ setParameter }) => {
             "ko_yl_kork_p" : "Ylemmän korkeakoulututkinnon suorittaneet (%)",
         },
         "Asukkaiden käytössä olevat rahatulot": {
-            "hr_ktu" : "Asukkaiden keskitulot",
-            "hr_mtu" : "Asukkaiden mediaanitulot",
+            "hr_ktu" : "Asukkaiden keskitulot (vuosittain)",
+            "hr_mtu" : "Asukkaiden mediaanitulot (vuosittain)",
             "hr_pi_tul_p" : "Alimpaan tuloluokkaan kuuluvat asukkaat (%)",
             "hr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat asukkaat (%)",
             "hr_hy_tul_p" : "Ylimpään tuloluokkaan kuuluvat asukkaat (%)",
@@ -54,8 +54,8 @@ const DataSelector = ({ setParameter }) => {
             "te_omis_as_p" : "Omistusasunnoissa asuvat taloudet (%)",
             "te_vuok_as_p" : "Vuokra- ja asumisoikeusasunnoissa asuvat taloudet (%)",
         },
-        "Talouksien käytössä olevat rahatulot": {
-            "tr_ktu" : "Talouksien keskitulot",
+        "Talouksien käytössä olevat rahatulot (vuosittain)": {
+            "tr_ktu" : "Talouksien keskitulot (vuosittain)",
             "tr_mtu" : "Talouksien mediaanitulot",
             "tr_pi_tul_p" : "Alimpaan tuloluokkaan kuuluvat taloudet (%)",
             "tr_ke_tul_p" : "Keskimmäiseen tuloluokkaan kuuluvat taloudet (%)",
