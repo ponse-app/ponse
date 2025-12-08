@@ -40,6 +40,11 @@ const processData = (feature, parameter) => {
 
   // Calculate properties based on these options
   const definitionMap = {
+    pinta_ala_km2: {
+      parameters: ["pinta_ala", 1000000],
+      operator: "pinta-ala/",
+    },
+
     vakimaara: {
       parameters: ["miehet", "naiset"],
       operator: "+",
@@ -225,6 +230,19 @@ const processData = (feature, parameter) => {
         return (
           (dividend / divider) * 100
         );
+
+        case "pinta-ala/":
+          const [areaParameter, divisor] =
+          definitionMap[parameter].parameters;
+
+          const areaValue = processData(feature, areaParameter).properties[areaParameter];
+
+          // If there are bad values, we cannot calculate the value
+          if (areaValue === -1 || areaValue === 0) return -1;
+
+          return (
+            areaValue / divisor
+          );
     }
   };
 

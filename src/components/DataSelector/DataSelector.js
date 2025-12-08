@@ -6,7 +6,7 @@ const DataSelector = ({ setParameter }) => {
     const [Category, setCategory] = useState("Yleiset tiedot");
     const Categories = {
         "Yleiset tiedot": {
-            "pinta_ala" : "Pinta-ala (m²)",
+            "pinta_ala_km2" : "Pinta-ala (km²)",
             "pt_tyoll" : "Työllisten määrä",
             "pt_tyott" : "Työttömien määrä",
             "pt_opisk" : "Opiskelijoiden määrä",
@@ -52,7 +52,7 @@ const DataSelector = ({ setParameter }) => {
             "te_laps_p" : "Lapsitaloudet (%)",
             "te_yhlap_p" : "Yhden vanhemman lapsitaloudet (%)",
             "te_omis_as_p" : "Omistusasunnoissa asuvat taloudet (%)",
-            "te_vuok_as_p" : "vuokra- ja asumisoikeusasunnoissa asuvat taloudet (%)",
+            "te_vuok_as_p" : "Vuokra- ja asumisoikeusasunnoissa asuvat taloudet (%)",
         },
         "Talouksien käytössä olevat rahatulot": {
             "tr_ktu" : "Talouksien keskitulot",

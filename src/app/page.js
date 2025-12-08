@@ -16,7 +16,7 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
 import MenuButton from "@/components/TopBar/MenuButton";
 
 export default function Home() {
-    const [parameter, setParameter] = useState("pinta_ala");
+    const [parameter, setParameter] = useState("pinta_ala_km2");
 
     const [previewTable, setPreviewTable] = useState([null, null]);
     const [selectedPreview, setSelectedPreview] = useState(0);
