@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import I18nProvider from "../i18n/I18nProvider";
-import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,9 +18,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
-  const cookieStore = cookies();
-  const lang = cookieStore.get('NEXT_LOCALE')?.value || 'fi';
 
   return (
     <html lang="fi">

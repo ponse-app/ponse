@@ -6,6 +6,7 @@ function Logo() {
     return (
         <div className="absolute p-[1vh] right-0 max-w-[362px] max-h-[148px] w-full h-full flex justify-end">
             <Image
+                priority
                 src="/images/LogoDarkModePicture.png"
                 alt="Ponse"
                 width={227}
@@ -13,6 +14,7 @@ function Logo() {
                 className={styles.imgDark}
             ></Image>
             <Image
+                priority
                 src="/images/LogoLightModePicture.png"
                 alt="Ponse"
                 width={239}
