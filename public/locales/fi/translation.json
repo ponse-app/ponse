@@ -6,6 +6,7 @@
         "instructions": "Käyttöohje",
         "about": "Tietoja"
     },
+    "chooseCategory": "Valitse kategoria:",
     "chooseParameter": "Valitse parametri:",
     "parameter": {
         "miehet": "Miesten määrä",

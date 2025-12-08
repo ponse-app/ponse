@@ -6,6 +6,7 @@
         "instructions": "Instructions",
         "about": "About"
     },
+    "chooseCategory": "Choose a category:",
     "chooseParameter": "Choose a parameter:",
     "parameter": {
         "miehet": "Number of men",

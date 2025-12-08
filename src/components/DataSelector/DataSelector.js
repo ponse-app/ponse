@@ -31,7 +31,7 @@ const DataSelector = ({ setParameter }) => {
             "ika_65" : "65-vuotiaat ja vanhemmat",
             "ika_0_17_p" : "Alaikäisten osuus väkiluvusta (%)",
             "ika_25_64_p" : "25-64 -vuotiaiden osuus väkiluvusta (%)",
-            "ika_65_p" : "Yli 65-vuotiaiden osuus väkiluvusta (%)",
+            "ika_65_p" : "Yli 64-vuotiaiden osuus väkiluvusta (%)",
         },
         "Asukkaiden koulutusaste (korkein suoritettu koulutusaste)": {
             "ko_perus_p" : "Perusasteen suorittaneet (%)",
@@ -93,7 +93,7 @@ const DataSelector = ({ setParameter }) => {
             <form action={""} method="post" className="z-10 ml-3">
                 <div className="flex bg-gray-500 w-fit p-1 mt-5">
                     <fieldset className="text-center flex items-center">
-                        <legend className="block w-full text-center">Valitse kategoria:</legend>
+                        <legend className="block w-full text-center">{t('chooseCategory')}</legend>
                         <ParameterSelector
                             setParameter={handleCategoryChange}
                             inputName={"parameter1"}
