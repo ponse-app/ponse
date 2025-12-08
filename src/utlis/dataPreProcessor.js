@@ -14,12 +14,7 @@ const fixMinusOne = (value) => {
 
 const processData = (feature, parameter) => {
   // If parameter is found from features, then nothing is needed to do
-  if (feature.properties.hasOwnProperty(parameter)) {
-    feature.properties[parameter] = fixMinusOne(feature.properties[parameter]);
-
-    return feature;
-  }
-
+  if (feature.properties.hasOwnProperty(parameter)) return feature;
 
   // Try find corresponding parameter with mapping
   const equivalencyTable = {
@@ -33,7 +28,7 @@ const processData = (feature, parameter) => {
       ...feature,
       properties: {
         ...feature.properties,
-        [parameter]: fixMinusOne(feature.properties[equivalencyTable[parameter]]),
+        [parameter]: feature.properties[equivalencyTable[parameter]],
       },
     };
   }
@@ -226,7 +221,7 @@ const processData = (feature, parameter) => {
         let sum = 0;
         for (let i = 0; i < parameters.length; i++) {
           const value = processData(feature, parameters[i]).properties[parameters[i]];
-
+          
           // If there's even one -1, we cannot calculate the sum
           if (value === -1) return -1;
 
@@ -248,9 +243,6 @@ const processData = (feature, parameter) => {
 
         // TODO: ei haluta aina kertoa sadalla, vaan ainoastaan jakaa.
         // Pitää siis luoda erillinen kertolaskuoperaatio
-        if (divider === 0) {
-          return 0;
-        }
         return (
           (dividend / divider) * 100
         );
