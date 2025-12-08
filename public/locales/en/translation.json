@@ -45,7 +45,6 @@
     "about": {
         "title": "Our project",
         "project": "Ponse (Postnumber search) is a service where you can compare Finland's postal code areas.",
-        "we": "We",
-        "aboutUs": "Juuso, Joonas, Atte, Veeti"
+        "we": "We"
     }
 }
