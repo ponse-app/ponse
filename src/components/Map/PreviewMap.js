@@ -144,7 +144,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     useEffect(() => {
         // Add legend
         if (!preview) return;
-        const legend = createLegend(parameter, groupedRef.current, hoverValue);
+        const legend = createLegend(parameter, groupedRef.current, hoverValue, "preview");
         legend.addTo(map.current);
 
         return () => {

@@ -73,14 +73,14 @@ const sortBy = (features, parameter) => {
     return sorted;
 };
 
-const createLegend = (parameter, grouped, hoverValue) => {
+const createLegend = (parameter, grouped, hoverValue, maptype) => {
     const legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {
         let eLegendContainer;
 
         // This is for the large map
-        if (grouped.length > 10) {
+        if (maptype === "large") {
             eLegendContainer = L.DomUtil.create(
                 "div",
                 "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[35vh] lg:max-h-[95vh]"
@@ -101,10 +101,7 @@ const createLegend = (parameter, grouped, hoverValue) => {
             const startValue = group[group.length - 1].properties[parameter];
             const endValue = group[0].properties[parameter];
 
-            const eLegendLine = L.DomUtil.create(
-                "p",
-                "legend-line flex gap-2 text-[0.9em]"
-            );
+            const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
             if (startValue === -1) {
                 const prevGroup = array[index - 1];
                 const prevStartValue = prevGroup[prevGroup.length - 1].properties[parameter];

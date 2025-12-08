@@ -169,7 +169,7 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
 
     useEffect(() => {
         // Add legend
-        const legend = createLegend(parameter, groupedRef.current, hoverValue);
+        const legend = createLegend(parameter, groupedRef.current, hoverValue, "large");
         legend.addTo(map.current);
 
         return () => {
