@@ -1,13 +1,12 @@
 "use client";
 
 import { memo, use, useEffect, useState } from "react";
-import pno_stat from "../../app/pno_tilasto.json";
+import pno_stat from "../../app/pno_tilasto_2024.json";
 import { preProcessData } from "@/utlis/dataPreProcessor";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
-
     const [t, i18n] = useTranslation();
 
     const [rows, setRows] = useState([]);
@@ -19,7 +18,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
     const fixMinusOne = (value) => {
         if (value === -1) return "Ei tarkkaa tietoa! :(";
         return value;
-    }
+    };
 
     useEffect(() => {
         if (!pnoInfo) {
@@ -90,8 +89,8 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                 {rows.length != 0 ? (
                     <thead>
                         <tr>
-                            <th>{t('statTable.postalCodeArea')}</th>
-                            <th>{t('statTable.value')}</th>
+                            <th>{t("statTable.postalCodeArea")}</th>
+                            <th>{t("statTable.value")}</th>
                         </tr>
                     </thead>
                 ) : null}
