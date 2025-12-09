@@ -159,7 +159,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     };
 
     if (position == 1) {
-        (styles.left = ""), (styles.right = 0);
+        styles.left = ""
+        styles.right = 0;
     }
 
     const selectedStyle = {
@@ -192,7 +193,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
 
     return (
         <div
-            className="lg:absolute lg:bottom-0 max-w-[100%] lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
+            className="lg:absolute max-w-full lg:max-w-1/2 lg:bottom-0 lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
             style={styles}
         >
             <PreviewStatTable pnoInfo={selectedPno} kuntaName={kuntaName} parameter={parameter} />
@@ -216,7 +217,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                     {kuntaName}
                 </p>
             </div>
-            <div ref={mapContainer} className="h-[25vh] lg:w-[25vw] w-[50vw] flex-none"></div>
+            <div ref={mapContainer} className="h-[40vh] lg:h-[25vh] lg:w-[24vw] w-[40vw] flex-none rounded-3xl"></div>
         </div>
     );
 };

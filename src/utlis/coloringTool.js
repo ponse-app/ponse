@@ -105,7 +105,7 @@ const createLegend = (parameter, grouped, hoverValue, maptype) => {
         else {
             eLegendContainer = L.DomUtil.create(
                 "div",
-                "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto max-h-[21vh]"
+                "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto overflow-x-auto max-h-[21vh] lg:max-w-[10vw]"
             );
         }
 
@@ -113,8 +113,17 @@ const createLegend = (parameter, grouped, hoverValue, maptype) => {
         L.DomEvent.disableScrollPropagation(eLegendContainer);
 
         grouped.forEach((group, _, array) => {
-            const startValue = group[group.length - 1].properties[parameter];
-            const endValue = group[0].properties[parameter];
+            const startValueOriginal = group[group.length - 1].properties[parameter];
+            const endValueOriginal = group[0].properties[parameter];
+
+            // These will be rounded if small map
+            let startValue = startValueOriginal;
+            let endValue = endValueOriginal;
+
+            if (maptype === "preview") {
+                startValue = Math.round(startValue);
+                endValue = Math.round(endValue);
+            }
 
             const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
             if (startValue === -1) {
@@ -129,8 +138,15 @@ const createLegend = (parameter, grouped, hoverValue, maptype) => {
                 eLegendLine.style.color = "#FCF6F5";
             }
 
-            const eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
-            eColorBox.style.backgroundColor = getColor(startValue, array, parameter);
+            let eColorBox = null;
+            if (maptype === "large") {
+                eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
+            }
+            else {
+                eColorBox = L.DomUtil.create("i", "w-[10px] h-[10px]");
+            }
+            
+            eColorBox.style.backgroundColor = getColor(startValueOriginal, array, parameter);
 
             eLegendLine.prepend(eColorBox);
             eLegendContainer.append(eLegendLine);

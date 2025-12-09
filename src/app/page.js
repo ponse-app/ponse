@@ -59,7 +59,7 @@ export default function Home() {
                 </div>
                 <DataSelector setParameter={setParameter} />
                 <Map onUpdatePreviewBounds={updatePreviewBounds} parameter={parameter} lng={i18n.language} />
-                <div className="lg:absolute relative lg:top-0 lg:h-full w-full lg:w-[50%] lg:block flex">
+                <div className="lg:absolute relative lg:bottom-0 lg:h-screen w-full lg:w-[50vw] flex justify-evenly">
                     <PreviewMap
                         preview={previewTable[0]?.bounds}
                         previewFeature={previewTable[0]?.previewFeature}
