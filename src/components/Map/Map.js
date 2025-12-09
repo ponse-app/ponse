@@ -169,13 +169,19 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
 
     useEffect(() => {
         // Add legend
-        const legend = createLegend(parameter, groupedRef.current, hoverValue, "large");
+        const legend = createLegend(
+            parameter,
+            groupedRef.current,
+            hoverValue,
+            "large",
+            t("coloringTool.noData")
+        );
         legend.addTo(map.current);
 
         return () => {
             legend.remove();
         };
-    }, [hoverValue, parameter]);
+    }, [hoverValue, parameter, t]);
 
     return (
         <div

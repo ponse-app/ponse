@@ -88,7 +88,7 @@ const sortBy = (features, parameter) => {
     return sorted;
 };
 
-const createLegend = (parameter, grouped, hoverValue, maptype) => {
+const createLegend = (parameter, grouped, hoverValue, maptype, noData) => {
     const legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {
@@ -120,14 +120,14 @@ const createLegend = (parameter, grouped, hoverValue, maptype) => {
             let startValue = startValueOriginal;
             let endValue = endValueOriginal;
 
-            if (maptype === "preview") {
+            /* if (maptype === "preview") {
                 startValue = Math.round(startValue);
                 endValue = Math.round(endValue);
-            }
+            } */
 
             const eLegendLine = L.DomUtil.create("p", "legend-line flex gap-2 text-[0.9em]");
             if (startValue === -1) {
-                eLegendLine.textContent = `Ei dataa`;
+                eLegendLine.textContent = noData;
             } else if (startValue === endValue) {
                 eLegendLine.textContent = `${startValue}`;
             } else {
@@ -141,11 +141,10 @@ const createLegend = (parameter, grouped, hoverValue, maptype) => {
             let eColorBox = null;
             if (maptype === "large") {
                 eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
-            }
-            else {
+            } else {
                 eColorBox = L.DomUtil.create("i", "w-[10px] h-[10px]");
             }
-            
+
             eColorBox.style.backgroundColor = getColor(startValueOriginal, array, parameter);
 
             eLegendLine.prepend(eColorBox);

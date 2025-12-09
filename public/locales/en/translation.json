@@ -40,11 +40,18 @@
         "parameterSelectorInfo": "You can choose a parameter by clicking on the drop down menu of \"Choose a parameter\" box.",
         "parameterSelectorPicture": "/images/ParameterSelectorPictureEnglish.png",
         "smallMapInfo": "After selecting a municipality a smaller map appears for more specific examination. In the map you can see postal code areas and color coded values. Picture is currently showing Kittilä and number of men.",
-        "smallMapPicture": "/images/PreviewMapPictureEnglish.png"
+        "smallMapPicture": "/images/PreviewMapPictureEnglish.png",
+        "previewTableInfo": "By clicking a postal code area you can add the area's information to a table. There you can compare the areas with the chosen parameter. You can also search for an area with its postal code or name similar to the large map.",
+        "previewTablePicture": "/images/PreviewTablePictureEnglish.png",
+        "twoMapsInfo": "You can have two smaller maps visible at the same time. By clicking the name of the municipality you can change which municipality gets swapped if you click another municipality on the larger map. The municipality written in yellow gets changed, the red one stays.",
+        "twoMapsPicture": "/images/TwoMapsPictureEnglish.png"
     },
     "about": {
         "title": "Our project",
         "project": "Ponse (Postnumber search) is a service where you can compare Finland's postal code areas.",
         "we": "We"
+    },
+    "coloringTool": {
+        "noData": "No data"
     }
 }

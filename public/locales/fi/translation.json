@@ -40,11 +40,18 @@
         "parameterSelectorInfo": "Voit valita parametrin valitsemalla \"Valitse parametrit\" -laatikon dropdown menusta.",
         "parameterSelectorPicture": "/images/ParameterSelectorPicture.png",
         "smallMapInfo": "Klikattuasi kuntaa kartalta aukeaa sivulle pienempi kartta tarkempaa kuntakohtaista tarkastelua varten. Kartalta näet kunnan postinumeroalueet ja valitun parametrin mukaisen värityksen (nyt Kittilä ja miesten määrä).",
-        "smallMapPicture": "/images/PreviewMapPicture.png"
+        "smallMapPicture": "/images/PreviewMapPicture.png",
+        "previewTableInfo": "Postinumeroalueita klikkaamalla voit lisätä alueen tiedot taulukkoon, jossa voit vertailla alueiden arvoja valitulla parametrilla. Voit myös hakea aluetta postinumerolla tai alueen nimellä kuten isollakin kartalla.",
+        "previewTablePicture": "/images/PreviewTablePicture.png",
+        "twoMapsInfo": "Pieniä karttoja voi olla samaan aikaan kaksi näkyvillä. Kunnan nimeä klikkaamalla voit valita kumpi kartta vaihtuu, jos isolta kartalta klikkaa uutta kuntaa. Keltaisella kirjoitettu kunta vaihtuu, punaisella kirjoitettu jää.",
+        "twoMapsPicture": "/images/TwoMapsPicture.png"
     },
     "about": {
         "title": "Projektimme",
         "project": "Ponse (Postnumber search) on palvelu, jossa voit vertailla Suomen eri postinumeroalueita.",
         "we": "Me"
+    },
+    "coloringTool": {
+        "noData": "Ei dataa"
     }
 }

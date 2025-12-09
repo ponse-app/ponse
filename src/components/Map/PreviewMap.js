@@ -144,13 +144,19 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     useEffect(() => {
         // Add legend
         if (!preview) return;
-        const legend = createLegend(parameter, groupedRef.current, hoverValue, "preview");
+        const legend = createLegend(
+            parameter,
+            groupedRef.current,
+            hoverValue,
+            "preview",
+            t("coloringTool.noData")
+        );
         legend.addTo(map.current);
 
         return () => {
             legend.remove();
         };
-    }, [hoverValue, parameter, preview]);
+    }, [hoverValue, parameter, preview, t]);
 
     const styles = {
         visibility: preview ? "visible" : "hidden",
