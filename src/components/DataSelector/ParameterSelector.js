@@ -14,7 +14,7 @@ const ParameterSelector = ({ inputName, setParameter, parameters }) => {
                 className="bg-gray-700 w-[100%]"
                 id="input1">
 
-                {parameters?.map(([dataName, showName]) => <option key={dataName} value={dataName}>{showName}</option> )}
+                {parameters?.map((dataName) => <option key={dataName} value={dataName}>{t(`parameter.${dataName}.name`)}</option> )}
             </select>
         </div>
     );

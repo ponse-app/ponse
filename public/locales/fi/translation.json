@@ -9,7 +9,10 @@
     "chooseCategory": "Valitse kategoria:",
     "chooseParameter": "Valitse parametri:",
     "parameter": {
-        "miehet": "Miesten määrä",
+        "miehet": {
+            "name": "Miesten määrä",
+            "description": "Jotain asiaa!"
+        },
         "naiset": "Naisten määrä",
         "ika_65_p": "ika_65_p",
         "ika_13_17": "ika_13_17",
