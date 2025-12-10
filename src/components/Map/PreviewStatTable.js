@@ -16,7 +16,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
     const [parameterCurrent, setParameterCurrent] = useState("pinta_ala_km2");
 
     const fixMinusOne = (value) => {
-        if (value === -1) return "Ei tarkkaa tietoa! :(";
+        if (value === -1) return t("statTable.noData");
         return value;
     };
 
@@ -46,7 +46,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                     if (pno.properties.id == previousRow.key) {
                         return {
                             ...previousRow,
-                            value: fixMinusOne(pno.properties[parameterCurrent]),
+                            value: pno.properties[parameterCurrent],
                         };
                     }
                 }
@@ -75,7 +75,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                             key: pnoInfo.id,
                             name: pnoInfo.nimi,
                             postnumber: pnoInfo.postinumeroalue,
-                            value: fixMinusOne(pnoInfo[property]),
+                            value: pnoInfo[property],
                         },
                     ];
                 });
@@ -103,7 +103,7 @@ const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
                                 {row.postnumber}
                             </td>
                             <td className="p-3 border-2 border-blue-400 border-collapse">
-                                {row.value}
+                                {fixMinusOne(row.value)}
                             </td>
                         </tr>
                     ))}

@@ -31,7 +31,8 @@
     },
     "statTable": {
         "postalCodeArea": "Postal code area",
-        "value": "Value"
+        "value": "Value",
+        "noData": "No data :("
     },
     "instructions": {
         "title": "Instructions",

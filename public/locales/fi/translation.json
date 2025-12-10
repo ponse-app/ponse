@@ -31,7 +31,8 @@
     },
     "statTable": {
         "postalCodeArea": "Postinumeroalue",
-        "value": "Arvo"
+        "value": "Arvo",
+        "noData": "Ei dataa :("
     },
     "instructions": {
         "title": "Käyttöohje",
