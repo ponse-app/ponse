@@ -24,7 +24,7 @@ const getColor = (value, grouped, parameter) => {
 
     // If the gap is not found, return specific color
     // This happens if the value is not part of any group, eg. value is -1.
-    if (whichGap === -1) return "hsl(0 0 0)";
+    if (whichGap === -1) return "hsl(0 0 70)";
 
     const gapPercentage = (whichGap / (amountOfGaps - 1)) * 100;
 
@@ -81,14 +81,12 @@ const group = (toBeGrouped, parameter, maxAmountOfGroups) => {
 };
 
 const sortBy = (features, parameter) => {
-    const sorted = features.toSorted(
-        (a, b) => b.properties[parameter] - a.properties[parameter]
-    );
+    const sorted = features.toSorted((a, b) => b.properties[parameter] - a.properties[parameter]);
 
     return sorted;
 };
 
-const createLegend = (parameter, grouped, hoverValue, maptype, noData) => {
+const createLegend = (parameter, grouped, hoverValue, maptype, noData, setHoverLegendValue) => {
     const legend = L.control({ position: "bottomright" });
 
     legend.onAdd = () => {
@@ -137,6 +135,16 @@ const createLegend = (parameter, grouped, hoverValue, maptype, noData) => {
                 eLegendLine.style.backgroundColor = "#7B9ACC";
                 eLegendLine.style.color = "#FCF6F5";
             }
+
+            eLegendLine.addEventListener("mouseover", (e) => {
+                setHoverLegendValue([startValue, endValue]);
+                console.log("Alku", startValue, "Loppu", endValue);
+            });
+
+            eLegendLine.addEventListener("mouseout", (e) => {
+                setHoverLegendValue([]);
+                console.log("Tyhjä");
+            });
 
             let eColorBox = null;
             if (maptype === "large") {

@@ -20,6 +20,7 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
     const geoJsonLayer = useRef(null);
 
     const [hoverValue, setHoverValue] = useState(null);
+    const [[hoverLegendValueStart, hoverLegendValueEnd], setHoverLegendValue] = useState([]);
     const groupedRef = useRef(null);
 
     proj4.defs(
@@ -91,14 +92,16 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
 
         info.update = function (feature) {
             this._div.innerHTML =
-                '<h4 style="color:blue;text-align:center;">'+t('map.municipalityText')+' </h4>' +
+                '<h4 style="color:blue;text-align:center;">' +
+                t("map.municipalityText") +
+                " </h4>" +
                 (feature
                     ? '<b style="align-items:center">' +
                       feature.properties.nimi +
                       "</b>" +
                       "<p></p>" +
                       feature.properties[parameter]
-                    : t('map.hoverInfo'));
+                    : t("map.hoverInfo"));
 
             setHoverValue(feature?.properties[parameter]);
         };
@@ -114,7 +117,7 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
                 "input",
                 "box bg-white/80 shadow-black text-black rounded-md p-2 border-radius 5px"
             );
-            this._div_search.placeholder = t('map.search');
+            this._div_search.placeholder = t("map.search");
             this._div_search.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
                     console.log(map.current);
@@ -174,7 +177,8 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
             groupedRef.current,
             hoverValue,
             "large",
-            t("coloringTool.noData")
+            t("coloringTool.noData"),
+            setHoverLegendValue
         );
         legend.addTo(map.current);
 
@@ -182,6 +186,39 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
             legend.remove();
         };
     }, [hoverValue, parameter, t]);
+
+    useEffect(() => {
+        map.current.eachLayer((layer) => {
+            if (
+                layer.feature?.properties[parameter] >= hoverLegendValueStart &&
+                layer.feature?.properties[parameter] <= hoverLegendValueEnd
+            ) {
+                layer.setStyle({
+                    fillColor: "#ffffff",
+                    weight: 1.5,
+                    opacity: 1,
+                    color: "white",
+                    dashArray: "3",
+                    fillOpacity: 1,
+                });
+            } else {
+                if (layer.setStyle) {
+                    layer.setStyle({
+                        fillColor: getColor(
+                            layer.feature?.properties[parameter],
+                            groupedRef.current,
+                            parameter
+                        ),
+                        weight: 1.5,
+                        opacity: 1,
+                        color: "white",
+                        dashArray: "3",
+                        fillOpacity: 1,
+                    });
+                }
+            }
+        });
+    });
 
     return (
         <div
