@@ -142,7 +142,7 @@ const createLegend = (parameter, grouped, hoverValue, maptype, noData) => {
             if (maptype === "large") {
                 eColorBox = L.DomUtil.create("i", "w-[17] h-[17]");
             } else {
-                eColorBox = L.DomUtil.create("i", "w-[10px] h-[10px]");
+                eColorBox = L.DomUtil.create("i", "w-[17px] h-[17px]");
             }
 
             eColorBox.style.backgroundColor = getColor(startValueOriginal, array, parameter);

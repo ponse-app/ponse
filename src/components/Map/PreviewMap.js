@@ -15,12 +15,12 @@ import { useTranslation } from "react-i18next";
 
 const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection,
     isSelectedPreview, parameter, lng }) => {
-   
+
     const [t, i18n] = useTranslation();
-   
+
     const mapContainer = useRef(null);
     const map = useRef(null);
-    
+
     const [selectedPno, SetSelectedPno] = useState(null);
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
 
@@ -87,6 +87,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             };
         };
 
+
         const pnoLayer = L.Proj.geoJson(preProcessedData, {
             style: featureStyle,
             onEachFeature: function (feature, layer) {
@@ -114,10 +115,12 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
         if (kuntaNameCurrent != kuntaName) {
             setKuntaNameCurrent(kuntaName);
             SetSelectedPno(null);
-            map.current.fitBounds(pnoLayer.getBounds(), {
+            console.log(preview);
+            map.current.setMaxBounds(null);
+            map.current.fitBounds(preview, {
                 animate: false,
             });
-            map.current.setMaxBounds(pnoLayer.getBounds().pad(2));
+            map.current.setMaxBounds(preview?.pad(2));
         }
 
         const kuntaLayer = L.Proj.geoJson(kunta_stat, {
@@ -196,7 +199,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             }
         }
     }
-
+    
     return (
         <div
             className="lg:absolute max-w-full lg:max-w-1/2 lg:bottom-0 lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
