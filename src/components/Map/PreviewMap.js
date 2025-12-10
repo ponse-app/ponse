@@ -27,7 +27,9 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     const preProcessedRef = useRef([]);
 
     const [hoverValue, setHoverValue] = useState(null);
+    const [[hoverLegendValueStart, hoverLegendValueEnd], setHoverLegendValue] = useState([]);
     const groupedRef = useRef(null);
+    const pnoLayerRef = useRef(null);
 
     proj4.defs(
         "EPSG:3067",
@@ -111,6 +113,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             },
         }).addTo(map.current);
 
+        pnoLayerRef.current = pnoLayer;
+
         if (kuntaNameCurrent != kuntaName) {
             setKuntaNameCurrent(kuntaName);
             SetSelectedPno(null);
@@ -149,7 +153,8 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             groupedRef.current,
             hoverValue,
             "preview",
-            t("coloringTool.noData")
+            t("coloringTool.noData"),
+            setHoverLegendValue
         );
         legend.addTo(map.current);
 
@@ -157,6 +162,39 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             legend.remove();
         };
     }, [hoverValue, parameter, preview, t]);
+
+    useEffect(() => {
+        pnoLayerRef.current?.eachLayer((layer) => {
+            if (
+                layer.feature?.properties[parameter] >= hoverLegendValueStart &&
+                layer.feature?.properties[parameter] <= hoverLegendValueEnd
+            ) {
+                layer.setStyle({
+                    fillColor: "#0000FF",
+                    weight: 1.5,
+                    opacity: 1,
+                    color: "white",
+                    dashArray: "3",
+                    fillOpacity: 1,
+                });
+            } else {
+                if (layer.setStyle && typeof layer.feature !== "undefined") {
+                    layer.setStyle({
+                        fillColor: getColor(
+                            layer.feature?.properties[parameter],
+                            groupedRef.current,
+                            parameter
+                        ),
+                        weight: 1.5,
+                        opacity: 1,
+                        color: "white",
+                        dashArray: "3",
+                        fillOpacity: 1,
+                    });
+                }
+            }
+        });
+    });
 
     const styles = {
         visibility: preview ? "visible" : "hidden",
