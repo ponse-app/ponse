@@ -49,7 +49,7 @@
     },
     "about": {
         "title": "Projektimme",
-        "project": "Ponse (Postnumber search) on palvelu, jossa voit vertailla Suomen eri postinumeroalueita.",
+        "project": "Ponse (Postnumber search) on palvelu, jossa voit vertailla Suomen eri postinumeroalueita. Projekti on toteutettu Jyväskylän yliopiston kurssilla TIEA207 \"Aineopintojen projektityö\".",
         "we": "Me"
     },
     "coloringTool": {

@@ -57,13 +57,13 @@ function MenuButton() {
     };
 
     return (
-        <div>
+        <div className="fixed top-0 left-0 z-30">
             <div
                 className="bg-gray-600 w-[10vh] h-[10vh] z-[100] rounded-md select-none flex items-center"
                 onMouseMove={(e) => handleMouseEnter(e)}
                 style={MiniMenuStyles}
             >
-                <p className="w-full text-center">{t('menu.name', "Menu")}</p>
+                <p className="w-full text-center">{t("menu.name", "Menu")}</p>
             </div>
             <div
                 className="bg-gray-600 w-40 h-fit z-[10000] rounded-md select-none flex items-center flex-col justify-center text-center pt-10 pb-10"
@@ -75,27 +75,32 @@ function MenuButton() {
                     className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400 select-none"
                     href="/"
                 >
-                    {t('menu.home')}
+                    {t("menu.home")}
                 </Link>
                 <Link
                     className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400"
                     href="/instructions"
                 >
-                    {t('menu.instructions')}
+                    {t("menu.instructions")}
                 </Link>
                 <Link className="pt-1 pb-1 w-[80%] rounded-2xl hover:bg-gray-400" href="/about">
-                    {t('menu.about')}
+                    {t("menu.about")}
                 </Link>
                 <div className="pt-1 pb-1 w-[80%] rounded-2xl flex flex-col justify-evenly">
                     {Object.keys(lngs).map((lng) => (
-                        <input key={lng} type="button"
-                            style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }}
+                        <input
+                            key={lng}
+                            type="button"
+                            style={{
+                                fontWeight: i18n.resolvedLanguage === lng ? "bold" : "normal",
+                            }}
                             className="hover:bg-gray-400"
                             value={lng}
                             onClick={(e) => {
                                 e.preventDefault();
                                 i18n.changeLanguage(lng);
-                            }} />
+                            }}
+                        />
                     ))}
                 </div>
             </div>
