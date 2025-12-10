@@ -202,7 +202,8 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
                     fillOpacity: 1,
                 });
             } else {
-                if (layer.setStyle) {
+                if (layer.setStyle && typeof layer.feature !== 'undefined') {
+                    
                     layer.setStyle({
                         fillColor: getColor(
                             layer.feature?.properties[parameter],
