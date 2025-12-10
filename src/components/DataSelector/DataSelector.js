@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ParameterSelector from "./ParameterSelector";
 
-const DataSelector = ({ setParameter, parameter }) => {
+const DataSelector = ({ setParameter }) => {
   const [t, i18n] = useTranslation();
 
   const [category, setCategory] = useState("Yleiset tiedot");
@@ -33,7 +33,7 @@ const DataSelector = ({ setParameter, parameter }) => {
             "ika_25_64_p",
             "ika_65_p",
         ],
-        "Asukkaiden koulutusaste (korkein suoritettu koulutusaste)": [
+        "Koulutusaste": [
             "ko_perus_p",
             "ko_tas_p",
             "ko_yliop_p",
@@ -41,14 +41,14 @@ const DataSelector = ({ setParameter, parameter }) => {
             "ko_al_kork_p",
             "ko_yl_kork_p",
         ],
-        "Asukkaiden käytössä olevat rahatulot": [
+        "Asukkaiden rahatulot": [
             "hr_ktu",
             "hr_mtu",
             "hr_pi_tul_p",
             "hr_ke_tul_p",
             "hr_hy_tul_p",
         ],
-        "Talouksien koko ja elämänvaihe": [
+        "Taloudet": [
             "te_taly",
             "te_takk",
             "te_as_valj",
@@ -58,14 +58,14 @@ const DataSelector = ({ setParameter, parameter }) => {
             "te_omis_as_p",
             "te_vuok_as_p",
         ],
-        "Talouksien käytössä olevat rahatulot (vuosittain)": [
+        "Talouksien rahatulot": [
             "tr_ktu",
             "tr_mtu",
             "tr_pi_tul_p",
             "tr_ke_tul_p",
             "tr_hy_tul_p",
         ],
-        "Rakennukset ja asunnot": [
+        "Rakennukset": [
             "ra_ke",
             "ra_raky",
             "ra_asrak",
@@ -74,7 +74,7 @@ const DataSelector = ({ setParameter, parameter }) => {
             "ra_pt_as_p",
             "ra_kt_as_p",
         ],
-        "Työpaikat toimialoittain": [
+        "Työpaikat": [
             "tp_tyopy",
             "tp_alku_a",
             "tp_jalo_bf",
@@ -82,11 +82,9 @@ const DataSelector = ({ setParameter, parameter }) => {
         ],
 }
 
-console.log(Object.entries(categories).map(category => category[0]), Object.values(categories[category]))
-
   const handleCategoryChange = (newCategory) => {
     setCategory(newCategory);
-    const firstParameter = Object.keys(categories[newCategory])[0];
+    const firstParameter = categories[newCategory][0];
     setParameter(firstParameter);
   };
 
@@ -113,7 +111,6 @@ console.log(Object.entries(categories).map(category => category[0]), Object.valu
               inputName={"parameter1"}
               parameters={Object.values(categories[category])}
             />
-            <span >?</span>
           </fieldset>
         </div>
         <p className="bg-gray-700 text-center">{t("source")}</p>
