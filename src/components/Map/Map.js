@@ -194,7 +194,7 @@ const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
                 layer.feature?.properties[parameter] <= hoverLegendValueEnd
             ) {
                 layer.setStyle({
-                    fillColor: "#ffffff",
+                    fillColor: "#0000FF",
                     weight: 1.5,
                     opacity: 1,
                     color: "white",
