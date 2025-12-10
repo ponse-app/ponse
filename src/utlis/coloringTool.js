@@ -105,7 +105,7 @@ const createLegend = (parameter, grouped, hoverValue, maptype, noData) => {
         else {
             eLegendContainer = L.DomUtil.create(
                 "div",
-                "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto overflow-x-auto max-h-[21vh] lg:max-w-[10vw]"
+                "info legend flex flex-col bg-white/80 p-2 shadow-md rounded-md text-black overflow-y-auto overflow-x-auto max-h-[21vh]"
             );
         }
 

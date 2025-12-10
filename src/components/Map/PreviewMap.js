@@ -117,7 +117,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             map.current.fitBounds(pnoLayer.getBounds(), {
                 animate: false,
             });
-            map.current.setMaxBounds(pnoLayer.getBounds().pad(0.3));
+            map.current.setMaxBounds(pnoLayer.getBounds().pad(2));
         }
 
         const kuntaLayer = L.Proj.geoJson(kunta_stat, {
