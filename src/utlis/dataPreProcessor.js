@@ -1,7 +1,7 @@
 import pno_stat from "@/app/pno_tilasto_2024.json";
 
 const preProcessData = (features, parameter) => {
-  if (features.length === 0) return;
+  if (features.length === 0) return features;
 
   return features.map((feature) => processData(feature, parameter));
 };

@@ -1,116 +1,55 @@
 "use client";
 
-import { memo, use, useEffect, useState } from "react";
-import pno_stat from "../../app/pno_tilasto_2024.json";
-import { preProcessData } from "@/utlis/dataPreProcessor";
+import { memo } from "react";
+
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const PreviewStatTable = ({ pnoInfo, kuntaName, parameter }) => {
-    const [t, i18n] = useTranslation();
+const PreviewStatTable = ({
+  chosePostnumbers,
+  parameter,
+  preProcessedData,
+}) => {
+  const [t, i18n] = useTranslation();
 
-    const [rows, setRows] = useState([]);
+  const fixMinusOne = (value) => {
+    if (value === -1) return t("statTable.noData");
+    return value;
+  };
 
-    const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
+  const chosePostnumberFeatures = [...chosePostnumbers].map((postnumber) =>
+    preProcessedData.features.find(
+        (postnumberFeature) => postnumberFeature.properties.postinumeroalue === postnumber)
+  );
 
-    const [parameterCurrent, setParameterCurrent] = useState("pinta_ala_km2");
-
-    const fixMinusOne = (value) => {
-        if (value === -1) return t("statTable.noData");
-        return value;
-    };
-
-    useEffect(() => {
-        if (!pnoInfo) {
-            return;
-        }
-        if (kuntaNameCurrent != kuntaName) {
-            setKuntaNameCurrent(kuntaName);
-            setRows([]);
-        }
-    }, [pnoInfo, kuntaNameCurrent, kuntaName]);
-
-    useEffect(() => {
-        const preProcessedData = {
-            ...pno_stat,
-            features: preProcessData(pno_stat.features, parameterCurrent),
-        };
-
-        if (parameterCurrent != parameter) {
-            setParameterCurrent(parameter);
-        }
-
-        setRows((previousRows) => {
-            return previousRows.map((previousRow) => {
-                for (let pno of preProcessedData.features) {
-                    if (pno.properties.id == previousRow.key) {
-                        return {
-                            ...previousRow,
-                            value: pno.properties[parameterCurrent],
-                        };
-                    }
-                }
-
-                // If for loop can't find a match returns the previousRow. This shouldn't happen but can implement
-                //something better if needed.
-                return previousRow;
-            });
-        });
-    }, [parameter, parameterCurrent]);
-
-    useEffect(() => {
-        if (!pnoInfo) {
-            return;
-        }
-        for (let property in pnoInfo) {
-            if (property == parameter) {
-                setRows((previousRows) => {
-                    if (previousRows.some((previousRow) => previousRow.key === pnoInfo.id)) {
-                        return previousRows;
-                    }
-
-                    return [
-                        ...previousRows,
-                        {
-                            key: pnoInfo.id,
-                            name: pnoInfo.nimi,
-                            postnumber: pnoInfo.postinumeroalue,
-                            value: pnoInfo[property],
-                        },
-                    ];
-                });
-            }
-        }
-    }, [pnoInfo, parameter]);
-
-    return (
-        <div className="max-h-1/2 lg:max-h-[40vh] overflow-y-auto max-w-[100%] flex justify-center">
-            <table className="m-2.5">
-                {rows.length != 0 ? (
-                    <thead>
-                        <tr>
-                            <th>{t("statTable.postalCodeArea")}</th>
-                            <th>{t("statTable.value")}</th>
-                        </tr>
-                    </thead>
-                ) : null}
-                <tbody>
-                    {rows.map((row) => (
-                        <tr key={row.key}>
-                            <td className="p-3 border-2 border-blue-400 border-collapse text-wrap">
-                                {row.name}
-                                <br />
-                                {row.postnumber}
-                            </td>
-                            <td className="p-3 border-2 border-blue-400 border-collapse">
-                                {fixMinusOne(row.value)}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
+  return (
+    chosePostnumberFeatures.length !== 0 && (
+      <div className="max-h-1/2 lg:max-h-[40vh] overflow-y-auto max-w-[100%] flex justify-center">
+        <table className="m-2.5">
+          <thead>
+            <tr>
+              <th>{t("statTable.postalCodeArea")}</th>
+              <th>{t("statTable.value")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {chosePostnumberFeatures.map((feature) => (
+              <tr key={feature.properties["postinumeroalue"]}>
+                <td className="p-3 border-2 border-blue-400 border-collapse text-wrap">
+                  {feature.properties["nimi"]}
+                  <br/>
+                  {feature.properties["postinumeroalue"]}
+                </td>
+                <td className="p-3 border-2 border-blue-400 border-collapse">
+                  {fixMinusOne(feature.properties[parameter])}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  );
 };
 
 export default memo(PreviewStatTable);

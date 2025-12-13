@@ -27,6 +27,9 @@ export default function Home() {
 
     const updatePreviewBounds = useCallback(
         (bounds, kuntaName, feature) => {
+            // If municipality is already in the preview
+            if (previewTable.some(preview => preview?.kuntaName === kuntaName)) return;
+
             if (selectedPreview == 1) {
                 setPreviewTable([
                     previewTable[0],
@@ -61,6 +64,7 @@ export default function Home() {
                 <Map onUpdatePreviewBounds={updatePreviewBounds} parameter={parameter} lng={i18n.language} />
                 <div className="lg:absolute relative lg:bottom-0 lg:h-screen w-full lg:w-[50vw] flex justify-evenly">
                     <PreviewMap
+                        key={previewTable[0]?.kuntaName ?? "map0"}
                         preview={previewTable[0]?.bounds}
                         previewFeature={previewTable[0]?.previewFeature}
                         kuntaName={previewTable[0]?.kuntaName}
@@ -70,6 +74,7 @@ export default function Home() {
                         parameter={parameter}
                     />
                     <PreviewMap
+                        key={previewTable[1]?.kuntaName ?? "map1"}
                         preview={previewTable[1]?.bounds}
                         previewFeature={previewTable[1]?.previewFeature}
                         kuntaName={previewTable[1]?.kuntaName}
@@ -77,7 +82,6 @@ export default function Home() {
                         isSelectedPreview={selectedPreview == 1}
                         position={1}
                         parameter={parameter}
-                        lng={i18n.language}
                     />
                 </div>
             </main>

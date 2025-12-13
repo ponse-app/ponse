@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useImperativeHandle, memo } from "react";
+import React, { useRef, useEffect, useState, memo, useMemo } from "react";
 import "leaflet/dist/leaflet.css";
 import pno_stat from "../../app/pno_tilasto_2024.json";
 import kunta_stat from "../../app/kunta_vaki2024.json";
@@ -14,14 +14,15 @@ import L from "leaflet";
 import { useTranslation } from "react-i18next";
 
 const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePreviewSelection,
-    isSelectedPreview, parameter, lng }) => {
+    isSelectedPreview, parameter }) => {
+
+    const [chosePostnumbers, setChosePostnumbers] = useState(new Set())
 
     const [t, i18n] = useTranslation();
 
     const mapContainer = useRef(null);
     const map = useRef(null);
 
-    const [selectedPno, SetSelectedPno] = useState(null);
     const [kuntaNameCurrent, setKuntaNameCurrent] = useState("");
 
     const preProcessedRef = useRef([]);
@@ -29,33 +30,11 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
     const [hoverValue, setHoverValue] = useState(null);
     const groupedRef = useRef(null);
 
-    proj4.defs(
-        "EPSG:3067",
-        "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
-    );
-
-    useEffect(() => {
-        if (map.current == null) {
-            map.current = L.map(mapContainer.current, { minZoom: 5, maxZoom: 13 });
-        } // stops map from intializing more than once
-        if (!previewFeature) {
-            return;
-        }
-
-        proj4.defs(
-            "EPSG:3067",
-            "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
-        );
-
+    const preProcessedData = useMemo(() => {
         // Here we look for the postnumbers of the municipality
-        let postnumbers = [];
-        for (const pno of pno_stat.features) {
-            if (pno.properties.kunta == previewFeature.properties.kunta) {
-                postnumbers.push(pno);
-            }
-        }
+        const postnumbers = pno_stat.features.filter((pno) => pno.properties.kunta === previewFeature?.properties.kunta);
 
-        var collection = {
+        const collection = {
             features: postnumbers,
             type: "FeatureCollection",
             crs: {
@@ -66,15 +45,29 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             },
         };
 
-        const preProcessedData = {
+        return {
             ...collection,
             features: preProcessData(collection.features, parameter),
-        };
-        preProcessedRef.current = preProcessedData;
+        }
+    }, [parameter, previewFeature?.properties.kunta]);
 
-        const sorted = sortBy(preProcessedData.features, parameter);
+    preProcessedRef.current = preProcessedData;
 
-        groupedRef.current = group(sorted, parameter, Math.min(sorted.length, 9));
+    const sorted = sortBy(preProcessedData.features, parameter);
+
+    groupedRef.current = group(sorted, parameter, Math.min(sorted.length, 9));
+
+    proj4.defs(
+        "EPSG:3067",
+        "+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+    );
+
+    useEffect(() => {
+        if (map.current == null) {
+            map.current = L.map(mapContainer.current, { minZoom: 5, maxZoom: 13 });
+        } // stops map from intializing more than once
+
+        if (!previewFeature) return;
 
         const featureStyle = (feature) => {
             return {
@@ -86,7 +79,6 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 fillOpacity: 1,
             };
         };
-
 
         const pnoLayer = L.Proj.geoJson(preProcessedData, {
             style: featureStyle,
@@ -107,20 +99,18 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                     setHoverValue(null);
                 });
                 layer.addEventListener("click", (e) => {
-                    SetSelectedPno(feature.properties);
+                    setChosePostnumbers(chosePostnumbers => new Set(chosePostnumbers).add(feature.properties.postinumeroalue))
                 });
             },
         }).addTo(map.current);
 
         if (kuntaNameCurrent != kuntaName) {
             setKuntaNameCurrent(kuntaName);
-            SetSelectedPno(null);
-            console.log(preview);
             map.current.setMaxBounds(null);
             map.current.fitBounds(preview, {
                 animate: false,
             });
-            map.current.setMaxBounds(preview?.pad(2));
+            map.current.setMaxBounds(preview?.pad(2)); // Block user pan the map out of the view.
         }
 
         const kuntaLayer = L.Proj.geoJson(kunta_stat, {
@@ -142,7 +132,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                 map.current.removeLayer(layer);
             });
         };
-    }, [previewFeature, preview, parameter, selectedPno, kuntaName, kuntaNameCurrent]); // Block user pan the map out of view.
+    }, [preProcessedData, previewFeature, preview, parameter, kuntaName, kuntaNameCurrent]);
 
     useEffect(() => {
         // Add legend
@@ -189,7 +179,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
                         e.target.value.trim()
                     ) == 0
                 ) {
-                    SetSelectedPno(pno.properties);
+                    setChosePostnumbers(chosePostnumbers => new Set(chosePostnumbers).add(pno.properties.postinumeroalue))
                     e.target.style.backgroundColor = "";
                     e.target.value = "";
                     break;
@@ -205,7 +195,7 @@ const PreviewMap = ({ preview, previewFeature, kuntaName, position, handlePrevie
             className="lg:absolute max-w-full lg:max-w-1/2 lg:bottom-0 lg:block flex flex-col-reverse lg:flex-col flex-none justify-end"
             style={styles}
         >
-            <PreviewStatTable pnoInfo={selectedPno} kuntaName={kuntaName} parameter={parameter} />
+            <PreviewStatTable key={previewFeature?.properties.kunta} chosePostnumbers={chosePostnumbers} preProcessedData={preProcessedRef.current} parameter={parameter} />
             <div className="flex lg:flex-row items-center gap-2 flex-col-reverse">
                 <input
                     type="text"
