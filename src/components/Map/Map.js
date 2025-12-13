@@ -11,7 +11,7 @@ import { preProcessData } from "@/utlis/dataPreProcessor";
 import L from "leaflet";
 import { useTranslation } from "react-i18next";
 
-const Map = ({ onUpdatePreviewBounds, parameter, lng }) => {
+const Map = ({ onUpdatePreviewBounds, parameter }) => {
 
     const [t, i18n] = useTranslation();
 

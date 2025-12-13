@@ -13,13 +13,9 @@ const PreviewMap = dynamic(() => import("../components/Map/PreviewMap"), {
 });
 
 import MenuButton from "@/components/TopBar/MenuButton";
-import { useTranslation } from "react-i18next";
 
 
 export default function Home() {
-
-    const [t, i18n] = useTranslation();
-
     const [parameter, setParameter] = useState("pinta_ala_km2");
 
     const [previewTable, setPreviewTable] = useState([null, null]);
@@ -30,20 +26,14 @@ export default function Home() {
             // If municipality is already in the preview
             if (previewTable.some(preview => preview?.kuntaName === kuntaName)) return;
 
-            if (selectedPreview == 1) {
-                setPreviewTable([
-                    previewTable[0],
-                    { bounds: bounds, kuntaName: kuntaName, previewFeature: feature },
-                ]);
-            } else {
-                setPreviewTable([
-                    { bounds: bounds, kuntaName: kuntaName, previewFeature: feature },
-                    previewTable[1],
-                ]);
-                if (previewTable[1] == null) {
-                    setSelectedPreview(1);
-                }
-            }
+            setPreviewTable(previewTable => {
+                const copy = [...previewTable];
+                copy[selectedPreview] = { bounds: bounds, kuntaName: kuntaName, previewFeature: feature }
+
+                return copy;
+            })
+            
+            if (previewTable[1] === null) setSelectedPreview(1);
         },
         [previewTable, selectedPreview]
     );
@@ -61,7 +51,7 @@ export default function Home() {
                     <Logo />
                 </div>
                 <DataSelector setParameter={setParameter} />
-                <Map onUpdatePreviewBounds={updatePreviewBounds} parameter={parameter} lng={i18n.language} />
+                <Map onUpdatePreviewBounds={updatePreviewBounds} parameter={parameter} />
                 <div className="lg:absolute relative lg:bottom-0 lg:h-screen w-full lg:w-[50vw] flex justify-evenly">
                     <PreviewMap
                         key={previewTable[0]?.kuntaName ?? "map0"}
