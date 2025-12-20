@@ -1,11 +1,9 @@
 # Example commands. Run these on the project root.
-# docker compose up
+# docker buildx build --platform linux/arm64 -t juusoturunen/ponse:latest --push -f docker/node/Dockerfile .
 
 services:
   nodejs:
-    build:
-      context: .
-      dockerfile: docker/node/Dockerfile
+    image: juusoturunen/ponse:latest
     container_name: nodejs
     restart: unless-stopped
     expose:
